@@ -6,6 +6,7 @@ const { token } = require('./config.json');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
+
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
@@ -35,11 +36,5 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-
-client.on('message', (message) => {
-    if (message.content === 'hello') {
-        message.reply('hiii ' + interaction.user.displayName + ' friend');
-    }
-});
 
 client.login(token);

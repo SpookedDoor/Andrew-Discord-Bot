@@ -10,7 +10,7 @@ rest.delete(Routes.applicationGuildCommand(clientId, guildId, '13580996245098332
 	.then(() => console.log('Successfully deleted guild command'))
 	.catch(console.error);
 
-// for global commands. If it ain't obvious, the numbers inserted here is the commandId. Replace that with whatever command you wanna delete :iminnocent: Same with the gulid-based one.
+// for global commands. If it ain't obvious, the numbers inserted here is the commandId. Replace that with whatever command you wanna delete :iminnocent: Same with the guild-based one.
 rest.delete(Routes.applicationCommand(clientId, '1358099624509833297'))
 	.then(() => console.log('Successfully deleted application command'))
 	.catch(console.error);
