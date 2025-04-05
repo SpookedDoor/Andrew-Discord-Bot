@@ -5,6 +5,6 @@ module.exports = {
 		.setName('hello')
 		.setDescription('Say hiii Androo!'),
 	async execute(interaction) {
-		await interaction.reply('hiii ' + interaction.user.username + ' friend');
+		await interaction.reply('hiii ' + interaction.user.displayName + ' friend');
 	},
 };

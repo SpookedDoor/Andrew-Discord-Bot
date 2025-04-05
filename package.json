@@ -1,0 +1,23 @@
+{
+  "name": "andrew-discord-bot",
+  "version": "1.0.0",
+  "description": "The funny Andrew_Fish27 bot. For now, it's very top secret! :trollface:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpookedDoor/Andrew-Discord-Bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpookedDoor/Andrew-Discord-Bot/issues"
+  },
+  "homepage": "https://github.com/SpookedDoor/Andrew-Discord-Bot#readme",
+  "dependencies": {
+    "discord.js": "^14.18.0"
+  }
+}
