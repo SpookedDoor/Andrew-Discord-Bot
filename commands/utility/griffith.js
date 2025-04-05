@@ -16,6 +16,6 @@ module.exports = {
 		.setName('griffith')
 		.setDescription('Androo think he Griffith'),
 	async execute(interaction) {
-		await interaction.reply(message +' all i am griffith');
+		await interaction.reply(message +' all i am Griffith');
 	},
 };
