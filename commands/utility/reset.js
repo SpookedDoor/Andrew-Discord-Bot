@@ -5,6 +5,7 @@ module.exports = {
 		.setName('reset')
 		.setDescription('Resets lil Androo!'),
 	async execute(interaction) {
-		await interaction.reply('<:tomoko_cup:1358095740299116614>');
+		await interaction.reply('https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141');
+		await interaction.followUp('This aint cheddar this quiche');
 	},
-};
+}; 
