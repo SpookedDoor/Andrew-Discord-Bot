@@ -36,21 +36,30 @@ for (const file of eventFiles) {
 	}
 }
 
-// Event to indicate the bot is ready
 client.on('ready', () => {
 	console.log(`${client.user.tag} has connected to Discord!`);
-  });
+});
   
-  // Event to listen for messages
-  client.on('messageCreate', (message) => {
-	// Ignore messages from the bot itself
+client.on('messageCreate', (message) => {
 	if (message.author.bot) return;
-  
-	// Process the message here
 	console.log(`Message from ${message.author.tag}: ${message.content}`);
-  
-	// You can also respond to the message
-	message.channel.send('Hello!');
-  });
+	
+    const responses = [
+        { keyword: 'hello', response: 'hello i am Griffith' },
+        { keyword: 'bye', response: 'GN all i am Griffith' },
+        { keyword: 'cheese', response: 'This aint cheddar this quiche' },
+		{ keyword: 'venezuela', response: 'I am from alabama' },
+    ];
+
+    const words = message.content.split(/\s+/);
+
+    for (const word of words) {
+        for (const { keyword, response } of responses) {
+            if (word.toLowerCase() === keyword.toLowerCase()) {
+                message.channel.send(response);
+            }
+        }
+    }
+});
 
 client.login(token);
