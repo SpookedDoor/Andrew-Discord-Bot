@@ -39,13 +39,27 @@ for (const file of eventFiles) {
 client.on('ready', () => {
 	console.log(`${client.user.tag} has connected to Discord!`);
 });
+
+const gods_apparently = [
+	{ user: 'thedragonary', display: 'dragonary' },
+	{ user: 'spookeddoor', display: 'spookeddoor' },
+	{ user: 'hellbeyv2', display: 'hellbey' },
+	{ user: 'sillyh.', display: 'trinke' },
+	{ user: 'nonamebadass', display: 'poncho' }
+]
   
 client.on('messageCreate', (message) => {
 	if (message.author.bot) return;
 	console.log(`Message from ${message.author.tag}: ${message.content}`);
 	
+	const god = gods_apparently.find(g => 
+        message.author.username.toLowerCase().includes(g.user.toLowerCase()) || 
+        message.member?.displayName.toLowerCase().includes(g.display.toLowerCase())
+    );
+	let title = god ? 'god' : 'friend';
+
     const responses = [
-        { keyword: 'hello', response: 'hello ' + message.author.displayName + ' friend' },
+        { keyword: 'hello', response: `hello ${god ? god.display : message.author.displayName} ${title}` },
         { keyword: 'bye', response: 'GN all i am Griffith' },
         { keyword: 'cheese', response: 'This aint cheddar this quiche' },
 		{ keyword: 'venezuela', response: 'I am from alabama' },
