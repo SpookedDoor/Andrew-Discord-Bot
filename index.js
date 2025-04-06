@@ -95,7 +95,7 @@ client.on('messageCreate', (message) => {
 		{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures'},
     ];
 
-    const words = message.content.split(/\s+/);
+    const words = message.content.replace(/[^\w\s]/g, '').split(/\s+/);
 
     for (const word of words) {
         for (const { keyword, response } of responses) {
