@@ -3,7 +3,6 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const channelId = '1069661626669727769';
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
@@ -40,7 +39,7 @@ for (const file of eventFiles) {
 client.on('ready', () => {
 	console.log(`${client.user.tag} has connected to Discord!`);
 
-    const sendHourlyMessage = async () => {
+	const sendRandomMessage = async () => {
         const channel = client.channels.cache.get(channelId);
 
         if (!channel) {
@@ -50,18 +49,22 @@ client.on('ready', () => {
 
         try {
             await channel.send('<:tomoko_cup:1358095740299116614>');
-            console.log('Hourly message sent.');
+            console.log('Random message sent.');
         } catch (error) {
-            console.error('Error sending hourly message:', error);
+            console.error('Error sending random message:', error);
         }
+
+        scheduleRandomMessage();
     };
 
-    const now = new Date();
-    const millisecondsUntilNextHour = (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000 - now.getMilliseconds();
-    setTimeout(() => {
-        sendHourlyMessage();
-        setInterval(sendHourlyMessage, 60 * 60 * 1000);
-    }, millisecondsUntilNextHour);
+    const scheduleRandomMessage = () => {
+        const randomDelay = Math.floor(Math.random() * (3600000 - 60000 + 1)) + 60000;
+
+        console.log(`Next message will be sent in ${Math.round(randomDelay / 1000)} seconds.`);
+        setTimeout(sendRandomMessage, randomDelay);
+    };
+
+    scheduleRandomMessage();
 });
 
 const gods_apparently = [
