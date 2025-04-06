@@ -3,7 +3,7 @@ const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
@@ -35,5 +35,22 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+// Event to indicate the bot is ready
+client.on('ready', () => {
+	console.log(`${client.user.tag} has connected to Discord!`);
+  });
+  
+  // Event to listen for messages
+  client.on('messageCreate', (message) => {
+	// Ignore messages from the bot itself
+	if (message.author.bot) return;
+  
+	// Process the message here
+	console.log(`Message from ${message.author.tag}: ${message.content}`);
+  
+	// You can also respond to the message
+	message.channel.send('Hello!');
+  });
 
 client.login(token);
