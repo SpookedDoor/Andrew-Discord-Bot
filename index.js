@@ -45,7 +45,7 @@ client.on('messageCreate', (message) => {
 	console.log(`Message from ${message.author.tag}: ${message.content}`);
 	
     const responses = [
-        { keyword: 'hello', response: 'hello i am Griffith' },
+        { keyword: 'hello', response: 'hello ' + message.author.displayName + ' friend' },
         { keyword: 'bye', response: 'GN all i am Griffith' },
         { keyword: 'cheese', response: 'This aint cheddar this quiche' },
 		{ keyword: 'venezuela', response: 'I am from alabama' },
@@ -59,6 +59,30 @@ client.on('messageCreate', (message) => {
                 message.channel.send(response);
             }
         }
+    }
+});
+
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+rl.on('line', async (input) => {
+    const channelId = '1069661626669727769';
+    const channel = client.channels.cache.get(channelId);
+
+    if (!channel) {
+        console.log('Channel not found. Please check the CHANNEL_ID.');
+        return;
+    }
+
+    try {
+        await channel.send(input);
+        console.log(`Message sent: ${input}`);
+    } catch (error) {
+        console.error('Error sending message:', error);
     }
 });
 
