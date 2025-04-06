@@ -90,6 +90,9 @@ client.on('messageCreate', (message) => {
         { keyword: 'bye', response: 'GN all i am Griffith' },
         { keyword: 'cheese', response: 'This aint cheddar this quiche' },
 		{ keyword: 'venezuela', response: 'I am from alabama' },
+		{ keyword: 'fish27.reset()', response: '<:tomoko_cup:1358095740299116614>' },
+		{ keyword: 'kanye', response: 'https://tenor.com/view/kanye-west-vultures-everybody-new-gif-12847039774498163445' },
+		{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures'},
     ];
 
     const words = message.content.split(/\s+/);
