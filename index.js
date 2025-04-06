@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config.json');
+const { token, channelMap } = require('./config.json');
 const channelId = '1069661626669727769';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
@@ -40,19 +40,21 @@ client.on('ready', () => {
 	console.log(`${client.user.tag} has connected to Discord!`);
 
 	const sendRandomMessage = async () => {
-        const channel = client.channels.cache.get(channelId);
-
-        if (!channel) {
-            console.log('Channel not found. Please check the CHANNEL_ID.');
-            return;
-        }
-
-        try {
-            await channel.send('<:tomoko_cup:1358095740299116614>');
-            console.log('Random message sent.');
-        } catch (error) {
-            console.error('Error sending random message:', error);
-        }
+		for (const [guildId, channelId] of Object.entries(channelMap)) {
+			const channel = client.channels.cache.get(channelId);
+	
+			if (!channel) {
+				console.log(`Channel not found for guild ID: ${guildId}`);
+				continue;
+			}
+	
+			try {
+				await channel.send('<:tomoko_cup:1358095740299116614>');
+				console.log(`Random message sent to guild ID: ${guildId}`);
+			} catch (error) {
+				console.error(`Error sending message to guild ID: ${guildId}`, error);
+			}
+		}
 
         scheduleRandomMessage();
     };
@@ -113,19 +115,52 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+let targetGuildId = Object.keys(channelMap)[0]; // Default to the first guild in channelMap
+let targetChannelId = channelMap[targetGuildId];
+
+console.log(`Default target set to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}`);
+console.log('Commands:');
+console.log('  /setguild <GUILD_ID> - Set the target guild');
+console.log('  /send <MESSAGE> - Send a message to the target guild\'s channel');
+console.log('  /exit - Exit the terminal interface');
+
 rl.on('line', async (input) => {
-    const channel = client.channels.cache.get(channelId);
+    const args = input.trim().split(' ');
+    const command = args[0];
 
-    if (!channel) {
-        console.log('Channel not found. Please check the CHANNEL_ID.');
-        return;
-    }
+    if (command === '/setguild') {
+        const guildId = args[1];
+        if (channelMap[guildId]) {
+            targetGuildId = guildId;
+            targetChannelId = channelMap[guildId];
+            console.log(`Target guild set to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}`);
+        } else {
+            console.log(`Guild ID ${guildId} not found in channelMap.`);
+        }
+    } else if (command === '/send') {
+        const message = args.slice(1).join(' ');
+        if (!message) {
+            console.log('Please provide a message to send.');
+            return;
+        }
 
-    try {
-        await channel.send(input);
-        console.log(`Message sent: ${input}`);
-    } catch (error) {
-        console.error('Error sending message:', error);
+        const channel = client.channels.cache.get(targetChannelId);
+        if (!channel) {
+            console.log(`Channel not found for Guild ID: ${targetGuildId}.`);
+            return;
+        }
+
+        try {
+            await channel.send(message);
+            console.log(`Message sent to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}: ${message}`);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    } else if (command === '/exit') {
+        console.log('Exiting terminal interface...');
+        rl.close();
+    } else {
+        console.log('Unknown command. Available commands: /setguild, /send, /exit');
     }
 });
 
