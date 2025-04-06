@@ -27,7 +27,8 @@ module.exports = {
 			{ keyword: 'venezuela', response: 'I am from alabama' },
 			{ keyword: 'fish27.reset()', response: '<:tomoko_cup:1358095740299116614>' },
 			{ keyword: 'kanye', response: 'https://tenor.com/view/kanye-west-vultures-everybody-new-gif-12847039774498163445' },
-			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures'},
+			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
+			{ keyword: 'reagan', response: 'https://tenor.com/view/republican-gif-24490147' },
     	];	
 
     	const words = message.content.replace(/[^\w\s]/g, '').split(/\s+/);
