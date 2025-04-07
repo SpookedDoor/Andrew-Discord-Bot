@@ -22,8 +22,14 @@ module.exports = {
 			) {
 				const message = interaction.options.getString('input');
 				await interaction.reply({ content: `Message sent: ${message}`, flags: MessageFlags.Ephemeral });
-				await interaction.followUp(message);
-				return;
+				if (interaction.guild) {
+					await interaction.channel.send(message);
+					return;
+				}
+				else {
+					await interaction.followUp(message);
+					return;
+				}
 			}
 			else {
                 await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });
