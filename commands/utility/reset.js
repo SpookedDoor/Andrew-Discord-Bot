@@ -6,6 +6,17 @@ module.exports = {
 		.setDescription('Resets lil Androo!'),
 	async execute(interaction) {
 		await interaction.reply('https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141');
+
+try {
+if (interaction.guild) {
 		await interaction.followUp('This aint cheddar this quiche');
+}
+else {
+await interaction.channel.send('This aint cheddar this quiche');
+}
+}
+catch (error) {
+console.error('Follow-up failed:' error);
+}
 	},
 }; 
