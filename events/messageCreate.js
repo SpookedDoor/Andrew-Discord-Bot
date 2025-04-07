@@ -8,6 +8,9 @@ const gods = [
 	{ user: 'nonamebadass', display: 'poncho' }
 ];
 
+let timed_message = new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
+const griffith_messages = [timed_message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
+
 const kanye_messages = [
 	"Kanye the goat", "I love Kanye", "Kanye will drop new album", "new kanye interview", "Like new Kanye album?", 
 	"This aint cheddar this quiche", "I hang whit the vultures", "You like vultures also?", "I like vultures", "Vultures 2 is goated", 
@@ -23,8 +26,15 @@ const reagan_messages = [
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779"
 ];
 
-let timed_message = new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
-const griffith_messages = [timed_message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
+const nick_messages = [
+	"nick fuentes is straight", "https://tenor.com/view/nick-fuentes-fuentes-nicholas-j-fuentes-is-for-me-me-gif-3856804053130586186",
+	"https://tenor.com/view/fuentes-shooting-you-are-fun-gif-1701233573689015350"
+];
+
+const ksi_messages = [
+	"ksi is based", "ksi is funny", "from the screen to the ring to the pen to the king", "https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851",
+	"https://youtu.be/At8v_Yc044Y"
+];
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -48,8 +58,8 @@ module.exports = {
 			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
 		    { keyword: 'griffith', response: griffith_messages[Math.floor(Math.random() * griffith_messages.length)] },
 			{ keyword: 'reagan', response: reagan_messages[Math.floor(Math.random() * reagan_messages.length)] },
-			{ keyword: 'nick fuentes', response: 'nick fuentes is straight' },
-			{ keyword: 'ksi', response: 'https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851' },
+			{ keyword: 'nick fuentes', response: nick_messages[Math.floor(Math.random() * nick_messages.length)] },
+			{ keyword: 'ksi', response: ksi_messages[Math.floor(Math.random() * ksi_messages.length)] },
     	];	
 
     	const lowerCaseMessage = message.content.toLowerCase();
