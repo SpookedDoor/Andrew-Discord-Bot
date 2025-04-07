@@ -30,6 +30,7 @@ module.exports = {
 					"<:umarucry:1358518905219584120> : <\\:umarucry:1358518905219584120>\n" +
 					"<:wtf:1358518914631602449> : <\\:wtf:1358518914631602449>\n" +
 					"<:xd:1358518924303667272> : <\\:xd:1358518924303667272>\n")
+					
 				const row1 = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
@@ -97,15 +98,22 @@ module.exports = {
 							.setEmoji('1358518924303667272'),
                     );
 
-                await interaction.reply({
+                const replyOptions = {
                     content: "Choose an emote for ol' great Androo to send. Or you could do it the traditional way and manually type in the emote. <:iminnocent:1357618844889256045>",
 					embeds: [emojiList],
                     components: [row1, row2, row3],
                     flags: MessageFlags.Ephemeral,
-                });
+                };
+
+                if (interaction.channel) {
+                    await interaction.reply(replyOptions);
+                } else {
+                    await interaction.user.send(replyOptions);
+                    await interaction.reply({ content: "Check your DMs for the emoji list!", flags: MessageFlags.Ephemeral });
+                }
 
                 const filter = i => i.customId && i.user.id === interaction.user.id;
-                const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
+                const collector = (interaction.channel || interaction.user.dmChannel).createMessageComponentCollector({ filter, time: 30000 });
 
                 collector.on('collect', async i => {
                     try {
@@ -120,35 +128,35 @@ module.exports = {
                             case 'tomokoarc':
                                 emoji = '<:tomokoarc:1358500281956044991>';
                                 break;
-							case 'depressed':
-								emoji = '<:depressed:1358517922938617883>';
-								break;
-							case 'emoji_52':
-								emoji = '<:emoji_52:1358517952311463956>';
-								break;
-							case 'tomoko_konata':
-								emoji = '<:tomoko_konata:1358518030547816570>';
-								break;
-							case 'tomoko_bread':
-								emoji = '<:tomoko_bread:1358518885829185816>';
-								break;
-							case 'tomoko_like':
-								emoji = '<:tomoko_like:1358518895627210762>';
-								break;
-							case 'umarucry':
-								emoji = '<:umarucry:1358518905219584120>';
-								break;
-							case 'wtf':
-								emoji = '<:wtf:1358518914631602449>';
-								break;
-							case 'xd':
-								emoji = '<:xd:1358518924303667272>';
-								break;
+                            case 'depressed':
+                                emoji = '<:depressed:1358517922938617883>';
+                                break;
+                            case 'emoji_52':
+                                emoji = '<:emoji_52:1358517952311463956>';
+                                break;
+                            case 'tomoko_konata':
+                                emoji = '<:tomoko_konata:1358518030547816570>';
+                                break;
+                            case 'tomoko_bread':
+                                emoji = '<:tomoko_bread:1358518885829185816>';
+                                break;
+                            case 'tomoko_like':
+                                emoji = '<:tomoko_like:1358518895627210762>';
+                                break;
+                            case 'umarucry':
+                                emoji = '<:umarucry:1358518905219584120>';
+                                break;
+                            case 'wtf':
+                                emoji = '<:wtf:1358518914631602449>';
+                                break;
+                            case 'xd':
+                                emoji = '<:xd:1358518924303667272>';
+                                break;
                             default:
                                 emoji = 'Unknown emoji';
                         }
-						await i.deferUpdate({ flags: MessageFlags.Ephemeral });
-                        await i.channel.send(emoji);
+                        await i.deferUpdate();
+                        await (interaction.channel || interaction.user).send(emoji);
                     } catch (error) {
                         console.error(error);
                     }
@@ -157,14 +165,12 @@ module.exports = {
                 collector.on('end', collected => {
                     console.log(`Collected ${collected.size} interactions.`);
                 });
-			}
-			else {
-				await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });
-				return;
-			}
-		} catch (error) {
-			console.error(error);
-			await interaction.reply({ content: "An error occurred while executing this command.", flags: MessageFlags.Ephemeral });
-		}
-	},
+            } else {
+                await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });
+            }
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ content: "An error occurred while executing this command.", flags: MessageFlags.Ephemeral });
+        }
+    },
 };
