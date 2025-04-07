@@ -11,15 +11,28 @@ const gods = [
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('hello')
-		.setDescription('Say hiii Androo!'),
+		.setDescription('Say hiii Androo!')
+		.addStringOption(option =>
+			option.setName('input')
+				.setDescription('Input name')
+				.setRequired(false)),
 	async execute(interaction) {
-		const god = gods.find(g => 
-        	interaction.user.username.toLowerCase().includes(g.user.toLowerCase()) || 
+		const name = interaction.options.getString('input');
+		let god = gods.find(g => interaction.user.username.toLowerCase().includes(g.user.toLowerCase()) || 
         	interaction.member?.displayName.toLowerCase().includes(g.display.toLowerCase())
     	);
-		let title = god ? 'god' : 'friend';
-		const displayName = interaction.member?.displayName || interaction.user.username;
-
-		await interaction.reply(`hiii ${god ? god.display : displayName} ${title}`);
+		
+		if (name && name.trim() !== '') {
+			god = gods.find(g => name.toLowerCase().includes(g.user.toLowerCase()) ||
+				name.toLowerCase().includes(g.display.toLowerCase())
+			);
+			await interaction.reply(`hiii ${name} ${god ? 'god' : 'friend'}`);
+			return;
+		}
+		else {
+			const displayName = interaction.member?.displayName || interaction.user.username;
+			await interaction.reply(`hiii ${god ? god.display : displayName} ${god ? 'god' : 'friend'}`);
+			return;
+		}
 	},
 };
