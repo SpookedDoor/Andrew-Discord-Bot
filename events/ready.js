@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { channelMap } = require('../config.json');
 
 module.exports = {
 	name: Events.ClientReady,
