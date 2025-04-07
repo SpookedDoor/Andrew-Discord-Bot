@@ -8,7 +8,7 @@ const gods = [
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('say')
-		.setDescription('ADMIN ONLY: Make Androo say something!')
+		.setDescription('ADMIN: Make Androo say something!')
 		.addStringOption(option =>
 			option.setName('input')
 				.setDescription('Input message')
