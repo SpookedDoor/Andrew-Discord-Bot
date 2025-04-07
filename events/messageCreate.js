@@ -28,7 +28,7 @@ module.exports = {
 			{ keyword: 'fish27.reset()', response: '<:tomoko_cup:1358095740299116614>' },
 			{ keyword: 'kanye', response: 'https://tenor.com/view/kanye-west-vultures-everybody-new-gif-12847039774498163445' },
 			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
-		        { keyword: 'griffith', response: 'I am prime Griffith'},
+		    { keyword: 'griffith', response: 'I am prime Griffith'},
 			{ keyword: 'reagan', response: 'https://tenor.com/view/republican-gif-24490147' },
 			{ keyword: 'nick fuentes', response: 'nick fuentes is straight'},
 			{ keyword: 'ksi', response: 'https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851'},
