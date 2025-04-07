@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageFlags, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, PermissionsBitField, ChannelType } = require('discord.js');
 
 const gods = [
 	{ user: 'thedragonary', display: 'dragonary' },
@@ -22,12 +22,7 @@ module.exports = {
 			) {
 				const message = interaction.options.getString('input');
 				await interaction.reply({ content: `Message sent: ${message}`, flags: MessageFlags.Ephemeral });
-				if (interaction.channel) {
-					await interaction.channel.send(message);
-				} 
-				else {
-					await interaction.user.send(message);
-				}
+				await interaction.followUp(message);
 				return;
 			}
 			else {
