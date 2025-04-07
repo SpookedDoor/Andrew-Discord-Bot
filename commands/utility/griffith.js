@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-let timed_message = new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'hello' : 'GN';
+let timed_message = new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 const griffith_messages = [timed_message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
 
 module.exports = {
