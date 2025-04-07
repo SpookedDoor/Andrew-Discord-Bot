@@ -8,6 +8,10 @@ const gods = [
 	{ user: 'nonamebadass', display: 'poncho' }
 ];
 
+const friends = [
+	{ user: 'moonmanv2', display: 'moon man' },
+];
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('hello')
@@ -25,15 +29,19 @@ module.exports = {
 			if (interaction.options.getUser('user')) {
 				const user = interaction.options.getUser('user');
 				const god = gods.find(g => user.username.toLowerCase().includes(g.user.toLowerCase()));
-				await interaction.reply(`hiii ${interaction.options.getBoolean('mention') ? `<@${user.id}>` : god ? god.display : user.displayName} ${god ? 'god' : 'friend'}`);
+				const friend = friends.find(f => user.username.toLowerCase().includes(f.user.toLowerCase()));
+				await interaction.reply(`hiii ${interaction.options.getBoolean('mention') ? `<@${user.id}>` : god ? god.display : friend ? friend.display : user.displayName} ${god ? 'god' : 'friend'}`);
 				return;
 			}
 			else {
-				let god = gods.find(g => interaction.user.username.toLowerCase().includes(g.user.toLowerCase()) || 
+				const god = gods.find(g => interaction.user.username.toLowerCase().includes(g.user.toLowerCase()) || 
 					interaction.member?.displayName.toLowerCase().includes(g.display.toLowerCase())
 				);
+				const friend = friends.find(f => interaction.user.username.toLowerCase().includes(f.user.toLowerCase()) || 
+					interaction.member?.displayName.toLowerCase().includes(f.display.toLowerCase())
+				);
 				const displayName = interaction.member?.displayName || interaction.user.username;
-				await interaction.reply(`hiii ${god ? god.display : displayName} ${god ? 'god' : 'friend'}`);
+				await interaction.reply(`hiii ${god ? god.display : friend ? friend.display : displayName} ${god ? 'god' : 'friend'}`);
 				return;
 			}
 		} catch (error) {
