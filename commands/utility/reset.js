@@ -9,7 +9,7 @@ module.exports = {
 
 try {
 if (interaction.guild) {
-await interaction.followUp('This aint cheddar this quiche');
+await interaction.channel.send('This aint cheddar this quiche');
 }
 else {
 await interaction.user.send('This aint cheddar this quiche');
