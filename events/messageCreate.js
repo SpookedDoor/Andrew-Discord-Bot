@@ -37,7 +37,7 @@ module.exports = {
         	{ keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
 			{ keyword: 'venezuela', response: 'I am from alabama' },
 			{ keyword: 'fish27.reset()', response: 'hello friends', response2: '<:tomoko_cup:1358095740299116614>' },
-			{ keyword: 'kanye', response: kanye_messages[Math.floor(Math.random() * reagan_messages.length)] },
+			{ keyword: 'kanye', response: kanye_messages[Math.floor(Math.random() * kanye_messages.length)] },
 			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
 		    { keyword: 'griffith', response: 'I am prime Griffith'},
 			{ keyword: 'reagan', response: reagan_messages[Math.floor(Math.random() * reagan_messages.length)] },
