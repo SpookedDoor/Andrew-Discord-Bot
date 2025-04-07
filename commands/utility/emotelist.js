@@ -47,17 +47,65 @@ module.exports = {
                             .setCustomId('tomokoarc')
                             .setLabel('Tomoko Arc')
                             .setStyle(1)
-                            .setEmoji('1358500281956044991')
+                            .setEmoji('1358500281956044991'),
+						new ButtonBuilder()
+							.setCustomId('depressed')
+							.setLabel('Depressed')
+							.setStyle(1)
+							.setEmoji('1358517922938617883')
+					);
+
+				const row2 = new ActionRowBuilder()
+					.addComponents(
+						new ButtonBuilder()
+							.setCustomId('emoji_52')
+							.setLabel('Emoji 52')
+							.setStyle(1)
+							.setEmoji('1358517952311463956'),
+						new ButtonBuilder()
+							.setCustomId('tomoko_konata')
+							.setLabel('Tomoko Konata')
+							.setStyle(1)
+							.setEmoji('1358518030547816570'),
+						new ButtonBuilder()
+							.setCustomId('tomoko_bread')
+							.setLabel('Tomoko Bread')
+							.setStyle(1)
+							.setEmoji('1358518885829185816'),
+						new ButtonBuilder()
+							.setCustomId('tomoko_like')
+							.setLabel('Tomoko Like')
+							.setStyle(1)
+							.setEmoji('1358518895627210762')
+					);
+
+				const row3 = new ActionRowBuilder()
+					.addComponents(
+						new ButtonBuilder()
+							.setCustomId('umarucry')
+							.setLabel('Umaru Cry')
+							.setStyle(1)
+							.setEmoji('1358518905219584120'),
+						new ButtonBuilder()
+							.setCustomId('wtf')
+							.setLabel('WTF')
+							.setStyle(1)
+							.setEmoji('1358518914631602449'),
+						new ButtonBuilder()	
+							.setCustomId('xd')	
+							.setLabel('XD')	
+							.setStyle(1)	
+							.setEmoji('1358518924303667272'),
                     );
 
                 await interaction.reply({
                     content: 'Select an emoji:',
-                    components: [row1],
+                    components: [row1, row2, row3],
                     flags: MessageFlags.Ephemeral,
                 });
 
                 const filter = i => i.customId && i.user.id === interaction.user.id;
-                const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+                const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
 
                 collector.on('collect', async i => {
                     try {
@@ -72,6 +120,30 @@ module.exports = {
                             case 'tomokoarc':
                                 emoji = '<:tomokoarc:1358500281956044991>';
                                 break;
+							case 'depressed':
+								emoji = '<:depressed:1358517922938617883>';
+								break;
+							case 'emoji_52':
+								emoji = '<:emoji_52:1358517952311463956>';
+								break;
+							case 'tomoko_konata':
+								emoji = '<:tomoko_konata:1358518030547816570>';
+								break;
+							case 'tomoko_bread':
+								emoji = '<:tomoko_bread:1358518885829185816>';
+								break;
+							case 'tomoko_like':
+								emoji = '<:tomoko_like:1358518895627210762>';
+								break;
+							case 'umarucry':
+								emoji = '<:umarucry:1358518905219584120>';
+								break;
+							case 'wtf':
+								emoji = '<:wtf:1358518914631602449>';
+								break;
+							case 'xd':
+								emoji = '<:xd:1358518924303667272>';
+								break;
                             default:
                                 emoji = 'Unknown emoji';
                         }
