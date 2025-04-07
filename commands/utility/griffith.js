@@ -11,11 +11,13 @@ if (time < 12) {
 	message = 'GN';
 }
 
+const griffith_messages = [message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('griffith')
 		.setDescription('Androo think he Griffith'),
 	async execute(interaction) {
-		await interaction.reply(message +' all i am Griffith');
+		await interaction.reply(Math.floor(Math.random() * griffith_messages.length));
 	},
 };
