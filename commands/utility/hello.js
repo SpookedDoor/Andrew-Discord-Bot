@@ -22,17 +22,34 @@ module.exports = {
         	interaction.member?.displayName.toLowerCase().includes(g.display.toLowerCase())
     	);
 		
-		if (name && name.trim() !== '') {
-			god = gods.find(g => name.toLowerCase().includes(g.user.toLowerCase()) ||
-				name.toLowerCase().includes(g.display.toLowerCase())
-			);
-			await interaction.reply(`hiii ${name} ${god ? 'god' : 'friend'}`);
-			return;
-		}
-		else {
-			const displayName = interaction.member?.displayName || interaction.user.username;
-			await interaction.reply(`hiii ${god ? god.display : displayName} ${god ? 'god' : 'friend'}`);
-			return;
+		try {
+			if (name && name.trim() !== '') {
+				const mentionMatch = name.match(/^<@!?(\d+)>$/);
+				if (mentionMatch) {
+					const userId = mentionMatch[1];
+					const mentionedUser = await interaction.client.users.fetch(userId);
+
+					god = gods.find(g => mentionedUser.username.toLowerCase().includes(g.user.toLowerCase()) ||
+						mentionedUser.displayName.toLowerCase().includes(g.display.toLowerCase())
+					);
+					await interaction.reply(`hiii ${name} ${god ? 'god' : 'friend'}`);
+					return;
+				}
+				
+				god = gods.find(g => name.toLowerCase().includes(g.user.toLowerCase()) ||
+					name.toLowerCase().includes(g.display.toLowerCase())
+				);
+				await interaction.reply(`hiii ${name} ${god ? 'god' : 'friend'}`);
+				return;
+			}
+			else {
+				const displayName = interaction.member?.displayName || interaction.user.username;
+				await interaction.reply(`hiii ${god ? god.display : displayName} ${god ? 'god' : 'friend'}`);
+				return;
+			}
+		} catch (error) {
+			console.error(error);
+			await interaction.reply({ content: 'An error occurred while executing this command.', flags: MessageFlags.Ephemeral });
 		}
 	},
 };
