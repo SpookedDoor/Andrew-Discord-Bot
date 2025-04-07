@@ -19,7 +19,8 @@ const reagan_messages = ["Reagan was the best", "Reagan number 1", "Reagan numbe
 	"Reagan and Trump best presidents ever", "Ronald pls", "https://tenor.com/view/republican-gif-24490147", 
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779"]
 
-const griffith_messages = [message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
+let timed_message = new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'hello' : 'GN';
+const griffith_messages = [timed_message + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
 
 module.exports = {
 	name: Events.MessageCreate,
