@@ -98,11 +98,29 @@ module.exports = {
 							.setEmoji('1358518924303667272'),
                     );
 
-                await interaction.reply({
-                    content: 'Select an emoji:',
-                    components: [row1, row2, row3],
-                    flags: MessageFlags.Ephemeral,
-                });
+                    const embed = {
+                      title: "Emote List",
+                      description: `
+                        <:tomoko_cup:1358095740299116614> : \\<:tomoko_cup:1358095740299116614>
+                        <:cirnoarc:1358517895809990793> : \\<:cirnoarc:1358517895809990793>
+                        <:tomokoarc:1358500281956044991>: \\<:tomokoarc:1358500281956044991>
+                        <:umarucry:1358518905219584120>: \\<:umarucry:1358518905219584120>
+                        <:depressed:1358517922938617883>: \\<:depressed:1358517922938617883>
+                        <:emoji_52:1358517952311463956>: \\<:emoji_52:1358517952311463956>
+                        <:tomoko_konata:1358518030547816570>: \\<:tomoko_konata:1358518030547816570>
+                        <:tomoko_like:1358518895627210762>: \\<:tomoko_like:1358518895627210762>
+                        <:tomoko_bread:1358518885829185816>: \\<:tomoko_bread:1358518885829185816>
+                        <:wtf:1358518914631602449>: \\<:wtf:1358518914631602449>
+                        <:xd:1358518924303667272>: \\<:xd:1358518924303667272>
+                      `,
+                    };
+                    
+                    await interaction.reply({
+                      content: 'Choose an emote for ol\' great Androo to send. Or you could do it the traditional way and manually type in the emote. <:iminnocent:1357618844889256045>',
+                      embeds: [embed],
+                      components: [row1, row2, row3],
+                      flags: MessageFlags.Ephemeral,
+                    });
 
                 const filter = i => i.customId && i.user.id === interaction.user.id;
                 const collector = interaction.channel.createMessageComponentCollector({ filter, time: 30000 });
@@ -147,7 +165,8 @@ module.exports = {
                             default:
                                 emoji = 'Unknown emoji';
                         }
-                        await i.reply(emoji);
+                        await i.deferUpdate({ ephemeral: true });
+                        await i.channel.send(emoji);
                     } catch (error) {
                         console.error(error);
                     }
