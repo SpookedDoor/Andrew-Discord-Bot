@@ -29,16 +29,22 @@ module.exports = {
 			{ keyword: 'kanye', response: 'https://tenor.com/view/kanye-west-vultures-everybody-new-gif-12847039774498163445' },
 			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
 			{ keyword: 'reagan', response: 'https://tenor.com/view/republican-gif-24490147' },
+			{ keyword: 'nick fuentes', response: 'nick fuentes is straight'},
+			{ keyword: 'ksi', response: 'https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851'},
     	];	
 
-    	const words = message.content.replace(/[^\w\s]/g, '').split(/\s+/);
+    	const lowerCaseMessage = message.content.toLowerCase();
 
-    	for (const word of words) {
-        	for (const { keyword, response } of responses) {
-            	if (word.toLowerCase() === keyword.toLowerCase()) {
-                	message.channel.send(response);
-	            }
-    	    }
-    	}
+        const matchedKeywords = responses.filter(({ keyword }) =>
+            lowerCaseMessage.includes(keyword.toLowerCase())
+        );
+
+        matchedKeywords.sort((a, b) =>
+            lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
+        );
+
+        for (const { response } of matchedKeywords) {
+            message.channel.send(response);
+        }
 	},
 };
