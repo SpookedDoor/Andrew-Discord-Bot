@@ -31,6 +31,7 @@ module.exports = {
 			{ keyword: 'reagan', response: 'https://tenor.com/view/republican-gif-24490147' },
 			{ keyword: 'nick fuentes', response: 'nick fuentes is straight'},
 			{ keyword: 'ksi', response: 'https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851'},
+			{ keyword: 'griffith', response: 'I am prime Griffith' },
     	];	
 
     	const lowerCaseMessage = message.content.toLowerCase();
