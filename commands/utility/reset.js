@@ -16,7 +16,7 @@ await interaction.user.send('This aint cheddar this quiche');
 }
 }
 catch (error) {
-console.error('Follow-up failed:' error);
+console.error('Follow-up failed: error');
 }
 	},
 }; 
