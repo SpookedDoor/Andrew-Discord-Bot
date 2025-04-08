@@ -60,6 +60,7 @@ module.exports = {
 			{ keyword: 'reagan', response: reagan_messages[Math.floor(Math.random() * reagan_messages.length)] },
 			{ keyword: 'nick fuentes', response: nick_messages[Math.floor(Math.random() * nick_messages.length)] },
 			{ keyword: 'ksi', response: ksi_messages[Math.floor(Math.random() * ksi_messages.length)] },
+			{ keyword: 'admin', response: 'demoted' },
     	];	
 
     	const lowerCaseMessage = message.content.toLowerCase();
