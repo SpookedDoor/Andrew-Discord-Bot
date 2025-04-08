@@ -47,6 +47,11 @@ module.exports = {
             "She Wanna Hop in a rari",
             "Preacherman an rari are +SSS Tier songs",
             "Cope harder",
+            "https://tenor.com/view/persona-persona3-minato-arisato-makoto-yuki-battle-gif-17813346",
+            "-9999 watapoints",
+            "average sonic fan ⬆️",
+            "least schizo sonic fan",
+            "lain red pill aura",
         ];
 
         const possibleMessages2 = [
