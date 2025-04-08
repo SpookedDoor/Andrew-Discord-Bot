@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageFlags, PermissionsBitField, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, PermissionsBitField } = require('discord.js');
 
 const gods = [
 	{ user: 'thedragonary', display: 'dragonary' },
