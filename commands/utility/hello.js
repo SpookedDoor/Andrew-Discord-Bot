@@ -10,6 +10,7 @@ const gods = [
 
 const friends = [
 	{ user: 'moonmanv2', display: 'moon man' },
+	{ user: 'marv_mari', display: 'brit'},
 ];
 
 module.exports = {
