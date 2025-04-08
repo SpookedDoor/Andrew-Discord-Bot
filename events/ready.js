@@ -52,6 +52,11 @@ module.exports = {
             "average sonic fan ⬆️",
             "least schizo sonic fan",
             "lain red pill aura",
+            "I want watamote movie someday",
+            "https://tenor.com/view/touhou-cirno-pumped-excited-punch-gif-17552731",
+            "https://tenor.com/view/tomoko-kuroki-gif-25980950",
+            "Send csgo clips",
+            "https://tenor.com/view/smoking-duck-dj-khaled-what-does-he-even-do-gif-8004262131450496811",
         ];
 
         const possibleMessages2 = [
@@ -59,7 +64,12 @@ module.exports = {
             "Sorry all",
         ];
 
-        const allMessages = possibleMessages.concat(possibleMessages2);
+        const possibleMessages3 = [
+          "lain power: nuke",
+          "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
+      ];
+
+        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3);
 
         const sendRandomMessage = async () => {
             for (const [guildId, channelId] of Object.entries(channelMap)) {
@@ -71,18 +81,22 @@ module.exports = {
                 }
     
                 try {
-                    const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
-                    
-                    if (possibleMessages2.includes(randomMessage)) {
-                        await channel.send(possibleMessages2[0]);
-                        await channel.send(possibleMessages2[1]);
-                        console.log(`Both messages from possibleMessages2 sent to guild ID: ${guildId}`);
-                    } else {
-                        await channel.send(randomMessage);
-                        console.log(`Random message sent to guild ID: ${guildId}`);
-                    }
+                  const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
+                
+                  if (possibleMessages2.includes(randomMessage)) {
+                    await channel.send(possibleMessages2[0]);
+                    await channel.send(possibleMessages2[1]);
+                    console.log(`Both messages from possibleMessages2 sent to guild ID: ${guildId}`);
+                  } else if (possibleMessages3.includes(randomMessage)) {
+                    await channel.send(possibleMessages3[0]);
+                    await channel.send(possibleMessages3[1]);
+                    console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
+                  } else {
+                    await channel.send(randomMessage);
+                    console.log(`Random message sent to guild ID: ${guildId}`);
+                  }
                 } catch (error) {
-                    console.error(`Error sending message to guild ID: ${guildId}`, error);
+                  console.error(`Error sending message to guild ID: ${guildId}`, error);
                 }
             }
 
