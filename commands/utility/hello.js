@@ -11,6 +11,8 @@ const gods = [
 const friends = [
 	{ user: 'moonmanv2', display: 'moon man' },
 	{ user: 'marv_mari', display: 'brit'},
+	{ user: 'edenlance', display: 'peanut' },
+	{ user: 'nagiro.', display: 'ghostto' },
 ];
 
 module.exports = {
