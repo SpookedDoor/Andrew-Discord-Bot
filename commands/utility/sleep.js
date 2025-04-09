@@ -1,7 +1,10 @@
 const { SlashCommandBuilder, MessageFlags, PermissionBitField } = require('discord.js');
 const status = require('../../setSleep.js');
 
-const gods = [                                          { user: 'thedragonary', display: 'dragonary' },                                                 { user: 'spookeddoor', display: 'spookeddoor' },                                        ];
+const gods = [
+	{ user: 'thedragonary', display: 'dragonary' },
+	{ user: 'spookeddoor', display: 'spookeddoor' },
+];
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -17,7 +20,8 @@ module.exports = {
 			else {
 				await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });
 				return;
-			}                                       } catch (error) {
+			}
+		} catch (error) {
 			console.error(error);
 			await interaction.reply({ content: "An error occurred while executing this command.", flags: MessageFlags.Ephemeral });
 		}

@@ -3,20 +3,21 @@ const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
 
 function checkSleepSchedule() {
-		const now = new Date();
-		const hourUTC = now.getUTCHours();
+	const now = new Date();
+	const hourUTC = now.getUTCHours();
 
-		if (hourUTC >= 2 && hourUTC < 12) {
-					if (!status.isAsleep) {
-									console.log('Auto-sleeping Androo');
-									status.setAsleep(true);
-								}
-				} else {
-							if (status.isAsleep && !status.override	) {
-											console.log('Auto-waking Androo');
-											status.setAsleep(false);
-										}
-						}
+	if (hourUTC >= 2 && hourUTC < 12) {
+		if (!status.isAsleep) {
+			console.log('Auto-sleeping Androo');
+			status.setAsleep(true);
+		}
+	}
+	else {
+		if (status.isAsleep && !status.override	) {
+			console.log('Auto-waking Androo');
+			status.setAsleep(false);
+		}
+	}
 }
 
 module.exports = {
@@ -67,7 +68,7 @@ module.exports = {
         const possibleMessages3 = [
           "lain power: nuke",
           "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
-      ];
+      	];
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3);
 
@@ -80,39 +81,42 @@ module.exports = {
                     continue;
                 }
     
-                try {
-		if (!status.isAsleep) {
-                  const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
-                
-                  if (possibleMessages2.includes(randomMessage)) {
-                    await channel.send(possibleMessages2[0]);
-                    await channel.send(possibleMessages2[1]);
-                    console.log(`Both messages from possibleMessages2 sent to guild ID: ${guildId}`);
-                  } else if (possibleMessages3.includes(randomMessage)) {
-                    await channel.send(possibleMessages3[0]);
-                    await channel.send(possibleMessages3[1]);
-                    console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
-                  } else {
-                    await channel.send(randomMessage);
-                    console.log(`Random message sent to guild ID: ${guildId}`);
-                  }
-		}
-                } catch (error) {
-                  console.error(`Error sending message to guild ID: ${guildId}`, error);
-                }
-            }
-
-	scheduleRandomMessage();
+				try {
+					if (!status.isAsleep) {
+						const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
+						
+						if (possibleMessages2.includes(randomMessage)) {
+							await channel.send(possibleMessages2[0]);
+							await channel.send(possibleMessages2[1]);
+							console.log(`Both messages from possibleMessages2 sent to guild ID: ${guildId}`);
+						} 
+						else if (possibleMessages3.includes(randomMessage)) {
+							await channel.send(possibleMessages3[0]);
+							await channel.send(possibleMessages3[1]);
+							console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
+						}
+						else {
+							await channel.send(randomMessage);
+							console.log(`Random message sent to guild ID: ${guildId}`);
+						}
+					}
+				} catch (error) {
+					console.error(`Error sending message to guild ID: ${guildId}`, error);
+				}
+    		}
+			scheduleRandomMessage();
         };
 
         const scheduleRandomMessage = () => {
-            const randomDelay = Math.floor(Math.random() * (3600000 - 60000 + 1)) + 60000;
-            console.log(`Next message will be sent in ${Math.round(randomDelay / 1000)} seconds.`);
-            setTimeout(sendRandomMessage, randomDelay);
+			if (!status.isAsleep) {
+				const randomDelay = Math.floor(Math.random() * (3600000 - 60000 + 1)) + 60000;
+				console.log(`Next message will be sent in ${Math.round(randomDelay / 1000)} seconds.`);
+				setTimeout(sendRandomMessage, randomDelay);
+			}
         };
 
-	scheduleRandomMessage();
+		scheduleRandomMessage();
 
-	setInterval(checkSleepSchedule, 60 * 1000);
+		setInterval(checkSleepSchedule, 60 * 1000);
     },
 };
