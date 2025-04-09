@@ -21,6 +21,9 @@ module.exports = {
 				!interaction.guild
 			) {
 				const message = interaction.options.getString('input');
+
+				console.log(`/say command used by: ${interaction.user.username}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : 'DM'}\nMessage: ${message}`);
+
 				await interaction.reply({ content: `Message sent: ${message}`, flags: MessageFlags.Ephemeral });
 				if (interaction.guild) {
 					await interaction.channel.send(message);
