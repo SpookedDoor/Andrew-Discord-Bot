@@ -109,7 +109,7 @@ module.exports = {
 
         const scheduleRandomMessage = () => {
 			if (!status.isAsleep) {
-				const randomDelay = Math.floor(Math.random() * (3600000 - 60000 + 1)) + 60000;
+				const randomDelay = Math.floor(Math.random() * (3600000 - 1800000 + 1)) + 1800000;
 				console.log(`Next message will be sent in ${Math.round(randomDelay / 1000)} seconds.`);
 				setTimeout(sendRandomMessage, randomDelay);
 			}
