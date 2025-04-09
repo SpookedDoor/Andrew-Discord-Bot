@@ -10,9 +10,22 @@ module.exports = (client) => {
     let targetGuildId = Object.keys(channelMap)[0];
     let targetChannelId = channelMap[targetGuildId];
 
+    const getGuildName = (guildId) => {
+        const guild = client.guilds.cache.get(guildId);
+        return guild ? guild.name : `Unknown Guild (${guildId})`;
+    };
+
+    const getChannelName = (guildId, channelId) => {
+        const guild = client.guilds.cache.get(guildId);
+        if (!guild) return `Unknown Channel (${channelId})`;
+        const channel = guild.channels.cache.get(channelId);
+        return channel ? channel.name : `Unknown Channel (${channelId})`;
+    };
+
     console.log(`Default target set to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}`);
     console.log('Commands:');
     console.log('  /setguild <GUILD_ID> - Set the target guild');
+    console.log('  /setchannel <CHANNEL_ID> - Set the target channel within the current guild');
     console.log('  /send <MESSAGE> - Send a message to the target guild\'s channel');
     console.log('  /exit - Exit the terminal interface');
 
@@ -25,10 +38,31 @@ module.exports = (client) => {
             if (channelMap[guildId]) {
                 targetGuildId = guildId;
                 targetChannelId = channelMap[guildId];
-                console.log(`Target guild set to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}`);
+                console.log(`Target guild set to Guild: ${getGuildName(targetGuildId)}, Channel: ${getChannelName(targetGuildId, targetChannelId)}`);
             } else {
                 console.log(`Guild ID ${guildId} not found in channelMap.`);
             }
+        } else if (command === '/setchannel') {
+            const channelId = args[1];
+            if (!channelId) {
+                console.log('Please provide a channel ID.');
+                return;
+            }
+
+            const guild = client.guilds.cache.get(targetGuildId);
+            if (!guild) {
+                console.log(`Guild not found for Guild ID: ${targetGuildId}.`);
+                return;
+            }
+
+            const channel = guild.channels.cache.get(channelId);
+            if (!channel) {
+                console.log(`Channel ID ${channelId} not found in Guild: ${getGuildName(targetGuildId)}.`);
+                return;
+            }
+
+            targetChannelId = channelId;
+            console.log(`Target channel set to Channel: ${getChannelName(targetGuildId, targetChannelId)} in Guild: ${getGuildName(targetGuildId)}`);
         } else if (command === '/send') {
             const message = args.slice(1).join(' ');
             if (!message) {
@@ -38,13 +72,13 @@ module.exports = (client) => {
 
             const channel = client.channels.cache.get(targetChannelId);
             if (!channel) {
-                console.log(`Channel not found for Guild ID: ${targetGuildId}.`);
+                console.log(`Channel not found for Guild: ${getGuildName(targetGuildId)}.`);
                 return;
             }
 
             try {
                 await channel.send(message);
-                console.log(`Message sent to Guild ID: ${targetGuildId}, Channel ID: ${targetChannelId}: ${message}`);
+                console.log(`Message sent to Guild: ${getGuildName(targetGuildId)}, Channel: ${getChannelName(targetGuildId, targetChannelId)}`);
             } catch (error) {
                 console.error('Error sending message:', error);
             }
