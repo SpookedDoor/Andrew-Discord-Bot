@@ -1,4 +1,5 @@
 const sleepStatus = new Map();
+const override = new Map();
 
 module.exports = {
   	getSleepStatus(serverId) {
@@ -8,11 +9,9 @@ module.exports = {
     	sleepStatus.set(serverId, status);
   	},
   	getOverride(serverId) {
-	    return sleepStatus.get(serverId) && sleepStatus.get(serverId).override;
+	    return override.get(serverId) || false;
   	},
   	setOverride(serverId, value) {
-    	if (sleepStatus.get(serverId)) {
-      		sleepStatus.get(serverId).override = value;
-    	}
+    	override.set(serverId, value);
   	}
 };
