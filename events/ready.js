@@ -27,20 +27,20 @@ module.exports = {
 						if (possibleMessages2.includes(randomMessage)) {
 							await channel.send(possibleMessages2[0]);
 							await channel.send(possibleMessages2[1]);
-							console.log(`Both messages from possibleMessages2 sent to guild ID: ${guildId}`);
+							console.log(`Both messages from possibleMessages2 sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						} 
 						else if (possibleMessages3.includes(randomMessage)) {
 							await channel.send(possibleMessages3[0]);
 							await channel.send(possibleMessages3[1]);
-							console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
+							console.log(`Both messages from possibleMessages3 sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
 						else {
 							await channel.send(randomMessage);
-							console.log(`Random message sent to guild ID: ${guildId}`);
+							console.log(`Random message sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
 					}
 				} catch (error) {
-					console.error(`Error sending message to guild ID: ${guildId}`, error);
+					console.error(`Error sending message to guild: ${client.guilds.cache.get(guildId).name}`, error);
 				}
     		}
 			scheduleRandomMessage();
@@ -54,20 +54,23 @@ module.exports = {
 			}
         };
 
-		const checkSleepSchedule = () => {
+		const checkSleepSchedule = async () => {
 			const now = new Date();
 			const hourUTC = now.getUTCHours();
 			
-			for (const [guildId] of Object.entries(channelMap)) {
+			for (const [guildId, channelId] of Object.entries(channelMap)) {
+				const channel = client.channels.cache.get(channelId);
 				if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.getSleepStatus(guildId)) {
-						console.log(`Auto-sleeping Androo in ${client.guilds.cache.get(guildId).name}`);
+						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
+						await channel.send("GN all i am Griffith");
 						status.setSleepStatus(guildId, true);	
 					}
 				}
 				else {
-					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)	) {
-						console.log(`Auto-waking Androo in ${client.guilds.cache.get(guildId).name}`);
+					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)) {
+						console.log(`Auto-waking Androo in guild: ${client.guilds.cache.get(guildId).name}`);
+						await channel.send("morning all i am Griffith");
 						status.setSleepStatus(guildId, false);
 					}
 				}
