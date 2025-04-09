@@ -12,7 +12,7 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			if (
-				gods.find(g => interaction.user.username.toLowerCase().includes(g.user.toLowerCase())) ||
+				gods.find(g => interaction.user.username === g.user) ||
 				(interaction.member && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ||
 				!interaction.guild
 			) {
