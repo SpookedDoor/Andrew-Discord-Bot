@@ -13,6 +13,7 @@ const friends = [
 	{ user: 'marv_mari', display: 'brit'},
 	{ user: 'edenlance', display: 'peanut' },
 	{ user: 'nagiro.', display: 'ghostto' },
+	{ user: 'meeperthe1', display: 'meeper' },
 ];
 
 module.exports = {
