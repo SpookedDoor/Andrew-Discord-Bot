@@ -34,6 +34,7 @@ const possibleMessages = [
     "Send csgo clips",
     "https://tenor.com/view/smoking-duck-dj-khaled-what-does-he-even-do-gif-8004262131450496811",
     "Wataland = falconia",
+    "Lain should Nuke all",
 ];
 
 const possibleMessages2 = [
