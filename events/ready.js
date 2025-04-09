@@ -81,6 +81,7 @@ module.exports = {
                 }
     
                 try {
+		if (!status.isAsleep) {
                   const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
                 
                   if (possibleMessages2.includes(randomMessage)) {
@@ -95,14 +96,13 @@ module.exports = {
                     await channel.send(randomMessage);
                     console.log(`Random message sent to guild ID: ${guildId}`);
                   }
+		}
                 } catch (error) {
                   console.error(`Error sending message to guild ID: ${guildId}`, error);
                 }
             }
 
-	if (!status.isAsleep) {
-            scheduleRandomMessage();
-	}
+	scheduleRandomMessage();
         };
 
         const scheduleRandomMessage = () => {
@@ -111,9 +111,7 @@ module.exports = {
             setTimeout(sendRandomMessage, randomDelay);
         };
 
-	if (!status.isAsleep) {
-        	scheduleRandomMessage();
-	}
+	scheduleRandomMessage();
 
 	setInterval(checkSleepSchedule, 60 * 1000);
     },
