@@ -14,8 +14,12 @@ module.exports = {
 	name: Events.MessageCreate,
 	execute(message) {
 		if (message.author.bot) return;
-		console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content}`);
-	
+
+		console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
+		if (message.attachments.size > 0) {
+			console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
+		}
+
 		const god = gods.find(g => 
         	message.author.username.toLowerCase().includes(g.user.toLowerCase()) || 
         	(message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
@@ -48,10 +52,10 @@ module.exports = {
         );
 	
 		if (!status.getSleepStatus(message.guild.id)) {
-        	for (const { response, response2 } of matchedKeywords) {
-            	message.channel.send(response);
+			for (const { response, response2 } of matchedKeywords) {
+				message.channel.send(response);
 				if (response2) message.channel.send(response2);
-        	}
+			}
 		}
 	},
 };
