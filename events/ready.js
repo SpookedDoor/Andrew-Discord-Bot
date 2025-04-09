@@ -9,7 +9,7 @@ module.exports = {
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
-        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3);
+        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4);
 
         const sendRandomMessage = async () => {
             for (const [guildId, channelId] of Object.entries(channelMap)) {
@@ -33,6 +33,13 @@ module.exports = {
 							await channel.send(possibleMessages3[0]);
 							await channel.send(possibleMessages3[1]);
 							console.log(`Both messages from possibleMessages3 sent to guild: ${client.guilds.cache.get(guildId).name}`);
+							console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
+
+            }
+              else if (possibleMessages4.includes(randomMessage)) {
+              await channel.send(possibleMessages4[0]);
+              await channel.send(possibleMessages4[1]);
+              console.log(`Both messages from possibleMessages4 sent to guild ID: ${guildId}`);
 						}
 						else {
 							await channel.send(randomMessage);
