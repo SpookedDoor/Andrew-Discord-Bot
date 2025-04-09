@@ -1,7 +1,7 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
-const { possibleMessages, possibleMessages2, possibleMessages3 } = require('../messageDatabase.js');
+const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4 } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -33,13 +33,11 @@ module.exports = {
 							await channel.send(possibleMessages3[0]);
 							await channel.send(possibleMessages3[1]);
 							console.log(`Both messages from possibleMessages3 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-							console.log(`Both messages from possibleMessages3 sent to guild ID: ${guildId}`);
-
-            }
-              else if (possibleMessages4.includes(randomMessage)) {
-              await channel.send(possibleMessages4[0]);
-              await channel.send(possibleMessages4[1]);
-              console.log(`Both messages from possibleMessages4 sent to guild ID: ${guildId}`);
+						}
+						else if (possibleMessages4.includes(randomMessage)) {
+							await channel.send(possibleMessages4[0]);
+							await channel.send(possibleMessages4[1]);
+							console.log(`Both messages from possibleMessages4 sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
 						else {
 							await channel.send(randomMessage);
@@ -85,7 +83,6 @@ module.exports = {
 		}
 
 		scheduleRandomMessage();
-
 		setInterval(checkSleepSchedule, 60 * 1000);
     },
 };
