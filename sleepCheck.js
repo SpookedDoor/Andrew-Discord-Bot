@@ -7,7 +7,7 @@ module.exports = async (interaction, next) => {
         const serverId = interaction.guild.id;
         if (status.getSleepStatus(serverId) && (interaction.commandName !== 'wake' && interaction.commandName !== 'status')) {
             return interaction.reply({
-                content: 'Shhhh... lil Androo is sleeping. Ask Dragonary or SpookedDoor to wake him up.',
+                content: 'Shhhh... lil Androo is sleeping. Ask an admin to wake him up.',
                 flags: MessageFlags.Ephemeral
             });
         }
