@@ -1,5 +1,23 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
+const status = require('../setSleep.js');
+
+function checkSleepSchedule() {
+		const now = new Date();
+		const hourUTC = now.getUTCHours();
+
+		if (hourUTC >= 3 && hourUTC < 12) {
+					if (!status.isAsleep) {
+									console.log('Auto-sleeping Androo');
+									status.setAsleep(true);
+								}
+				} else {
+							if (status.isAsleep && !status.override	) {
+											console.log('Auto-waking Androo');
+											status.setAsleep(false);
+										}
+						}
+}
 
 module.exports = {
     name: Events.ClientReady,
@@ -46,7 +64,7 @@ module.exports = {
                     console.log(`Channel not found for guild ID: ${guildId}`);
                     continue;
                 }
-
+    
                 try {
                     const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
                     
@@ -63,7 +81,9 @@ module.exports = {
                 }
             }
 
+	if (!status.isAsleep) {
             scheduleRandomMessage();
+	}
         };
 
         const scheduleRandomMessage = () => {
@@ -72,6 +92,10 @@ module.exports = {
             setTimeout(sendRandomMessage, randomDelay);
         };
 
-        scheduleRandomMessage();
+	if (!status.isAsleep) {
+        	scheduleRandomMessage();
+	}
+
+	setInterval(checkSleepSchedule, 60 * 1000);
     },
 };

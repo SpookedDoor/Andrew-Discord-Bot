@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const status = require('../setSleep.js');
 
 const gods = [
 	{ user: 'thedragonary', display: 'dragonary' },
@@ -72,10 +73,12 @@ module.exports = {
         matchedKeywords.sort((a, b) =>
             lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
         );
-
+	
+	if (!status.isAsleep) {
         for (const { response, response2 } of matchedKeywords) {
             message.channel.send(response);
 			if (response2) message.channel.send(response2);
         }
+	}
 	},
 };

@@ -7,6 +7,7 @@ module.exports = {
 		.setDescription('Wake Androo up'),
 	async execute(interaction) {
 		status.setAsleep(false);
+		status.setOverride(false);
 		await interaction.reply('morning all i am Griffith');
 	},
 };
