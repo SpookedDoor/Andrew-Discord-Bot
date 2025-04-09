@@ -52,7 +52,7 @@ const possibleMessages4 = [
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 }
-const griffith_messages = [getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', 'https://i.imgflip.com/9q0wk1.jpg'];
+const griffith_messages = [getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', 'https://imgur.com/wczV48O.png'];
 
 const kanye_messages = [
 	"Kanye the goat", "I love Kanye", "Kanye will drop new album", "new kanye interview", "Like new Kanye album?", 
