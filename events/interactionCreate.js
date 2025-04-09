@@ -1,12 +1,12 @@
 const { Events, MessageFlags } = require('discord.js');
-const middleware = require('../sleepCheck');
+const sleepCheck = require('../sleepCheck');
 
 module.exports = {
   	name: Events.InteractionCreate,
   	async execute(interaction) {
     	if (!interaction.isChatInputCommand()) return;
 
-	    await middleware(interaction, async () => {
+	    await sleepCheck(interaction, async () => {
     	  	const command = interaction.client.commands.get(interaction.commandName);
 
       		if (!command) {

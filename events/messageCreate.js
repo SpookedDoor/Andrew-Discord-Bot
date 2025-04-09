@@ -74,11 +74,11 @@ module.exports = {
             lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
         );
 	
-	if (!status.isAsleep) {
-        for (const { response, response2 } of matchedKeywords) {
-            message.channel.send(response);
-			if (response2) message.channel.send(response2);
-        }
-	}
+		if (!status.isAsleep) {
+        	for (const { response, response2 } of matchedKeywords) {
+            	message.channel.send(response);
+				if (response2) message.channel.send(response2);
+        	}
+		}
 	},
 };

@@ -9,7 +9,8 @@ module.exports = {
 		isAsleep = value;
 	},
 	get override() {
-		return override;                        },
+		return override;
+	},
 	setOverride(value) {
 		override = value;
 	}
