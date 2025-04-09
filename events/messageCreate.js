@@ -47,7 +47,7 @@ module.exports = {
             lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
         );
 	
-		if (!status.isAsleep) {
+		if (!status.getSleepStatus(message.guild.id)) {
         	for (const { response, response2 } of matchedKeywords) {
             	message.channel.send(response);
 				if (response2) message.channel.send(response2);

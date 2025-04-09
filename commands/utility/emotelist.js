@@ -13,7 +13,7 @@ module.exports = {
 		try {
 			if (
 				gods.find(g => interaction.user.username === g.user) ||
-				(interaction.member && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ||
+				interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) ||
 				!interaction.guild
 			) {
 				const emojiList = new EmbedBuilder()

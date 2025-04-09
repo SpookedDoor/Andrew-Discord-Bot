@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, PermissionsBitField } = require('discord.js');
 const status = require('../../setSleep.js');
 
 const gods = [
@@ -9,12 +9,24 @@ const gods = [
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('wake')
-		.setDescription('CREATOR: Wake Androo up'),
+		.setDescription('ADMIN: Wake Androo up'),
 	async execute(interaction) {
 		try {
-			if (gods.find(g => interaction.user.username === g.user)) {
-				status.setAsleep(false);
-				status.setOverride(false);
+			if (!interaction.guild) {
+				await interaction.reply({
+					content: 'This command can only be used in a server.',
+					flags: MessageFlags.Ephemeral,
+				})
+				return;
+			}
+			
+			const serverId = interaction.guild.id;
+			if (
+				gods.find(g => interaction.user.username === g.user) || 
+				interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)
+			) {
+				status.setSleepStatus(serverId, false);
+				status.setOverride(serverId, false);
 				await interaction.reply('morning all i am Griffith');
 			}
 			else {
