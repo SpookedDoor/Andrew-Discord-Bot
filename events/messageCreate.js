@@ -41,7 +41,7 @@ module.exports = {
 	name: Events.MessageCreate,
 	execute(message) {
 		if (message.author.bot) return;
-		console.log(`Message from ${message.author.tag}: ${message.content}`);
+		console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content}`);
 	
 		const god = gods.find(g => 
         	message.author.username.toLowerCase().includes(g.user.toLowerCase()) || 
