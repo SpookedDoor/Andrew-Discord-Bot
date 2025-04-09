@@ -6,7 +6,7 @@ function checkSleepSchedule() {
 		const now = new Date();
 		const hourUTC = now.getUTCHours();
 
-		if (hourUTC >= 3 && hourUTC < 12) {
+		if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.isAsleep) {
 									console.log('Auto-sleeping Androo');
 									status.setAsleep(true);
