@@ -43,6 +43,12 @@ const possibleMessages3 = [
   "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
 ];
 
+const possibleMessages4 = [
+    "Watamote movie can be a crossover whit azumanga dahio",
+    "What you guys think about this",
+];
+  
+
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 }
@@ -77,6 +83,7 @@ module.exports = {
     possibleMessages,
     possibleMessages2,
     possibleMessages3,
+    possibleMessages4,
     griffith_messages,
     kanye_messages,
     reagan_messages,
