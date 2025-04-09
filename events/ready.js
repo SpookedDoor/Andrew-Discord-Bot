@@ -3,24 +3,6 @@ const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
 const { possibleMessages, possibleMessages2, possibleMessages3 } = require('../messageDatabase.js');
 
-function checkSleepSchedule() {
-	const now = new Date();
-	const hourUTC = now.getUTCHours();
-
-	if (hourUTC >= 2 && hourUTC < 12) {
-		if (!status.isAsleep) {
-			console.log('Auto-sleeping Androo');
-			status.setAsleep(true);
-		}
-	}
-	else {
-		if (status.isAsleep && !status.override	) {
-			console.log('Auto-waking Androo');
-			status.setAsleep(false);
-		}
-	}
-}
-
 module.exports = {
     name: Events.ClientReady,
     once: true,
@@ -39,7 +21,7 @@ module.exports = {
                 }
     
 				try {
-					if (!status.isAsleep) {
+					if (!status.getSleepStatus(guildId)) {
 						const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
 						
 						if (possibleMessages2.includes(randomMessage)) {
@@ -65,12 +47,32 @@ module.exports = {
         };
 
         const scheduleRandomMessage = () => {
-			if (!status.isAsleep) {
+			if (!status.getSleepStatus(client.guilds.cache.first().id)) {
 				const randomDelay = Math.floor(Math.random() * (3600000 - 1800000 + 1)) + 1800000;
 				console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
 				setTimeout(sendRandomMessage, randomDelay);
 			}
         };
+
+		const checkSleepSchedule = () => {
+			const now = new Date();
+			const hourUTC = now.getUTCHours();
+			
+			for (const [guildId] of Object.entries(channelMap)) {
+				if (hourUTC >= 2 && hourUTC < 12) {
+					if (!status.getSleepStatus(guildId)) {
+						console.log(`Auto-sleeping Androo in ${client.guilds.cache.get(guildId).name}`);
+						status.setSleepStatus(guildId, true);	
+					}
+				}
+				else {
+					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)	) {
+						console.log(`Auto-waking Androo in ${client.guilds.cache.get(guildId).name}`);
+						status.setSleepStatus(guildId, false);
+					}
+				}
+			}
+		}
 
 		scheduleRandomMessage();
 

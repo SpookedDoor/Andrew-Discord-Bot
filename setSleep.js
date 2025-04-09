@@ -1,17 +1,18 @@
-let isAsleep = false;
-let override = false;
+const sleepStatus = new Map();
 
 module.exports = {
-	get isAsleep() {
-		return isAsleep;
-	},
-	setAsleep(value) {
-		isAsleep = value;
-	},
-	get override() {
-		return override;
-	},
-	setOverride(value) {
-		override = value;
-	}
+  	getSleepStatus(serverId) {
+    	return sleepStatus.get(serverId) || false;
+  	},
+  	setSleepStatus(serverId, status) {
+    	sleepStatus.set(serverId, status);
+  	},
+  	getOverride(serverId) {
+	    return sleepStatus.get(serverId) && sleepStatus.get(serverId).override;
+  	},
+  	setOverride(serverId, value) {
+    	if (sleepStatus.get(serverId)) {
+      		sleepStatus.get(serverId).override = value;
+    	}
+  	}
 };
