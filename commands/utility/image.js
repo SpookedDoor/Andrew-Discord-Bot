@@ -21,6 +21,9 @@ module.exports = {
 				!interaction.guild
 			) {
 				const attachment = interaction.options.getAttachment('image').url;
+
+				console.log(`/image command used by: ${interaction.user.username}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : 'DM'}\nAttachment: ${attachment}`);
+
 				await interaction.reply({ content: `Image sent: ${attachment}`, flags: MessageFlags.Ephemeral });
 				if (interaction.guild) {
 					await interaction.channel.send({ files: [attachment] });
