@@ -22,7 +22,7 @@ module.exports = {
 			) {
 				const attachment = interaction.options.getAttachment('image').url;
 
-				console.log(`/image command used by: ${interaction.user.username}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : 'DM'}\nAttachment: ${attachment}`);
+				console.log(`/image command used by: ${interaction.user.username}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nAttachment: ${attachment}`);
 
 				await interaction.reply({ content: `Image sent: ${attachment}`, flags: MessageFlags.Ephemeral });
 				if (interaction.guild) {
