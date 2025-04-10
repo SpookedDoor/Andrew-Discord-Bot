@@ -73,7 +73,7 @@ module.exports = {
 
 						let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
 						const model = 'meta-llama/llama-4-scout:free';
-						console.log(`Model used: ${model}, Location: ${message.guild ? `${message.guild.name} - ${message.channel.name}` : 'DM'}, Prompt: ${prompt}`);
+						console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
 						if (isReplyToBot) {
                             const refMessage = await message.fetchReference();

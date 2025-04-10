@@ -98,7 +98,7 @@ module.exports = {
         }
 
         try {
-            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : 'DM'}, Prompt: ${prompt}`);
+            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
         
             const reply = await module.exports.generateChatCompletion(interaction.user.id, prompt, model);
         
