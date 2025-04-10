@@ -93,12 +93,18 @@ module.exports = {
                 .setRequired(false)
                 .addChoices(
                     { name: 'Quasar Alpha', value: 'openrouter/quasar-alpha' },
+                    { name: 'Optimus Alpha', value: 'openrouter/optimus-alpha' },
                     { name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
+                    { name: 'Deepseek R1', value: 'deepseek/deepseek-r1:free' },
                     { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
                     { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
-                    { name: 'Llama 3.3 Super', value: 'nvidia/llama-3.3-nemotron-super-49b-v1:free' },
-                    { name: 'Llama 3.1 Ultra', value: 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free' },
+                    { name: 'Llama 3.3', value: 'meta-llama/llama-3.3-70b-instruct:free' },
+                    { name: 'Llama 3.3 Nemotron Super', value: 'nvidia/llama-3.3-nemotron-super-49b-v1:free' },
+                    { name: 'Llama 3.1 Nemotron', value: 'nvidia/llama-3.1-nemotron-70b-instruct:free' },
+                    { name: 'Llama 3.1 Nemotron Ultra', value: 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free' },
                     { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
+                    { name: 'Google Gemini 2.0 Flash', value: 'google/gemini-2.0-flash-exp:free' },
+                    { name: 'Google Gemma 3', value: 'google/gemma-3-27b-it:free' },
                 )),
 
     async execute(interaction) {
