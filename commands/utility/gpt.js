@@ -75,7 +75,7 @@ const askIfToolIsNeeded = async (userPrompt, model) => {
         Only respond with one of the above formats. Do not include any extra text.
         `;
 
-    const decision = await openaiCommand.generateChatCompletion('system', toolPrompt, model);
+    const decision = await module.exports.generateChatCompletion('system', toolPrompt, model);
     return decision.trim();
 };
 
@@ -103,14 +103,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-scout:free';
-
-        try {
-            await interaction.deferReply();
-        } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: 'An error occurred while executing this command.', flags: MessageFlags.Ephemeral });
-        }
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'openrouter/quasar-alpha';
 
         // Check cache
         const cachedResponse = await getResponseFromCache(prompt, model);
@@ -130,12 +123,12 @@ module.exports = {
                 const query = toolDecision.replace("WEB_SEARCH:", "").trim();
                 const searchResults = await braveSearch(query);
                 finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
-                console.log(`🔍 Web search used with query: "${query}"`);
+                console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
             } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
                 const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
                 const imageResults = await braveImageSearch(query);
                 finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
-                console.log(`🖼️ Image search used with query: "${query}"`);
+                console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
             } else {
                 console.log(`No internet tools used.`);
             }
