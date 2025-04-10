@@ -71,9 +71,16 @@ module.exports = {
 					try {
 						await message.channel.sendTyping();
 
-						const prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-						const model = 'deepseek/deepseek-chat-v3-0324:free';
-						console.log(`Model used: ${model}, Prompt: ${prompt}`);
+						let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
+						const model = 'meta-llama/llama-4-scout:free';
+						console.log(`Model used: ${model}, Location: ${message.guild ? `${message.guild.name} - ${message.channel.name}` : 'DM'}, Prompt: ${prompt}`);
+
+						if (isReplyToBot) {
+                            const refMessage = await message.fetchReference();
+                            previousMessage = refMessage.content;  // Previous response from bot
+                            prompt = `${previousMessage}\n${prompt}`;
+                            console.log(`Replying to previous message. Combined prompt: ${prompt}`);
+                        }
 
 						const reply = await openaiCommand.generateChatCompletion(message.author.id, prompt, model);
 						console.log(`AI response: ${reply}`);
