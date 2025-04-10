@@ -1,6 +1,20 @@
 const { AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
 
+const emojis = [
+    "<:tomoko_cup:1358095740299116614>",
+    "<:cirnoarc:1358517895809990793>",
+    "<:tomokoarc:1358500281956044991>",
+    "<:depressed:1358517922938617883>",
+    "<:emoji_52:1358517952311463956>",
+    "<:tomoko_konata:1358518030547816570>",
+    "<:tomoko_bread:1358518885829185816>",
+    "<:tomoko_like:1358518895627210762>",
+    "<:umarucry:1358518905219584120>",
+    "<:wtf:1358518914631602449>",
+    "<:xd:1358518924303667272>",
+]
+
 const possibleMessages = [
     "<:tomoko_cup:1358095740299116614>",
     "Hello watafriends",
@@ -87,6 +101,7 @@ const ksi_messages = [
 ];
 
 module.exports = {
+    emojis,
     possibleMessages,
     possibleMessages2,
     possibleMessages3,
