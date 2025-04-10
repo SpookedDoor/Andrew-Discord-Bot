@@ -1,7 +1,7 @@
 const { Events } = require('discord.js');
 const status = require('../setSleep.js');
 const openaiCommand = require('../commands/utility/gpt.js');
-const { griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
+const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
 
 const gods = [
 	{ user: 'thedragonary', display: 'dragonary' },
@@ -32,7 +32,7 @@ module.exports = {
         	{ keyword: 'bye', response: 'GN all i am Griffith' },
         	{ keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
 			{ keyword: 'venezuela', response: 'I am from alabama' },
-			{ keyword: 'fish27.reset()', response: 'hello friends', response2: '<:tomoko_cup:1358095740299116614>' },
+			{ keyword: 'fish27.reset()', response: 'hello friends', response2: emojis[0] },
 			{ keyword: 'kanye', response: kanye_messages[Math.floor(Math.random() * kanye_messages.length)] },
 			{ keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
 		    { keyword: 'griffith', response: griffith_messages[Math.floor(Math.random() * griffith_messages.length)] },
