@@ -1,6 +1,8 @@
 const { Events } = require('discord.js');
 const status = require('../setSleep.js');
 const openaiCommand = require('../commands/utility/gpt.js');
+const { braveSearch } = require('../braveSearch.js');
+const { braveImageSearch } = require('../braveImageSearch.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
 
 const gods = [
@@ -51,6 +53,23 @@ module.exports = {
         matchedKeywords.sort((a, b) =>
             lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
         );
+
+		const askIfToolIsNeeded = async (userPrompt, model) => {
+			const toolPrompt = `
+				A user asked: "${userPrompt}"
+				
+				Decide what tool (if any) is needed to answer.
+				
+				- If you need to search the web for context, reply with: WEB_SEARCH: <query>
+				- If you need to find image results, reply with: IMAGE_SEARCH: <query>
+				- If you can answer without using the internet, reply with: NO_SEARCH
+				
+				Only respond with one of the above formats. Do not include any extra text.
+				`;
+		
+			const decision = await openaiCommand.generateChatCompletion('system', toolPrompt, model);
+			return decision.trim();
+		};	
 	
 		try {
 			if (!status.getSleepStatus(message.guild.id)) {
@@ -64,25 +83,42 @@ module.exports = {
 				const botWasMentioned = message.mentions.has(message.client.user);
 				const triggerWords = ['andrew', 'androo'];
 				const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
-				const isReplyToBot = message.reference 
-					&& (await message.fetchReference()).author?.id === message.client.user.id;
+				const isReplyToBot = message.reference && (await message.fetchReference()).author?.id === message.client.user.id;
 
 				if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
 					try {
 						await message.channel.sendTyping();
 
 						let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-						const model = 'meta-llama/llama-4-scout:free';
+
+						const model = 'openrouter/quasar-alpha';
 						console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
+
+						const toolDecision = await askIfToolIsNeeded(prompt, model);
+						let finalPrompt = prompt;
+
+						if (toolDecision.startsWith("WEB_SEARCH:")) {
+							const query = toolDecision.replace("WEB_SEARCH:", "").trim();
+							const searchResults = await braveSearch(query);
+							finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
+							console.log(`🔍 Web search used with query: "${query}"`);
+						} else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
+							const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
+							const imageResults = await braveImageSearch(query);
+							finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
+							console.log(`🖼️ Image search used with query: "${query}"`);
+						} else {
+							console.log(`No internet tools used.`);
+						}
 
 						if (isReplyToBot) {
                             const refMessage = await message.fetchReference();
                             previousMessage = refMessage.content;  // Previous response from bot
                             prompt = `${previousMessage}\n${prompt}`;
-                            console.log(`Replying to previous message. Combined prompt: ${prompt}`);
+                            console.log(`Replying to previous message. Combined prompt: ${finalPrompt}`);
                         }
 
-						const reply = await openaiCommand.generateChatCompletion(message.author.id, prompt, model);
+						const reply = await openaiCommand.generateChatCompletion(message.author.id, finalPrompt, model);
 						console.log(`AI response: ${reply}`);
 						if (reply) message.reply(reply);
 					} catch (err) {
