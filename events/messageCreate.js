@@ -73,8 +73,10 @@ module.exports = {
 
 						const prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
 						const model = 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free';
+						console.log(`Model used: ${model}, Prompt: ${prompt}`);
 
 						const reply = await openaiCommand.generateResponse(prompt, model);
+						console.log(`AI response: ${reply}`);
 						if (reply) message.reply(reply);
 					} catch (err) {
 						console.error('Error generating AI response:', err);
