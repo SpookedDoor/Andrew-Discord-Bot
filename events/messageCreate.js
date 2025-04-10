@@ -101,12 +101,12 @@ module.exports = {
 							const query = toolDecision.replace("WEB_SEARCH:", "").trim();
 							const searchResults = await braveSearch(query);
 							finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
-							console.log(`🔍 Web search used with query: "${query}"`);
+							console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
 						} else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
 							const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
 							const imageResults = await braveImageSearch(query);
 							finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
-							console.log(`🖼️ Image search used with query: "${query}"`);
+							console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
 						} else {
 							console.log(`No internet tools used.`);
 						}
