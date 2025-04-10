@@ -72,10 +72,10 @@ module.exports = {
 						await message.channel.sendTyping();
 
 						const prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-						const model = 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free';
+						const model = 'deepseek/deepseek-chat-v3-0324:free';
 						console.log(`Model used: ${model}, Prompt: ${prompt}`);
 
-						const reply = await openaiCommand.generateResponse(prompt, model);
+						const reply = await openaiCommand.generateChatCompletion(message.author.id, prompt, model);
 						console.log(`AI response: ${reply}`);
 						if (reply) message.reply(reply);
 					} catch (err) {
