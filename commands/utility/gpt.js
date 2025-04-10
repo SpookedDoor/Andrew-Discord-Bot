@@ -7,6 +7,9 @@ const openai = new OpenAI({
 });
 const messageDatabase = require('../../messageDatabase.js');
 
+const userHistories = {};
+const MAX_HISTORY = 10;
+
 // Combine all messages from the messageDatabase into one string
 const combinedMessages = [
     ...messageDatabase.emojis,
@@ -70,8 +73,8 @@ module.exports = {
                 .setDescription('Select a model')
                 .setRequired(false)
                 .addChoices(
-                    { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
                     { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
+                    { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
                     { name: 'Llama 3.3 Super', value: 'nvidia/llama-3.3-nemotron-super-49b-v1:free' },
                     { name: 'Llama 3.1 Ultra', value: 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free' },
                     { name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
@@ -79,7 +82,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-maverick:free';
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-scout:free';
 
         try {
             await interaction.deferReply();
@@ -96,56 +99,24 @@ module.exports = {
 
         try {
             console.log(`Model used: ${model}, Prompt: ${prompt}`);
-            const response = await openai.chat.completions.create({
-		    model: model,
-                messages: [
-                    {
-                        role: "system",
-                        content: content
-                    },
-                    { role: "user", content: prompt }
-                ],
-                temperature: 0.9,
-                max_tokens: 200,
-            });
-
-            // Check if response.choices exists and has a valid structure
-            if (response?.choices && response.choices[0]?.message?.content) {
-                const reply = response.choices[0].message.content;
-
-                // Cache the response
-                storeInCache(prompt, model, reply);
-
-                // Send the response
-                console.log(`AI response: ${reply}`);
-                await interaction.editReply(reply);
-            } else {
-                console.error("Unexpected response structure:", response);
-                await interaction.editReply("Something went wrong, the model didn't respond as expected.");
-            }
+        
+            const reply = await module.exports.generateChatCompletion(interaction.user.id, prompt, model);
+        
+            // Cache the response (optional here since you're storing memory already)
+            storeInCache(prompt, model, reply);
+        
+            console.log(`AI response: ${reply}`);
+            await interaction.editReply(reply);
         } catch (err) {
             console.error(err);
             await interaction.editReply("Can't think now... try again later");
-        }
+        }        
     }
 };
 
 module.exports.generateResponse = async function(prompt, model) {
     const cachedResponse = await getResponseFromCache(prompt, model);
     if (cachedResponse) return cachedResponse;
-
-    const combinedMessages = [
-        ...messageDatabase.possibleMessages,
-        ...messageDatabase.possibleMessages2,
-        ...messageDatabase.possibleMessages3,
-        ...messageDatabase.possibleMessages4,
-        ...messageDatabase.kanye_messages,
-        ...messageDatabase.ksi_messages,
-        ...messageDatabase.reagan_messages,
-        ...messageDatabase.nick_messages,
-        ...messageDatabase.griffith_messages
-    ];
-    const memoryDump = combinedMessages.join('\n');
 
     const response = await openai.chat.completions.create({
         model: model,
@@ -168,3 +139,33 @@ module.exports.generateResponse = async function(prompt, model) {
         throw new Error("Invalid response structure from model.");
     }
 }
+
+module.exports.generateChatCompletion = async function(userId, prompt, model) {
+    if (!userHistories[userId]) userHistories[userId] = [];
+
+    // Add new user message
+    userHistories[userId].push({ role: "user", content: prompt });
+
+    // Trim history
+    userHistories[userId] = userHistories[userId].slice(-MAX_HISTORY);
+
+    const messages = [
+        { role: "system", content },
+        ...userHistories[userId]
+    ];
+
+    const response = await openai.chat.completions.create({
+        model,
+        messages,
+        temperature: 0.9,
+        max_tokens: 200
+    });
+
+    if (response?.choices?.[0]?.message?.content) {
+        const reply = response.choices[0].message.content;
+        userHistories[userId].push({ role: "assistant", content: reply });
+        return reply;
+    } else {
+        throw new Error("Invalid response structure");
+    }
+};
