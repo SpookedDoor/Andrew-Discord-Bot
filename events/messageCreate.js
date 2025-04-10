@@ -1,5 +1,6 @@
 const { Events } = require('discord.js');
 const status = require('../setSleep.js');
+const openaiCommand = require('../commands/utility/gpt.js');
 const { griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
 
 const gods = [
@@ -12,7 +13,7 @@ const gods = [
 
 module.exports = {
 	name: Events.MessageCreate,
-	execute(message) {
+	async execute(message) {
 		if (message.author.bot) return;
 
 		console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
@@ -51,11 +52,39 @@ module.exports = {
             lowerCaseMessage.indexOf(a.keyword.toLowerCase()) - lowerCaseMessage.indexOf(b.keyword.toLowerCase())
         );
 	
-		if (!status.getSleepStatus(message.guild.id)) {
-			for (const { response, response2 } of matchedKeywords) {
-				message.channel.send(response);
-				if (response2) message.channel.send(response2);
+		try {
+			if (!status.getSleepStatus(message.guild.id)) {
+				// Classic keyword replies
+				for (const { response, response2 } of matchedKeywords) {
+					message.channel.send(response);
+					if (response2) message.channel.send(response2);
+				}
+
+				// === AI RESPONSE TRIGGERS ===
+				const botWasMentioned = message.mentions.has(message.client.user);
+				const triggerWords = ['andrew', 'androo'];
+				const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
+				const isReplyToBot = message.reference 
+					&& (await message.fetchReference()).author?.id === message.client.user.id;
+
+				if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
+					try {
+						await message.channel.sendTyping();
+
+						const prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
+						const model = 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free';
+
+						const reply = await openaiCommand.generateResponse(prompt, model);
+						if (reply) message.reply(reply);
+					} catch (err) {
+						console.error('Error generating AI response:', err);
+						message.reply("Can't think now...");
+					}
+				}
 			}
+		} catch (error) {
+			console.log(error);
+			message.reply('An error occurred while sending the message.');
 		}
 	},
 };
