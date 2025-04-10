@@ -92,13 +92,13 @@ module.exports = {
                 .setDescription('Select a model')
                 .setRequired(false)
                 .addChoices(
+                    { name: 'Quasar Alpha', value: 'openrouter/quasar-alpha' },
+                    { name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
                     { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
                     { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
                     { name: 'Llama 3.3 Super', value: 'nvidia/llama-3.3-nemotron-super-49b-v1:free' },
                     { name: 'Llama 3.1 Ultra', value: 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free' },
-                    { name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
-                    { name: 'Mistral Nemo', value: 'mistralai/mistral-nemo:free' },
-                    { name: 'Quasar Alpha', value: 'openrouter/quasar-alpha' },
+                    { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
                 )),
 
     async execute(interaction) {
