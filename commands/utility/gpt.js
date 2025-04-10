@@ -45,23 +45,6 @@ const content = `You are Androo (Andrew Valenzuela), an unintelligent human from
 
                 Here are things you've said before: ${memoryDump}`
 
-// Cache object to store previously asked prompts and responses
-let cache = {};
-const CACHE_EXPIRY_TIME = 86400000;  // 1 day in milliseconds
-
-async function getResponseFromCache(prompt, model) {
-    const key = `${model}::${prompt}`;
-    if (cache[key] && Date.now() - cache[prompt].timestamp < CACHE_EXPIRY_TIME) {
-        return cache[key].response;
-    }
-    return null;
-}
-
-async function storeInCache(prompt, model, response) {
-    const key = `${model}::${prompt}`;
-    cache[key] = { response, timestamp: Date.now() };
-}
-
 const askIfToolIsNeeded = async (userPrompt, model) => {
     const toolPrompt = `
         A user asked: "${userPrompt}"
@@ -105,17 +88,12 @@ module.exports = {
                     { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
                     { name: 'Google Gemini 2.0 Flash', value: 'google/gemini-2.0-flash-exp:free' },
                     { name: 'Google Gemma 3', value: 'google/gemma-3-27b-it:free' },
+                    { name: 'Rogue Rose', value: 'sophosympatheia/rogue-rose-103b-v0.2:free' },
                 )),
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
         const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'openrouter/quasar-alpha';
-
-        // Check cache
-        const cachedResponse = await getResponseFromCache(prompt, model);
-        if (cachedResponse) {
-            return interaction.editReply(cachedResponse);
-        }
 
         try {
             await interaction.deferReply();
@@ -140,8 +118,7 @@ module.exports = {
             }
         
             const reply = await module.exports.generateChatCompletion(interaction.user.id, finalPrompt, model);
-            storeInCache(prompt, model, reply);
-        
+
             await interaction.editReply(reply);
         } catch (err) {
             console.error(err);
@@ -151,9 +128,6 @@ module.exports = {
 };
 
 module.exports.generateResponse = async function(prompt, model) {
-    const cachedResponse = await getResponseFromCache(prompt, model);
-    if (cachedResponse) return cachedResponse;
-
     const response = await openai.chat.completions.create({
         model: model,
         messages: [
@@ -169,7 +143,6 @@ module.exports.generateResponse = async function(prompt, model) {
 
     if (response?.choices && response.choices[0]?.message?.content) {
         const reply = response.choices[0].message.content;
-        storeInCache(prompt, model, reply);
         return reply;
     } else {
         throw new Error("Invalid response structure from model.");
