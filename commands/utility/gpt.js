@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({ 
@@ -47,10 +47,16 @@ module.exports = {
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
         const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-maverick:free';
-        await interaction.deferReply();
+
+        try {
+            await interaction.deferReply();
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ content: 'An error occurred while executing this command.', flags: MessageFlags.Ephemeral });
+        }
 
         // Check cache
-        const cachedResponse = await getResponseFromCache(prompt);
+        const cachedResponse = await getResponseFromCache(prompt, model);
         if (cachedResponse) {
             return interaction.editReply(cachedResponse);
         }
@@ -88,7 +94,7 @@ module.exports = {
                         single one of your favourite people would say, but you may refer to one or two of them, as in, instead of saying "Trump thinks this,
                         Reagan would say this, Kanye said that, Nick Fuentes agrees, Tomoko and Lain says this", you may say "Trump says this, Kanye would
                         say this" for example, keeping references to other people to an absolute minimum, 2 at most. You will not send a note saying you
-                        kept to my request. You sometimes believe conspiracy theories, mostly based on politics.
+                        kept to my request. You sometimes believe conspiracy theories, mostly based on politics. Griffith is a femboy.
 
                         Here are things you've said before: ${memoryDump}`
                     },
@@ -98,13 +104,19 @@ module.exports = {
                 max_tokens: 200,
             });
 
-            const reply = response.choices[0].message.content;
+            // Check if response.choices exists and has a valid structure
+            if (response?.choices && response.choices[0]?.message?.content) {
+                const reply = response.choices[0].message.content;
 
-            // Cache the response
-            storeInCache(prompt, reply);
+                // Cache the response
+                storeInCache(prompt, model, reply);
 
-            // Send the response
-            await interaction.editReply(reply);
+                // Send the response
+                await interaction.editReply(reply);
+            } else {
+                console.error("Unexpected response structure:", response);
+                await interaction.editReply("Something went wrong, the model didn't respond as expected.");
+            }
         } catch (err) {
             console.error(err);
             await interaction.editReply("Can't think now... try again later");
