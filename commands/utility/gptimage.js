@@ -22,7 +22,6 @@ module.exports = {
         	.setRequired(false)
         	.addChoices(
           		{ name: 'Optimus Alpha', value: 'openrouter/optimus-alpha' },
-          		{ name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
           		{ name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
           		{ name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
 				{ name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
