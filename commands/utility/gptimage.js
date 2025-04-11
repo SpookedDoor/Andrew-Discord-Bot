@@ -42,35 +42,39 @@ module.exports = {
 		await interaction.deferReply();
 
 		try {
-			const response = await openai.chat.completions.create({
-				model: model,
-				messages: [
-          			{
-            			role: 'system',
-            			content: content
-          			},
-          			{
-            			role: 'user',
-            			content: [
-              				{ type: 'text', text: "Hey Andrew, describe this image and tell me what you think of this?" },
-              				{ type: 'image_url', image_url: { url: imageUrl } }
-            			]
-          			}
-        		],
-        		temperature: 0.9,
-      		});
-
-      		const reply = response.choices[0]?.message?.content || "Couldn't describe the image";
-	  		console.log(`AI response: ${reply}`);
-
-      		await interaction.editReply({
-        		content: reply,
-        		files: [imageUrl]
-      		});
-
+			console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}`);
+      		const reply = await module.exports.generateImagePrompt("Hey Andrew, describe this image and tell me what you think of this?", imageUrl, model);
+      		await interaction.editReply({ content: reply, files: [imageUrl] });
 		} catch (err) {
 			console.error(err);
 			await interaction.editReply("There was a problem analysing the image");
     	}
   	}
+};
+
+module.exports.generateImagePrompt = async function(promptText, imageUrl, model) {
+	try {
+		const response = await openai.chat.completions.create({
+			model,
+			messages: [
+				{ role: 'system', content },
+				{
+					role: 'user',
+					content: [
+						{ type: 'text', text: promptText },
+						{ type: 'image_url', image_url: { url: imageUrl } }
+					]
+				}
+			],
+			temperature: 0.9
+		});
+
+		const reply = response.choices[0]?.message?.content || "Couldn't describe the image";
+		console.log(`Prompt: ${promptText}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+		return reply;
+
+	} catch (err) {
+		console.error("Image prompt failed:", err);
+		throw new Error("Image analysis failed.");
+	}
 };
