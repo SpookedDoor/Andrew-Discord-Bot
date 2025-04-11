@@ -11,7 +11,8 @@ async function braveSearch(query) {
 			},
 			params: {
 				q: query,
-				count: 5 // number of results
+				count: 10,
+				safesearch: 'off',
 			}
 		});
 
