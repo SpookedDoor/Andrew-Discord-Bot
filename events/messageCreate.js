@@ -91,7 +91,7 @@ module.exports = {
 
 						let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
 
-						const model = 'openrouter/quasar-alpha';
+						const model = 'openrouter/optimus-alpha';
 						console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
 						const toolDecision = await askIfToolIsNeeded(prompt, model);
