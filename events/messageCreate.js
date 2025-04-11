@@ -120,24 +120,22 @@ module.exports = {
 
 						if (message.attachments.size > 0) {
 							const imageUrl = message.attachments.first().url;
-							const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-							if (reply) {
+							try {
+								const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
 								return message.reply(reply);
-							} else {
-								return message.reply("I couldn't describe the image properly.");
+							} catch (err) {
+								console.error("Image analysis failed:", err);
+								return message.reply("There was an issue analysing the image. Please try again later.");
 							}
 						} 
-						else if (message.reference) {
+						
+						if (message.reference) {
 							try {
 								const repliedMessage = await message.fetchReference();
 								if (repliedMessage.attachments.size > 0) {
 									const imageUrl = repliedMessage.attachments.first().url;
 									const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-									if (reply) {
-										return message.reply(reply);
-									} else {
-										return message.reply("I couldn't describe the image properly.");
-									}
+									return message.reply(reply);
 								}
 								else {
 									finalPrompt = `${repliedMessage.content}\n${prompt}`
@@ -146,6 +144,7 @@ module.exports = {
 								console.error("Failed to fetch referenced message:", err);
 							}
 						}
+						
 						const reply = await openaiCommand.generateChatCompletion(message.author.id, finalPrompt, model);
 						console.log(`AI response: ${reply}`);
 						if (reply) message.reply(reply);
