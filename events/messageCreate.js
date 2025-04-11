@@ -114,7 +114,7 @@ module.exports = {
 						if (isReplyToBot) {
                             const refMessage = await message.fetchReference();
                             previousMessage = refMessage.content;  // Previous response from bot
-                            prompt = `${previousMessage}\n${prompt}`;
+                            finalPrompt = `${previousMessage}\n${prompt}`;
                             console.log(`Replying to previous message. Combined prompt: ${finalPrompt}`);
                         }
 

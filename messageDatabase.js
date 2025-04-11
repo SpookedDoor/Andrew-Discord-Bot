@@ -49,6 +49,10 @@ const possibleMessages = [
     "https://tenor.com/view/smoking-duck-dj-khaled-what-does-he-even-do-gif-8004262131450496811",
     "Wataland = falconia",
     "Lain should Nuke all",
+    "I am rightchad",
+    "Alt right chad",
+    "im based rightchad",
+    "i am a right chad",
 ];
 
 const possibleMessages2 = [

@@ -1,6 +1,14 @@
 const axios = require('axios');
 require('dotenv').config();
 
+function shuffleArray(array) {
+	  for (let i = array.length - 1; i > 0; i--) {
+		      const j = Math.floor(Math.random() * (i + 1));
+		      [array[i], array[j]] = [array[j], array[i]];
+		    }
+	  return array;
+}
+
 async function braveImageSearch(query) {
 	const url = `https://api.search.brave.com/res/v1/images/search`;
 
@@ -12,19 +20,22 @@ async function braveImageSearch(query) {
 			},
 			params: {
 				q: query,
-				count: 5,
+				count: 30,
 				search_lang: 'en',
 				country: 'us',
 				spellcheck: 1,
-				safesearch: 'strict',
+				safesearch: 'off',
 			}
 		});
 
 		const results = res.data.results || [];
 		if (results.length === 0) return 'No images found.';
 
+		const shuffledResults = shuffleArray(results);
+		const pickedImages = shuffledResults.slice(0, 5); // or pick a few randomly
+
 		// Grab the full image URL from `properties.url`
-		return results
+		return pickedImages
 			.map((img, i) => {
 				const imageUrl = img.properties?.url || img.thumbnail?.src;
 				if (!imageUrl) return null;
