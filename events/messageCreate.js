@@ -139,6 +139,9 @@ module.exports = {
 										return message.reply("I couldn't describe the image properly.");
 									}
 								}
+								else {
+									finalPrompt = `${repliedMessage.content}\n${prompt}`
+								}
 							} catch (err) {
 								console.error("Failed to fetch referenced message:", err);
 							}
