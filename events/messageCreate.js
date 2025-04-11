@@ -1,6 +1,7 @@
 const { Events } = require('discord.js');
 const status = require('../setSleep.js');
 const openaiCommand = require('../commands/utility/gpt.js');
+const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
@@ -90,7 +91,6 @@ module.exports = {
 						await message.channel.sendTyping();
 
 						let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-
 						const model = 'openrouter/optimus-alpha';
 						console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
@@ -113,11 +113,36 @@ module.exports = {
 
 						if (isReplyToBot) {
                             const refMessage = await message.fetchReference();
-                            previousMessage = refMessage.content;  // Previous response from bot
+                            previousMessage = refMessage.content;
                             finalPrompt = `${previousMessage}\n${prompt}`;
                             console.log(`Replying to previous message. Combined prompt: ${finalPrompt}`);
                         }
 
+						if (message.attachments.size > 0) {
+							const imageUrl = message.attachments.first().url;
+							const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
+							if (reply) {
+								return message.reply(reply);
+							} else {
+								return message.reply("I couldn't describe the image properly.");
+							}
+						} 
+						else if (message.reference) {
+							try {
+								const repliedMessage = await message.fetchReference();
+								if (repliedMessage.attachments.size > 0) {
+									const imageUrl = repliedMessage.attachments.first().url;
+									const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
+									if (reply) {
+										return message.reply(reply);
+									} else {
+										return message.reply("I couldn't describe the image properly.");
+									}
+								}
+							} catch (err) {
+								console.error("Failed to fetch referenced message:", err);
+							}
+						}
 						const reply = await openaiCommand.generateChatCompletion(message.author.id, finalPrompt, model);
 						console.log(`AI response: ${reply}`);
 						if (reply) message.reply(reply);
