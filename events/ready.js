@@ -68,7 +68,7 @@ module.exports = {
 				if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.getSleepStatus(guildId)) {
 						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						await channel.send("GN all i am Griffith");
+						if (hourUTC === 2) await channel.send("GN all i am Griffith");
 						status.setSleepStatus(guildId, true);	
 					}
 				}
