@@ -53,10 +53,9 @@ const possibleMessages = [
     "Alt right chad",
     "im based rightchad",
     "i am a right chad",
-    "https://tenor.com/view/springtrap-gif-22758628"
-    "https://tenor.com/view/springtrap-gif-22758628"
-    "https://tenor.com/view/fumo-ayumu-kasuga-osaka-cirno-azumanga-daioh-gif-20739417"
-    "Silent Hill  tesla"
+    "https://tenor.com/view/springtrap-gif-22758628",
+    "https://tenor.com/view/fumo-ayumu-kasuga-osaka-cirno-azumanga-daioh-gif-20739417",
+    "Silent Hill  tesla",
 ];
 
 const possibleMessages2 = [
