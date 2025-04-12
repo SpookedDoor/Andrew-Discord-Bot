@@ -4,6 +4,7 @@ const openaiCommand = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
+const { googleImageSearch } = require('../googleImageSearch.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
 
 const gods = [
@@ -124,7 +125,7 @@ Only respond with one of the above formats. Do not include any extra text.
                         console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
                     } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
                         const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                        const imageResults = await braveImageSearch(query);
+                        const imageResults = await googleImageSearch(query);
                         finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
                         console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
                     } else {
