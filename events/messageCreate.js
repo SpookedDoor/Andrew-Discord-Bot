@@ -92,7 +92,7 @@ Only respond with one of the above formats. Do not include any extra text.
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    const model = 'meta-llama/llama-4-scout:free';
+                    const model = 'openrouter/optimus-alpha';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;
