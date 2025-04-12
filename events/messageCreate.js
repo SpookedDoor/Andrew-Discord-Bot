@@ -108,7 +108,7 @@ Only respond with one of the above formats. Do not include any extra text.
                             }
                             if (repliedMessage.content) {
                                 finalPrompt = `${repliedMessage.content}\n${prompt}`;
-                                console.log(`Replying with context from any message. Combined prompt: ${finalPrompt}`);
+                                console.log(`Replying with context from previous message. Combined prompt: ${finalPrompt}`);
                             }
                         } catch (err) {
                             console.error("Failed to fetch referenced message:", err);
