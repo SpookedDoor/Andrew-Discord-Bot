@@ -33,6 +33,7 @@ module.exports = {
                     { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
                     { name: 'Google Gemini 2.0 Flash', value: 'google/gemini-2.0-flash-exp:free' },
                     { name: 'Google Gemma 3', value: 'google/gemma-3-27b-it:free' },
+                    { name: 'Qwen 2.5', value: 'qwen/qwen2.5-vl-72b-instruct:free' },
                 )),
 
     async execute(interaction) {
