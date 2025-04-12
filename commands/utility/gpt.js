@@ -46,13 +46,10 @@ module.exports = {
                     { name: 'Deepseek V3', value: 'deepseek/deepseek-chat-v3-0324:free' },
                     { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
                     { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
-                    { name: 'Llama 3.3 Nemotron Super', value: 'nvidia/llama-3.3-nemotron-super-49b-v1:free' },
                     { name: 'Llama 3.1 Nemotron Ultra', value: 'nvidia/llama-3.1-nemotron-ultra-253b-v1:free' },
-                    { name: 'Mistral Nemo', value: 'mistralai/mistral-nemo:free' },
                     { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
                     { name: 'Google Gemini 2.0 Flash', value: 'google/gemini-2.0-flash-exp:free' },
                     { name: 'Google Gemma 3', value: 'google/gemma-3-27b-it:free' },
-                    { name: 'Rogue Rose', value: 'sophosympatheia/rogue-rose-103b-v0.2:free' },
                 )),
 
     async execute(interaction) {
