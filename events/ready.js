@@ -62,13 +62,14 @@ module.exports = {
 		const checkSleepSchedule = async () => {
 			const now = new Date();
 			const hourUTC = now.getUTCHours();
+			const minutes = now.getUTCMinutes();
 			
 			for (const [guildId, channelId] of Object.entries(channelMap)) {
 				const channel = client.channels.cache.get(channelId);
 				if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.getSleepStatus(guildId) && !status.getWakeOverride(guildId)) {
 						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						if (hourUTC === 2) await channel.send("GN all i am Griffith");
+						if (hourUTC === 2 && minutes === 0) await channel.send("GN all i am Griffith");
 						status.setSleepStatus(guildId, true);	
 					}
 				}

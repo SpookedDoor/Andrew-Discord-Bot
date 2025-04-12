@@ -39,7 +39,7 @@ module.exports = {
         const imageAttachment = interaction.options.getAttachment('image');
         const imageUrl = imageAttachment.url;
         const prompt = interaction.options.getString('prompt') || "Hey Andrew, describe this image and tell me what you think of this?";
-        const model = interaction.options.getString('model') || 'openrouter/optimus-alpha';
+        const model = interaction.options.getString('model') || 'meta-llama/llama-4-scout:free';
 
         await interaction.deferReply();
 
