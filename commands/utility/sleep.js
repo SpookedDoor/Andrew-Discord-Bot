@@ -27,6 +27,7 @@ module.exports = {
 			) {
 				status.setSleepStatus(serverId, true);
 				status.setOverride(serverId, true);
+				status.setWakeOverride(serverId, false);
 				await interaction.reply('GN all i am Griffith');
 			}
 			else {
