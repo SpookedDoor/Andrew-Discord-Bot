@@ -9,6 +9,7 @@ const openai = new OpenAI({
 const content = require('../../characterPrompt.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
+const { googleImageSearch } = require('../../googleImageSearch.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -55,7 +56,7 @@ module.exports = {
                 console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
             } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
                 const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                const imageResults = await braveImageSearch(query);
+                const imageResults = await googleImageSearch(query);
                 enrichedPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
                 console.log(`🖼️  Image search used with query: "${query}"\n${imageResults}`);
             } else {
