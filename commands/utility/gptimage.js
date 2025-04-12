@@ -16,6 +16,10 @@ module.exports = {
       		option.setName('image')
         	.setDescription('Image to analyse')
         	.setRequired(true))
+	.addStringOption(option =>
+		option.setName('prompt')
+		.setDescription('Text prompt')
+		.setRequired(false))
     	.addStringOption(option =>
       		option.setName('model')
         	.setDescription('Select a multimodal model')
@@ -32,13 +36,15 @@ module.exports = {
   	async execute(interaction) {
 		const imageAttachment = interaction.options.getAttachment('image');
 		const imageUrl = imageAttachment.url;
+		const prompt = interaction.options.getString('prompt') || "Hey Andrew, describe this image and tell me what you think of this?";
 		const model = interaction.options.getString('model') || 'openrouter/optimus-alpha';
 
 		await interaction.deferReply();
 
 		try {
+      			const reply = await module.exports.generateImagePrompt(prompt, imageUrl, model);
 			console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}`);
-      		const reply = await module.exports.generateImagePrompt("Hey Andrew, describe this image and tell me what you think of this?", imageUrl, model);
+			console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
       		await interaction.editReply({ content: reply, files: [imageUrl] });
 		} catch (err) {
 			console.error(err);
@@ -65,7 +71,6 @@ module.exports.generateImagePrompt = async function(promptText, imageUrl, model)
 		});
 
 		const reply = response.choices[0]?.message?.content || "Couldn't describe the image";
-		console.log(`Prompt: ${promptText}, Image URL: ${imageUrl}\nAI response: ${reply}`);
 		return reply;
 
 	} catch (err) {
