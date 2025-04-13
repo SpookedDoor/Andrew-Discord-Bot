@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({ 
@@ -8,6 +8,8 @@ const openai = new OpenAI({
 const content = require('../../characterPrompt.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
+
+const { findUserIdentity } = require('./userIdentities');
 
 const userHistories = {};
 const MAX_HISTORY = 5;
@@ -22,7 +24,8 @@ const askIfToolIsNeeded = async (userPrompt, model) => {
         - If you need to find image results, reply with: IMAGE_SEARCH: <query>
         - If you can answer without using the internet, reply with: NO_SEARCH
         
-        Only respond with one of the above formats. Do not include any extra text.`;
+        Only respond with one of the above formats. Do not include any extra text.
+    `;
 
     const decision = await module.exports.generateChatCompletion('system', toolPrompt, model);
     return decision.trim();
@@ -78,7 +81,15 @@ module.exports = {
                 console.log(`No internet tools used.`);
             }
         
-            const reply = await module.exports.generateChatCompletion(interaction.user.id, finalPrompt, model);
+            const userInfo = await findUserIdentity({ id: interaction.user.id, guild: interaction.guild });
+            const usernameForAI = userInfo?.displayName || interaction.user.username;
+
+            const reply = await module.exports.generateChatCompletion(
+                interaction.user.id,
+                finalPrompt,
+                model,
+                usernameForAI
+            );
 
 	        console.log(`AI response: ${reply}`);
 
@@ -119,10 +130,30 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
     userHistories[userId] = userHistories[userId].slice(-MAX_HISTORY);
 
     const displayName = username || "this user";
-    const identityContext = `You are talking to ${displayName} (user ID: ${userId}). If their name appears in the prompt, it likely refers to themselves.`;
+
+    const otherUsers = require('./userIdentities').users
+        .filter(u => u.id !== userId)
+        .map(u => `- ${u.displayName} (nicknames: ${u.usernames.join(', ')})${u.isCreator ? ' [Creator]' : ''}`)
+        .join('\n');
+
+    const otherUserNicknames = require('./userIdentities').users
+        .filter(u => u.id !== userId)
+        .flatMap(u => u.usernames || [])
+        .join(', ');
+
+    const identityContext = `
+        You are talking to ${displayName} (user ID: ${userId}).
+        If this user's name appears in the prompt, it most likely refers to themselves unless stated otherwise.
+        You should also recognize other known users by nickname or username ${otherUserNicknames ? `(${otherUserNicknames})` : 'if mentioned.'}.
+        When the user speaks in the prompt, assume it's from their perspective unless they refer to themselves in third person.
+    `;
+
+    const knownUsersContext = otherUsers
+        ? `Known users on this server:\n${otherUsers}`
+        : "No other known users found.";
 
     const messages = [
-        { role: "system", content: `${content}\n\n${identityContext}` },
+        { role: "system", content: `${content}\n\n${identityContext}\n\n${knownUsersContext}` },
         ...userHistories[userId]
     ];
 
