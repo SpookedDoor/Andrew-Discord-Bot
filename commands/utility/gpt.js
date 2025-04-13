@@ -9,7 +9,7 @@ const content = require('../../characterPrompt.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 
-const { findUserIdentity } = require('../../userIdentities');
+const { users, findUserIdentity } = require('../../userIdentities.js');
 
 const userHistories = {};
 const MAX_HISTORY = 5;
@@ -84,6 +84,8 @@ module.exports = {
             const userInfo = await findUserIdentity({ id: interaction.user.id, guild: interaction.guild });
             const usernameForAI = userInfo?.displayName || interaction.user.username;
 
+            if (userInfo.note) finalPrompt += `User "${usernameForAI}" is just a person in this server.`;
+
             const reply = await module.exports.generateChatCompletion(
                 interaction.user.id,
                 finalPrompt,
@@ -101,37 +103,16 @@ module.exports = {
     }
 };
 
-module.exports.generateResponse = async function(prompt, model) {
-    const response = await openai.chat.completions.create({
-        model: model,
-        messages: [
-            {
-                role: "system",
-                content: content
-            },
-            { role: "user", content: prompt }
-        ],
-        temperature: 0.9,
-        max_tokens: 200
-    });
-
-    if (response?.choices && response.choices[0]?.message?.content) {
-        const reply = response.choices[0].message.content;
-        return reply;
-    } else {
-        throw new Error("Invalid response structure from model.");
-    }
-}
-
-module.exports.generateChatCompletion = async function(userId, prompt, model, username = null) {
+module.exports.generateChatCompletion = async function(userId, prompt, model, username = null, guild = null) {
     if (!userHistories[userId]) userHistories[userId] = [];
-
     userHistories[userId].push({ role: "user", content: prompt });
     userHistories[userId] = userHistories[userId].slice(-MAX_HISTORY);
 
-    const displayName = username || "this user";
+    const currentUser = await findUserIdentity({ id: userId, name: username, guild });
+    const displayName = currentUser?.displayName || username || "this user";
+    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
 
-    const otherUsers = require('./userIdentities').users
+    const otherUsers = users
         .filter(u => u.id !== userId)
         .map(u => {
             const nicknames = u.usernames.join(', ');
@@ -142,45 +123,86 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         })
         .join('\n');
 
-    const otherUserNicknames = require('./userIdentities').users
-        .filter(u => u.id !== userId)
-        .flatMap(u => u.usernames || [])
-        .join(', ');
+    function getGuildDisplayNames(guild, excludeId = null, limit = 25) {
+        const members = guild.members.cache
+            .filter(m => !m.user.bot && m.id !== excludeId)
+            .map(m => `- ${m.displayName} (${m.user.username})`);
+        return members.slice(0, limit).join('\n');
+    }
 
-    const currentUser = require('./userIdentities').findUserIdentity({ id: userId });
-    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
+    let guildMemberInfo = '';
+    if (guild?.members?.cache?.size) {
+        const member = guild.members.cache.get(userId);
+        const roles = member?.roles?.cache
+            ? member.roles.cache
+                .map(role => role.name)
+                .filter(r => r !== '@everyone')
+                .join(', ')
+            : 'None';
+        const allDisplayNames = getGuildDisplayNames(guild, userId);
+
+        guildMemberInfo = `
+            Guild-Specific Info:
+            - Server Name: ${guild.name}
+            - Member Display Name: ${member?.displayName || 'unknown'}
+            - Roles: ${roles || 'None'}
+            - Other Members: ${allDisplayNames}
+        `;
+    }
 
     const identityContext = `
-        You are talking to ${displayName} (user ID: ${userId}).
-        ${userTraits ? userTraits + '\n' : ''}
-        If this user's name appears in the prompt, it most likely refers to themselves unless stated otherwise.
-        You should also recognize other known users by nickname or username (${otherUserNicknames}).
-        When the user speaks in the prompt, assume it's from their perspective unless they refer to themselves in third person.
+        You are speaking with ${displayName} (user ID: ${userId}).
+        They are the current user and the primary speaker in this conversation.
+        Always assume that this person is the one asking questions or making statements, unless clearly stated otherwise.
 
-        Special Note: Users with the 'isGod' flag should be referred to as "[username] god" when their name is mentioned (e.g., "Dragonary god").
+        User Identity Details:
+        - Display Name: ${displayName}
+        - Usernames / Nicknames: ${currentUser?.usernames?.join(', ') || 'unknown'}
+        ${userTraits ? `- ${userTraits}` : ''}
+
+        ${guildMemberInfo}
+
+        IMPORTANT:
+        If you see any of this user's names or nicknames in a prompt, assume it refers to themselves unless they explicitly refer to themselves in third person.
+        Refer to all people exclusively as "${displayName}" in all replies. Never use any of their usernames or nicknames unless quoting directly. 
+        Never say "you like to be called" or "you prefer to be called" or similar.
+
+        Additionally, the following users are known in this server:
+        ${otherUsers || 'No other users found.'}
+
+        Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. 
+        All creators are gods while not all gods are your creators.
     `;
 
-    const knownUsersContext = otherUsers
-        ? `Known users on this server:\n${otherUsers}`
-        : "No other known users found.";
+    if (userHistories[userId].length % 3 === 0) {
+        userHistories[userId].unshift({
+            role: "system",
+            content: `Reminder: The current user is "${displayName}". Only refer to them by this name.`
+        });
+    }
 
     const messages = [
-        { role: "system", content: `${content}\n\n${identityContext}\n\n${knownUsersContext}` },
+        { role: "system", content: `${content}\n\n${identityContext}` },
         ...userHistories[userId]
     ];
 
-    const response = await openai.chat.completions.create({
-        model,
-        messages,
-        temperature: 0.9,
-        max_tokens: 200
-    });
+    try {
+        const response = await openai.chat.completions.create({
+            model,
+            messages,
+            temperature: 0.9,
+            max_tokens: 200
+        });
 
-    if (response?.choices?.[0]?.message?.content) {
-        const reply = response.choices[0].message.content;
-        userHistories[userId].push({ role: "assistant", content: reply });
-        return reply;
-    } else {
-        throw new Error("Invalid response structure");
+        if (response?.choices?.[0]?.message?.content) {
+            const reply = response.choices[0].message.content;
+            userHistories[userId].push({ role: "assistant", content: reply });
+            return reply;
+        } else {
+            throw new Error("Invalid response structure");
+        }
+    } catch (error) {
+        console.error("Error generating AI response:", error);
+        throw error;
     }
 };

@@ -1,10 +1,11 @@
 const { Events } = require('discord.js');
 const status = require('../setSleep.js');
-const openaiCommand = require('../commands/utility/gpt.js');
+const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
+const { findUserIdentity } = require('../userIdentities.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages } = require('../messageDatabase.js');
 
 const gods = [
@@ -12,7 +13,8 @@ const gods = [
     { user: 'spookeddoor', display: 'spookeddoor' },
     { user: 'hellbeyv2', display: 'hellbey' },
     { user: 'sillyh.', display: 'trinke' },
-    { user: 'nonamebadass', display: 'poncho' }
+    { user: 'nonamebadass', display: 'poncho' },
+	{ user: 'marv_mari', display: 'brit' },
 ];
 
 module.exports = {
@@ -73,7 +75,7 @@ module.exports = {
 				Only respond with one of the above formats. Do not include any extra text.
 			`;
 
-            const decision = await openaiCommand.generateChatCompletion('system', toolPrompt, model);
+            const decision = await generateChatCompletion('system', toolPrompt, model);
             return decision.trim();
         };
 
@@ -143,8 +145,18 @@ module.exports = {
                         }
                     }
 
-                    const reply = await openaiCommand.generateChatCompletion(message.author.id, finalPrompt, model);
-                    console.log(`Prompt: ${finalPrompt}\nAI response: ${reply}`);
+					const userInfo = await findUserIdentity({ id: message.author.id, name: message.author.displayname, guild: message.guild });
+					const usernameForAI = userInfo?.displayName || message.author.username;
+
+					const reply = await generateChatCompletion(
+						message.author.id,
+						finalPrompt,
+						model,
+						usernameForAI,
+						message.guild
+					);
+
+					console.log(`Prompt: ${finalPrompt}\nAI response: ${reply}`);
                     if (reply) message.reply(reply);
                 }
             }

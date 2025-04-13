@@ -5,12 +5,12 @@ const gods = [
 	{ user: 'spookeddoor', display: 'spookeddoor' },
 	{ user: 'hellbeyv2', display: 'hellbey' },
 	{ user: 'sillyh.', display: 'trinke' },
-	{ user: 'nonamebadass', display: 'poncho' }
+	{ user: 'nonamebadass', display: 'poncho' },
+	{ user: 'marv_mari', display: 'brit'},
 ];
 
 const friends = [
 	{ user: 'moonmanv2', display: 'moon man' },
-	{ user: 'marv_mari', display: 'brit'},
 	{ user: 'edenlance', display: 'peanut' },
 	{ user: 'nagiro.', display: 'ghostto' },
 	{ user: 'meeperthe1', display: 'meeper' },
