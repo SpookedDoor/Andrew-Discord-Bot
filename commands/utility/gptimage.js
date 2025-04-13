@@ -65,7 +65,7 @@ module.exports = {
 
             const reply = await module.exports.generateImagePrompt(enrichedPrompt, imageUrl, model);
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}`);
-            console.log(`Prompt: ${enrichedPrompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+            console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
             await interaction.editReply({ content: reply, files: [imageUrl] });
 
         } catch (err) {

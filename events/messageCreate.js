@@ -18,7 +18,7 @@ const gods = [
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
-        if (message.author.bot) return;
+        if (message.author.bot || message.system) return;
 
         console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
         if (message.attachments.size > 0) {
@@ -135,7 +135,7 @@ Only respond with one of the above formats. Do not include any extra text.
                     if (imageUrl) {
                         try {
                             const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-			    console.log(`Prompt: ${finalPrompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+			    console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
                             return message.reply(reply);
                         } catch (err) {
                             console.error("Image analysis failed:", err);
@@ -144,7 +144,7 @@ Only respond with one of the above formats. Do not include any extra text.
                     }
 
                     const reply = await openaiCommand.generateChatCompletion(message.author.id, finalPrompt, model);
-                    console.log(`Prompt: ${finalPrompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+                    console.log(`Prompt: ${finalPrompt}\nAI response: ${reply}`);
                     if (reply) message.reply(reply);
                 }
             }
