@@ -45,7 +45,7 @@ const users = [
         displayName: 'Moon Man',
         isCreator: false,
         isGod: false,
-        traits: ['male', 'brazilian', 'likes games', 'likes anime', 'likes lolis'],
+        traits: ['male', 'brazilian', 'only plays paradox games, map games like HOI4, EU4 and CK3', 'likes anime', 'likes lolis'],
     },
     {
         id: '559520799829000203',
