@@ -70,7 +70,8 @@ module.exports = {
 				- If you need to find image results, reply with: IMAGE_SEARCH: <query>
 				- If you can answer without using the internet, reply with: NO_SEARCH
 
-				Only respond with one of the above formats. Do not include any extra text.`;
+				Only respond with one of the above formats. Do not include any extra text.
+			`;
 
             const decision = await openaiCommand.generateChatCompletion('system', toolPrompt, model);
             return decision.trim();
