@@ -63,15 +63,14 @@ module.exports = {
             }
 
             const toolPrompt = `
-A user asked: "${enrichedPrompt}"
+				A user asked: "${enrichedPrompt}"
 
-Decide what tool (if any) is needed to answer.
-- If you need to search the web for context, reply with: WEB_SEARCH: <query>
-- If you need to find image results, reply with: IMAGE_SEARCH: <query>
-- If you can answer without using the internet, reply with: NO_SEARCH
+				Decide what tool (if any) is needed to answer.
+				- If you need to search the web for context, reply with: WEB_SEARCH: <query>
+				- If you need to find image results, reply with: IMAGE_SEARCH: <query>
+				- If you can answer without using the internet, reply with: NO_SEARCH
 
-Only respond with one of the above formats. Do not include any extra text.
-            `;
+				Only respond with one of the above formats. Do not include any extra text.`;
 
             const decision = await openaiCommand.generateChatCompletion('system', toolPrompt, model);
             return decision.trim();
@@ -135,7 +134,7 @@ Only respond with one of the above formats. Do not include any extra text.
                     if (imageUrl) {
                         try {
                             const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-			    console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+			    			console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
                             return message.reply(reply);
                         } catch (err) {
                             console.error("Image analysis failed:", err);

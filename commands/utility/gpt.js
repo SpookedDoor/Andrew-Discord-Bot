@@ -22,8 +22,7 @@ const askIfToolIsNeeded = async (userPrompt, model) => {
         - If you need to find image results, reply with: IMAGE_SEARCH: <query>
         - If you can answer without using the internet, reply with: NO_SEARCH
         
-        Only respond with one of the above formats. Do not include any extra text.
-        `;
+        Only respond with one of the above formats. Do not include any extra text.`;
 
     const decision = await module.exports.generateChatCompletion('system', toolPrompt, model);
     return decision.trim();
@@ -113,17 +112,17 @@ module.exports.generateResponse = async function(prompt, model) {
     }
 }
 
-module.exports.generateChatCompletion = async function(userId, prompt, model) {
+module.exports.generateChatCompletion = async function(userId, prompt, model, username = null) {
     if (!userHistories[userId]) userHistories[userId] = [];
 
-    // Add new user message
     userHistories[userId].push({ role: "user", content: prompt });
-
-    // Trim history
     userHistories[userId] = userHistories[userId].slice(-MAX_HISTORY);
 
+    const displayName = username || "this user";
+    const identityContext = `You are talking to ${displayName} (user ID: ${userId}). If their name appears in the prompt, it likely refers to themselves.`;
+
     const messages = [
-        { role: "system", content },
+        { role: "system", content: `${content}\n\n${identityContext}` },
         ...userHistories[userId]
     ];
 
