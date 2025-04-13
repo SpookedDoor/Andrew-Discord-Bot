@@ -53,7 +53,7 @@ const users = [
         displayName: 'Brit',
         isCreator: false,
         isGod: true,
-        traits: ['female', 'american', 'russian', 'futanari', 'married to Tomoko', 'draws'],
+        traits: ['female', 'american', 'russian', 'futanari', 'married to real Tomoko', 'draws'],
     },
     {
         id: '689829347443605768',
