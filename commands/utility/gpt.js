@@ -133,7 +133,13 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
 
     const otherUsers = require('./userIdentities').users
         .filter(u => u.id !== userId)
-        .map(u => `- ${u.displayName} (nicknames: ${u.usernames.join(', ')})${u.isCreator ? ' [Creator]' : ''}`)
+        .map(u => {
+            const nicknames = u.usernames.join(', ');
+            const creatorTag = u.isCreator ? ' [Creator]' : '';
+            const godTag = u.isGod ? ' [God]' : '';
+            const traits = u.traits?.length ? ` | Traits: ${u.traits.join(', ')}` : '';
+            return `- ${u.displayName} (nicknames: ${nicknames})${creatorTag}${godTag}${traits}`;
+        })
         .join('\n');
 
     const otherUserNicknames = require('./userIdentities').users
@@ -141,11 +147,17 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         .flatMap(u => u.usernames || [])
         .join(', ');
 
+    const currentUser = require('./userIdentities').findUserIdentity({ id: userId });
+    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
+
     const identityContext = `
         You are talking to ${displayName} (user ID: ${userId}).
+        ${userTraits ? userTraits + '\n' : ''}
         If this user's name appears in the prompt, it most likely refers to themselves unless stated otherwise.
-        You should also recognize other known users by nickname or username ${otherUserNicknames ? `(${otherUserNicknames})` : 'if mentioned.'}.
+        You should also recognize other known users by nickname or username (${otherUserNicknames}).
         When the user speaks in the prompt, assume it's from their perspective unless they refer to themselves in third person.
+
+        Special Note: Users with the 'isGod' flag should be referred to as "[username] god" when their name is mentioned (e.g., "Dragonary god").
     `;
 
     const knownUsersContext = otherUsers
