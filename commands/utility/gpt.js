@@ -9,7 +9,7 @@ const content = require('../../characterPrompt.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 
-const { findUserIdentity } = require('./userIdentities');
+const { findUserIdentity } = require('../../userIdentities');
 
 const userHistories = {};
 const MAX_HISTORY = 5;
