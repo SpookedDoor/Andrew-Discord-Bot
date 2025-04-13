@@ -58,7 +58,7 @@ module.exports = {
                 const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
                 const imageResults = await googleImageSearch(query);
                 enrichedPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
-                console.log(`🖼️  Image search used with query: "${query}"\n${imageResults}`);
+                console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
             } else {
                 console.log("No internet tools used.");
             }
