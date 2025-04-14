@@ -28,7 +28,6 @@ module.exports = {
                 .setDescription('Select a multimodal model')
                 .setRequired(false)
                 .addChoices(
-                    { name: 'Optimus Alpha', value: 'openrouter/optimus-alpha' },
                     { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
                     { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
                     { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
@@ -41,7 +40,7 @@ module.exports = {
         const imageAttachment = interaction.options.getAttachment('image');
         const imageUrl = imageAttachment.url;
         const prompt = interaction.options.getString('prompt') || "Hey Andrew, describe this image and tell me what you think of this?";
-        const model = interaction.options.getString('model') || 'openrouter/optimus-alpha';
+        const model = interaction.options.getString('model') || 'meta-llama/llama-4-scout:free';
 
         await interaction.deferReply();
 
