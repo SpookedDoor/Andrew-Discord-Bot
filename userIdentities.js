@@ -87,6 +87,14 @@ const users = [
         isGod: false,
         traits: ['the real andrew', 'the person who andrew bot is based on'],
     },
+    {
+        id: '1068548654987755672',
+        usernames: ['mafic igneous rock', 'mafic_igneous_rock', 'mafic', 'femboy'],
+        displayName: 'Femboy',
+        isCreator: false,
+        isGod: false,
+        traits: ['male', 'finnish', 'likes games']
+    }
 ];
 
 async function findUserIdentity({ id = null, name = '', guild = null }) {
