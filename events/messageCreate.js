@@ -95,7 +95,7 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    const model = 'meta-llama/llama-4-scout:free';
+                    const model = 'meta-llama/llama-4-maverick:free';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;
