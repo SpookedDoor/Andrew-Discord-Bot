@@ -53,7 +53,7 @@ module.exports = {
 
         const scheduleRandomMessage = () => {
 			if (!status.getSleepStatus(client.guilds.cache.first().id)) {
-				const randomDelay = Math.floor(Math.random() * (3600000 - 1800000 + 1)) + 1800000;
+				const randomDelay = Math.floor(Math.random() * (21600000 - 10800000 + 1)) + 10800000;
 				console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
 				setTimeout(sendRandomMessage, randomDelay);
 			}
