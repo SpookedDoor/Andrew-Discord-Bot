@@ -95,7 +95,7 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    const model = 'meta-llama/llama-4-maverick:free';
+                    let model = 'deepseek/deepseek-chat-v3-0324:free';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;
@@ -136,8 +136,9 @@ module.exports = {
 
                     if (imageUrl) {
                         try {
+                            model = 'qwen/qwen2.5-vl-72b-instruct:free';
                             const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-			    			console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+			    			console.log(`Model used: ${model}, Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
                             return message.reply(reply);
                         } catch (err) {
                             console.error("Image analysis failed:", err);
