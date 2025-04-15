@@ -94,6 +94,14 @@ const users = [
         isCreator: false,
         isGod: false,
         traits: ['male', 'finnish', 'likes games']
+    },
+    {
+        id: '1358133237855293533',
+        usernames: ['Anti-Andrew'],
+        displayName: 'Anti-Andrew',
+        isCreator: false,
+        isGod: false,
+        traits: ['enemy of Andrew']
     }
 ];
 

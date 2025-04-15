@@ -56,7 +56,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-maverick:free';
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'deepseek/deepseek-chat-v3-0324:free';
 
         try {
             await interaction.deferReply();
