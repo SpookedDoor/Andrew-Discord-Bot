@@ -81,6 +81,7 @@ function getTimedMessage() {
 const griffith_messages = [
     getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', 
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith.png'))] },
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith2.jpg'))] },
 ];
 
 const kanye_messages = [
