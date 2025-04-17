@@ -2,6 +2,7 @@ const { Events } = require('discord.js');
 const status = require('../setSleep.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
+const { askIfToolIsNeeded } = require('../commands/utility/gptimage.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
@@ -52,33 +53,6 @@ module.exports = {
         const matchedKeywords = responses.filter(({ keyword }) => lowerCaseMessage.includes(keyword));
         matchedKeywords.sort((a, b) => lowerCaseMessage.indexOf(a.keyword) - lowerCaseMessage.indexOf(b.keyword));
 
-        const askIfToolIsNeeded = async (userPrompt, model, imageUrl = null) => {
-            let enrichedPrompt = userPrompt;
-
-            if (imageUrl) {
-                try {
-                    const imageDescription = await generateImagePrompt("Describe this image briefly:", imageUrl, model);
-                    enrichedPrompt = `${userPrompt}\n\nImage description: ${imageDescription}`;
-                } catch (err) {
-                    console.error("Failed to generate image description:", err);
-                }
-            }
-
-            const toolPrompt = `
-				A user asked: "${enrichedPrompt}"
-
-				Decide what tool (if any) is needed to answer.
-				- If you need to search the web for context, reply with: WEB_SEARCH: <query>
-				- If you need to find image results, reply with: IMAGE_SEARCH: <query>
-				- If you can answer without using the internet, reply with: NO_SEARCH
-
-				Only respond with one of the above formats. Do not include any extra text.
-			`;
-
-            const decision = await generateChatCompletion('system', toolPrompt, model);
-            return decision.trim();
-        };
-
         try {
             if (!status.getSleepStatus(message.guild.id)) {
                 for (const { response, response2 } of matchedKeywords) {
@@ -95,7 +69,7 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    let model = 'deepseek/deepseek-chat-v3-0324:free';
+                    let model = 'koboldcpp';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;

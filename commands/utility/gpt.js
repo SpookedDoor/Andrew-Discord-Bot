@@ -2,34 +2,18 @@ const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({ 
-	baseURL: "https://openrouter.ai/api/v1",
+	baseURL: "http://localhost:5001/v1",
 	apiKey: process.env.OPENROUTER_API_KEY 
 });
 const content = require('../../characterPrompt.js');
+const { askIfToolIsNeeded } = require('./gptimage.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
-
+const { googleImageSearch } = require('../../googleImageSearch.js');
 const { users, findUserIdentity } = require('../../userIdentities.js');
 
 const userHistories = {};
 const MAX_HISTORY = 5;
-
-const askIfToolIsNeeded = async (userPrompt, model) => {
-    const toolPrompt = `
-        A user asked: "${userPrompt}"
-        
-        Decide what tool (if any) is needed to answer.
-        
-        - If you need to search the web for context, reply with: WEB_SEARCH: <query>
-        - If you need to find image results, reply with: IMAGE_SEARCH: <query>
-        - If you can answer without using the internet, reply with: NO_SEARCH
-        
-        Only respond with one of the above formats. Do not include any extra text.
-    `;
-
-    const decision = await module.exports.generateChatCompletion('system', toolPrompt, model);
-    return decision.trim();
-};
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -56,7 +40,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'deepseek/deepseek-chat-v3-0324:free';
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'koboldcpp';
 
         try {
             await interaction.deferReply();
@@ -68,16 +52,16 @@ module.exports = {
         
             if (toolDecision.startsWith("WEB_SEARCH:")) {
                 const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                const searchResults = await braveSearch(query);
-                finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
-                console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
+                const webResults = await braveSearch(query);
+                enrichedPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
+                console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
             } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
                 const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                const imageResults = await braveImageSearch(query);
-                finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
+                const imageResults = await googleImageSearch(query);
+                enrichedPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
                 console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
             } else {
-                console.log(`No internet tools used.`);
+                console.log("No internet tools used.");
             }
         
             const userInfo = await findUserIdentity({ id: interaction.user.id, guild: interaction.guild });
@@ -190,7 +174,6 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
             model,
             messages,
             temperature: 0.9,
-            max_tokens: 200
         });
 
         if (response?.choices?.[0]?.message?.content) {

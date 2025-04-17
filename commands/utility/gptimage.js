@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const axios = require('axios');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({
@@ -45,7 +44,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const toolDecision = await askIfToolIsNeeded(prompt, model, imageUrl);
+            const toolDecision = await module.exports.askIfToolIsNeeded(prompt, model, imageUrl);
             let enrichedPrompt = prompt;
 
             if (toolDecision.startsWith("WEB_SEARCH:")) {
@@ -100,7 +99,7 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
     }
 };
 
-async function askIfToolIsNeeded(userPrompt, model, imageUrl = null) {
+module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl = null) {
     let enrichedPrompt = userPrompt;
 
     if (imageUrl) {
