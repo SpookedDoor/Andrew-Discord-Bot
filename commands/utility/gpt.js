@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({ 
-	baseURL: "http://localhost:5001/v1",
+	baseURL: "https://openrouter.ai/api/v1",
 	apiKey: process.env.OPENROUTER_API_KEY 
 });
 const content = require('../../characterPrompt.js');
@@ -40,7 +40,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'koboldcpp';
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'qwen/qwen2.5-vl-72b-instruct:free';
 
         try {
             await interaction.deferReply();
@@ -73,7 +73,8 @@ module.exports = {
                 interaction.user.id,
                 finalPrompt,
                 model,
-                usernameForAI
+                usernameForAI,
+                interaction.guild
             );
 
 	        console.log(`AI response: ${reply}`);
