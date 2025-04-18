@@ -69,7 +69,7 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    let model = 'qwen/qwen2.5-vl-72b-instruct:free';
+                    let model = 'meta-llama/llama-4-maverick:free';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;
