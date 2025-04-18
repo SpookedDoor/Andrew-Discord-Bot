@@ -69,7 +69,7 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    let model = 'koboldcpp';
+                    let model = 'qwen/qwen2.5-vl-72b-instruct:free';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     let finalPrompt = prompt;
