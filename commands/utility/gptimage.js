@@ -6,6 +6,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENROUTER_API_KEY,
 });
 const content = require('../../characterPrompt.js');
+const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
@@ -44,7 +45,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const toolDecision = await module.exports.askIfToolIsNeeded(prompt, model, imageUrl);
+            const toolDecision = await askIfToolIsNeeded(prompt, model, imageUrl, module.exports.generateImagePrompt);
             let enrichedPrompt = prompt;
 
             if (toolDecision.startsWith("WEB_SEARCH:")) {
@@ -98,38 +99,3 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         throw new Error("Image analysis failed.");
     }
 };
-
-module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl = null) {
-    let enrichedPrompt = userPrompt;
-
-    if (imageUrl) {
-        try {
-            const imageDescription = await module.exports.generateImagePrompt("Describe this image briefly:", imageUrl, model);
-            enrichedPrompt = `${userPrompt}\n\nImage description: ${imageDescription}`;
-        } catch (err) {
-            console.error("Failed to describe image for tool decision:", err);
-        }
-    }
-
-    const toolPrompt = `
-		A user asked: "${enrichedPrompt}"
-
-		Decide what tool (if any) is needed to answer.
-		- If you need to search the web for context, reply with: WEB_SEARCH: <query>
-		- If you need to find image results, reply with: IMAGE_SEARCH: <query>
-		- If you can answer without using the internet, reply with: NO_SEARCH
-
-		Only respond with one of the above formats. Do not include any extra text.
-	`;
-
-    const result = await openai.chat.completions.create({
-        model,
-        messages: [
-            { role: 'system', content: "You're an assistant that helps decide when external tools are needed to answer." },
-            { role: 'user', content: toolPrompt }
-        ],
-        temperature: 0.2
-    });
-
-    return result.choices[0]?.message?.content.trim() || "NO_SEARCH";
-}
