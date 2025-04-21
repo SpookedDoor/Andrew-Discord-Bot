@@ -6,7 +6,7 @@ const openai = new OpenAI({
 	apiKey: process.env.OPENROUTER_API_KEY 
 });
 const content = require('../../characterPrompt.js');
-const { askIfToolIsNeeded } = require('./gptimage.js');
+const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');

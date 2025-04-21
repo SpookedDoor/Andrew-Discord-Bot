@@ -2,7 +2,7 @@ const { Events } = require('discord.js');
 const status = require('../setSleep.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
-const { askIfToolIsNeeded } = require('../commands/utility/gptimage.js');
+const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
@@ -92,7 +92,7 @@ module.exports = {
                         }
                     }
 
-                    const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl);
+                    const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);
 
                     if (toolDecision.startsWith("WEB_SEARCH:")) {
                         const query = toolDecision.replace("WEB_SEARCH:", "").trim();
