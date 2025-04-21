@@ -89,7 +89,7 @@ module.exports = {
                         }
                     }
 
-                    const model = imageUrl ? 'qwen/qwen2.5-vl-72b-instruct:free' : 'meta-llama/llama-4-maverick:free';
+                    const model = 'koboldcpp';
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);

@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({ 
-	baseURL: "https://openrouter.ai/api/v1",
+	baseURL: "http://localhost:5001/v1",
 	apiKey: process.env.OPENROUTER_API_KEY 
 });
 const content = require('../../characterPrompt.js');
@@ -40,7 +40,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'meta-llama/llama-4-maverick:free';
+        const model = interaction.options.getString('model') ? interaction.options.getString('model') : 'koboldcpp';
 
         try {
             await interaction.deferReply();
