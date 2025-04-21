@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({
-    baseURL: 'https://openrouter.ai/api/v1',
+    baseURL: 'http://localhost:5001/v1',
     apiKey: process.env.OPENROUTER_API_KEY,
 });
 const content = require('../../characterPrompt.js');
@@ -10,6 +10,8 @@ const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
+const fetch = require('node-fetch');
+const path = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -40,7 +42,7 @@ module.exports = {
         const imageAttachment = interaction.options.getAttachment('image');
         const imageUrl = imageAttachment.url;
         const prompt = interaction.options.getString('prompt') || "Hey Andrew, describe this image and tell me what you think of this?";
-        const model = interaction.options.getString('model') || 'meta-llama/llama-4-maverick:free';
+        const model = interaction.options.getString('model') || 'koboldcpp';
 
         await interaction.deferReply();
 
@@ -76,6 +78,19 @@ module.exports = {
 
 module.exports.generateImagePrompt = async function (promptText, imageUrl, model) {
     try {
+        const responseImg = await fetch(imageUrl);
+        const buffer = await responseImg.buffer();
+        const ext = path.extname(imageUrl).toLowerCase();
+        let mimeType = 'image/png';
+        if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
+        else if (ext === '.webp') mimeType = 'image/webp';
+        else if (ext === '.gif') mimeType = 'image/gif';
+        const base64 = buffer.toString('base64');
+        const base64Url = `data:${mimeType};base64,${base64}`;
+
+        const personaReminder = "Stay in character as Andrew: short, unfiltered. Use 'whit' for 'with', lowercase, short sentences, never paragraphs. If confused, use 'how'.";
+        const fullPrompt = personaReminder + "Describe this image briefly:" + promptText;
+
         const response = await openai.chat.completions.create({
             model,
             messages: [
@@ -83,8 +98,8 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: promptText },
-                        { type: 'image_url', image_url: { url: imageUrl } }
+                        { type: 'text', text: fullPrompt },
+                        { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
             ],
