@@ -69,9 +69,6 @@ module.exports = {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
-                    let model = 'meta-llama/llama-4-maverick:free';
-                    console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
-
                     let finalPrompt = prompt;
                     let imageUrl = null;
 
@@ -92,6 +89,9 @@ module.exports = {
                         }
                     }
 
+                    const model = imageUrl ? 'qwen/qwen2.5-vl-72b-instruct:free' : 'meta-llama/llama-4-maverick:free';
+                    console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
+
                     const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);
 
                     if (toolDecision.startsWith("WEB_SEARCH:")) {
@@ -110,7 +110,6 @@ module.exports = {
 
                     if (imageUrl) {
                         try {
-                            model = 'qwen/qwen2.5-vl-72b-instruct:free';
                             const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
 			    			console.log(`Model used: ${model}, Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
                             return message.reply(reply);
