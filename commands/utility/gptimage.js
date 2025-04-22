@@ -88,8 +88,8 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         const base64 = buffer.toString('base64');
         const base64Url = `data:${mimeType};base64,${base64}`;
 
-        const personaReminder = "Stay in character as Andrew: short, unfiltered. Use 'whit' for 'with', lowercase, short sentences, never paragraphs. If confused, use 'how'.";
-        const fullPrompt = personaReminder + "Describe this image briefly:" + promptText;
+        const personaReminder = "Stay in character as Andrew: short, unfiltered. Use 'whit' for 'with', lowercase, short sentences, never paragraphs, no full stops. If confused, use 'how'.";
+        const fullPrompt = personaReminder + "Describe this image:" + promptText;
 
         const response = await openai.chat.completions.create({
             model,
