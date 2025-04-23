@@ -57,6 +57,25 @@ const possibleMessages = [
     "https://tenor.com/view/fumo-ayumu-kasuga-osaka-cirno-azumanga-daioh-gif-20739417",
     "Silent Hill  tesla",
     "Lain=Akira",
+    "Le Ferrari F8 Lamborghini roadster",
+    "https://tenor.com/view/pepe-popcorn-pepe-pepe-frog-frog-meme-pepe-gif-13771789960385103599",
+    "https://tenor.com/view/azumanga-daioh-osaka-osaker-speech-gif-12106132575117515996",
+    "https://tenor.com/view/patrick-bateman-gif-26282297",
+    "https://tenor.com/view/incel-wojak-meme-anime-glasses-gif-21218188",
+    "https://tenor.com/view/yay-yippee-clap-fuuka-yamagishi-gif-11473661067883569119",
+    "https://tenor.com/view/kanye-west-kanye-ye-vultures-vultures-1-gif-16466379573931117087",
+    "Hail Mussolini",
+    "Mark my words meeper",
+    "Meeper how you do?",
+    "Whats your secret meeper",
+    "Ahahahahah",
+    "https://tenor.com/view/back-to-the-future-ronald-gif-21233116",
+    "https://tenor.com/view/based-metal-gear-metal-gear-solid-big-boss-venom-snake-gif-21735928",
+    "https://tenor.com/view/squirtle-pokemon-gif-23882585",
+    "https://tenor.com/view/postal-postal-dude-breaking-bad-walter-white-meme-gif-26851972",
+    "https://tenor.com/view/vultures-vultures-1-kanye-west-ye-yeezy-gif-14661580508021642873",
+    "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
+    "https://tenor.com/view/ronald-reagan-its-a-great-feeling-1949-well-well-well-jack-curtiz-in-person-barber-shop-gif-21273551",
 ];
 
 const possibleMessages2 = [
@@ -72,6 +91,11 @@ const possibleMessages3 = [
 const possibleMessages4 = [
     "Watamote movie can be a crossover whit azumanga dahio",
     "What you guys think about this",
+];
+
+const possibleMessages5 = [
+    "https://tenor.com/view/kanye-west-kanye-ye-vultures-vultures-1-gif-16466379573931117087",
+    "This Is crazy so well made",
 ];
 
 function getTimedMessage() {
@@ -115,6 +139,7 @@ module.exports = {
     possibleMessages2,
     possibleMessages3,
     possibleMessages4,
+    possibleMessages5,
     griffith_messages,
     kanye_messages,
     reagan_messages,

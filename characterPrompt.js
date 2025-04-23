@@ -6,6 +6,7 @@ const combinedMessages = [
     ...messageDatabase.possibleMessages2,
     ...messageDatabase.possibleMessages3,
     ...messageDatabase.possibleMessages4,
+    ...messageDatabase.possibleMessages5,
     ...messageDatabase.kanye_messages,
     ...messageDatabase.ksi_messages,
     ...messageDatabase.reagan_messages,
