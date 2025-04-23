@@ -39,6 +39,11 @@ module.exports = {
 							await channel.send(possibleMessages4[1]);
 							console.log(`Both messages from possibleMessages4 sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
+						else if (possibleMessages5.includes(randomMessage)) {
+							await channel.send(possibleMessages5[0]);
+							await channel.send(possibleMessages5[1]);
+							console.log(`Both messages from possibleMessages5 sent to guild: ${client.guilds.cache.get(guildId).name}`);
+						}
 						else {
 							await channel.send(randomMessage);
 							console.log(`Random message sent to guild: ${client.guilds.cache.get(guildId).name}`);
