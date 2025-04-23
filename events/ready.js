@@ -1,7 +1,7 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
-const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4 } = require('../messageDatabase.js');
+const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5 } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
