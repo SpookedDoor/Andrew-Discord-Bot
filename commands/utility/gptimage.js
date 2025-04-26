@@ -3,7 +3,7 @@ const OpenAI = require('openai');
 require('dotenv').config();
 const openai = new OpenAI({
     baseURL: 'http://localhost:5001/v1',
-    apiKey: process.env.OPENROUTER_API_KEY,
+    apiKey: "0"
 });
 const content = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
@@ -24,25 +24,13 @@ module.exports = {
         .addStringOption(option =>
             option.setName('prompt')
                 .setDescription('Text prompt')
-                .setRequired(false))
-        .addStringOption(option =>
-            option.setName('model')
-                .setDescription('Select a multimodal model')
-                .setRequired(false)
-                .addChoices(
-                    { name: 'Llama 4 Scout', value: 'meta-llama/llama-4-scout:free' },
-                    { name: 'Llama 4 Maverick', value: 'meta-llama/llama-4-maverick:free' },
-                    { name: 'Mistral Small 3.1', value: 'mistralai/mistral-small-3.1-24b-instruct:free' },
-                    { name: 'Google Gemini 2.0 Flash', value: 'google/gemini-2.0-flash-exp:free' },
-                    { name: 'Google Gemma 3', value: 'google/gemma-3-27b-it:free' },
-                    { name: 'Qwen 2.5', value: 'qwen/qwen2.5-vl-72b-instruct:free' },
-                )),
+                .setRequired(false)),
 
     async execute(interaction) {
         const imageAttachment = interaction.options.getAttachment('image');
         const imageUrl = imageAttachment.url;
         const prompt = interaction.options.getString('prompt') || "Hey Andrew, describe this image and tell me what you think of this?";
-        const model = interaction.options.getString('model') || 'koboldcpp';
+        const model = 'koboldcpp';
 
         await interaction.deferReply();
 
