@@ -178,7 +178,10 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         });
 
         if (response?.choices?.[0]?.message?.content) {
-            const reply = response.choices[0].message.content;
+            let reply = response.choices[0].message.content;
+            if (reply.length > 2000) {
+                reply = reply.slice(0, 1997) + '...';
+            }
             userHistories[userId].push({ role: "assistant", content: reply });
             return reply;
         } else {
