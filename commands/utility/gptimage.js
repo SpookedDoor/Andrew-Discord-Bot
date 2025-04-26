@@ -107,6 +107,9 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         });
 
         const reply = response.choices[0]?.message?.content || "Couldn't describe the image";
+        if (reply.length > 2000) {
+            return reply.slice(0, 1997) + '...';
+        }
         return reply;
 
     } catch (err) {
