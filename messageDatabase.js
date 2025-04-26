@@ -13,6 +13,7 @@ const emojis = [
     "<:umarucry:1358518905219584120>",
     "<:wtf:1358518914631602449>",
     "<:xd:1358518924303667272>",
+    "<:pekostare:1365786858465919046>",
 ]
 
 const possibleMessages = [

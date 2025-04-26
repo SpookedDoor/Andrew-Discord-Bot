@@ -29,7 +29,8 @@ module.exports = {
 					"<:tomoko_like:1358518895627210762> : <\\:tomoko_like:1358518895627210762>\n" +
 					"<:umarucry:1358518905219584120> : <\\:umarucry:1358518905219584120>\n" +
 					"<:wtf:1358518914631602449> : <\\:wtf:1358518914631602449>\n" +
-					"<:xd:1358518924303667272> : <\\:xd:1358518924303667272>\n")
+					"<:xd:1358518924303667272> : <\\:xd:1358518924303667272>\n"  +
+                    "<:pekostare:1365786858465919046> : <\\:pekostare:1365786858465919046>\n")
 					
 				const row1 = new ActionRowBuilder()
                     .addComponents(
@@ -96,6 +97,11 @@ module.exports = {
 							.setLabel('XD')	
 							.setStyle(1)	
 							.setEmoji('1358518924303667272'),
+                        new ButtonBuilder()	
+							.setCustomId('pekostare')	
+							.setLabel('Peko Stare')	
+							.setStyle(1)	
+							.setEmoji('1365786858465919046'),
                     );
 
                 const replyOptions = {
@@ -152,6 +158,9 @@ module.exports = {
                             case 'xd':
                                 emoji = '<:xd:1358518924303667272>';
                                 break;
+                            case 'pekostare':
+                                    emoji = '<:pekostare:1365786858465919046>';
+                                    break;
                             default:
                                 emoji = 'Unknown emoji';
                         }
