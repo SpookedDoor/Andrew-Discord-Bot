@@ -8,7 +8,7 @@ This gives you nothing but the accurate experience with Andrew, anytime, anywher
 It's even got his Griffith, Kanye, Reagan, AND even his Nick Fuentes obsession, what more could you ask for?!
 
 ------------------------------------------------------------------------------
-## THE REAL SHIT AND IT'S FEATURES
+## THE REAL SHIT AND ITS FEATURES
 This bot was made as an inside-joke, and it could be pretty offensive, so there's that. It's also pretty funny, I'd say.
 
 It features nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
@@ -47,7 +47,7 @@ And a ``config.json`` that looks something like this.
 }
 ```
 
-Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Though, it is possible to make it use openrouter, but you'd have to manually set that up yourself, as we don't support it anymore. (The bot actually used to primarily use openrouter before we switched to local AIs!)
+Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Though, it is possible to make it use Openrouter/OpenAI, but you'd have to manually set that up yourself, as we don't support it anymore. (The bot actually used to primarily use Openrouter before we switched to local AIs!)
 
 If you have KoboldCPP installed and everything, make sure to set your ``baseURL`` to be the same as it is in ``./commands/utility/gpt.js``, ``./commands/utility/gptimage.js``, and ``searchTools.js``. By default it looks like:  
 ```dotenv js
@@ -63,6 +63,6 @@ const model = 'koboldcpp';
 ### THE REST
 Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
 
-But if you were to use it for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Without him, the project would be pretty barebones.
+But if you were to use it for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Without him, the project would be pretty barebones.)
 
-![F3nZ5QbX0AAgVJo](https://github.com/user-attachments/assets/98b63b14-01c4-41bc-956e-e5fcb5a00455)
+![blud](https://github.com/user-attachments/assets/98b63b14-01c4-41bc-956e-e5fcb5a00455)
