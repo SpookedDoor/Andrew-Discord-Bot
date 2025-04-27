@@ -134,6 +134,13 @@ const ksi_messages = [
 	"https://tenor.com/view/from-the-screen-to-the-ring-the-the-pen-to-the-king-ksi-gif-12257927774644906851",
 ];
 
+const mussolini_messages = [
+    "Hail Mussolini", "You like Mussolini?", "https://tenor.com/view/benito-mussolini-gif-26264823",
+    "https://tenor.com/view/benito-mussolini-keep-talking-talking-mad-gif-15512602", "Like Mussolini? Pog",
+    "https://tenor.com/view/mussolini-chad-gif-1828092016728334367", "What why Mussolini Is the best", "harry Potter and mussolini vs random slav country",
+    "https://tenor.com/view/mussolini-speech-gif-2561627433093724979", "https://tenor.com/view/mussolini-serious-who-cares-gif-5388395",
+];
+
 module.exports = {
     emojis,
     possibleMessages,
@@ -146,4 +153,5 @@ module.exports = {
     reagan_messages,
     nick_messages,
     ksi_messages,
+    mussolini_messages,
 }

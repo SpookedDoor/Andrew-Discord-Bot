@@ -5,7 +5,7 @@ The funny Andrew_Fish27 bot. For now, it's very top secret! :trollface:
 
 This gives you nothing but the accurate experience with Andrew, anytime, anywhere! 
 
-It's even got his Griffith, Kanye, Reagan, AND even his Nick Fuentes obsession, what more could you ask for?!
+It's even got his Griffith, Kanye, Reagan, Mussolini AND even his Nick Fuentes obsession, what more could you ask for?!
 
 ------------------------------------------------------------------------------
 ## THE REAL SHIT AND ITS FEATURES

@@ -11,7 +11,8 @@ const combinedMessages = [
     ...messageDatabase.ksi_messages,
     ...messageDatabase.reagan_messages,
     ...messageDatabase.nick_messages,
-    ...messageDatabase.griffith_messages
+    ...messageDatabase.griffith_messages,
+    ...messageDatabase.mussolini_messages
 ];
 const memoryDump = combinedMessages.join('\n');
 
