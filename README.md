@@ -13,7 +13,7 @@ This bot was made as an inside-joke, and it could be pretty offensive, so there'
 
 It features nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely a optional, separate project.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely an optional, separate project.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
