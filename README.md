@@ -13,7 +13,7 @@ This bot was made as an inside-joke, and it could be pretty offensive, so there'
 
 It features nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's a separate thing.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely a optional, separate project.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
@@ -24,7 +24,7 @@ First and foremost, you would have to clone the repo using:
 git clone https://github.com/SpookedDoor/Andrew-Discord-Bot.git
 ```
 
-Or you can just simply use Github Desktop, whatever suits your boat.
+Or you can just simply use Github Desktop, whatever floats your boat.
 
 ## THE MEAT ON THE BONES
 Before using this bot, I'd recommend reading the [discord.js guide](https://discord.js.org/), if you haven't already. 
