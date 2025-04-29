@@ -1,7 +1,7 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
-const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5 } = require('../messageDatabase.js');
+const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, wakeytime, sleepytime } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -9,7 +9,7 @@ module.exports = {
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
-        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4);
+        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5);
 
         const sendRandomMessage = async () => {
             for (const [guildId, channelId] of Object.entries(channelMap)) {
@@ -64,6 +64,9 @@ module.exports = {
 			}
         };
 
+		const { sleepytime } = require('../messageDatabase.js');
+		const { wakeytime } = require('../messageDatabase.js');
+
 		const checkSleepSchedule = async () => {
 			const now = new Date();
 			const hourUTC = now.getUTCHours();
@@ -74,14 +77,14 @@ module.exports = {
 				if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.getSleepStatus(guildId) && !status.getWakeOverride(guildId)) {
 						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						if (hourUTC === 2 && minutes === 0) await channel.send("GN all i am Griffith");
+						if (hourUTC === 2 && minutes === 0) await channel.send(sleepytime[Math.floor(Math.random() * sleepytime.length)]);
 						status.setSleepStatus(guildId, true);	
 					}
 				}
 				else {
 					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)) {
 						console.log(`Auto-waking Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						await channel.send("morning all i am Griffith");
+						await channel.send(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
 						status.setSleepStatus(guildId, false);
 					}
 				}
