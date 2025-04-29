@@ -91,8 +91,6 @@ module.exports = (client) => {
             console.log(`Next message will be sent in ${minutes}m ${seconds}s.`);
             return;
         } else if (command === '/help') {
-            const minutes = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 60000);
-            const seconds = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 1000) % 60;
             console.log(`Available commands: /setguild, /send, /exit, /randomtime`);
             return;
         } else if (command === '/exit') {
