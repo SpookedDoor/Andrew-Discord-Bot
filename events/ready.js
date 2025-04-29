@@ -55,17 +55,17 @@ module.exports = {
     		}
 			scheduleRandomMessage();
         };
-
+		
         const scheduleRandomMessage = () => {
 			if (!status.getSleepStatus(client.guilds.cache.first().id)) {
-				const randomDelay = Math.floor(Math.random() * (21600000 - 10800000 + 1)) + 10800000;
+				const randomMinutes = Math.floor(Math.random() * (360 - 180 + 1)) + 180;
+				const randomDelay = randomMinutes * 60 * 1000;
+				const nextMessageTimestamp = Date.now() + randomDelay;
+				module.exports.getNextMessageTimestamp = () => nextMessageTimestamp;
 				console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
 				setTimeout(sendRandomMessage, randomDelay);
 			}
         };
-
-		const { sleepytime } = require('../messageDatabase.js');
-		const { wakeytime } = require('../messageDatabase.js');
 
 		const checkSleepSchedule = async () => {
 			const now = new Date();
