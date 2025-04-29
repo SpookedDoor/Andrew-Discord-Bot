@@ -77,6 +77,10 @@ const possibleMessages = [
     "https://tenor.com/view/vultures-vultures-1-kanye-west-ye-yeezy-gif-14661580508021642873",
     "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
     "https://tenor.com/view/ronald-reagan-its-a-great-feeling-1949-well-well-well-jack-curtiz-in-person-barber-shop-gif-21273551",
+    "https://tenor.com/view/tomoko-watamote-tomoko-kuroki-kuroki-dance-gif-3529097142210118205",
+    "Lain>Cthulhu",
+    "https://tenor.com/view/lain-sel-serial-experiments-lain-iwakura-silly-gif-26865566583074851370",
+    "https://tenor.com/view/berserk-griffith-smile-gif-26958203",
 ];
 
 const possibleMessages2 = [
@@ -107,6 +111,23 @@ const griffith_messages = [
     getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', 
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith.png'))] },
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith2.jpg'))] },
+];
+
+// because you just KNOW he's an awake ahh blud!
+const wakeytime = [
+	"morning all i am Griffith", "morning all i am Griffith", "morning all i am Griffith",
+    "https://tenor.com/view/griffith-berserk-good-morning-good-morning-chat-hello-chat-gif-7712373713074364619",
+    "https://tenor.com/view/whale-shark-good-morning-gm-good-night-gn-gif-26569624", "https://tenor.com/view/kanye-fuzzle-good-morning-gif-26126244",
+
+];
+
+// because you just KNOW he's a sleepy ahh blud!
+const sleepytime = [
+	"GN all i am Griffith", "GN all i am Griffith", "GN all i am Griffith",
+    "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
+    "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
+    "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
+
 ];
 
 const kanye_messages = [
@@ -141,6 +162,7 @@ const mussolini_messages = [
     "https://tenor.com/view/mussolini-speech-gif-2561627433093724979", "https://tenor.com/view/mussolini-serious-who-cares-gif-5388395",
 ];
 
+
 module.exports = {
     emojis,
     possibleMessages,
@@ -154,4 +176,6 @@ module.exports = {
     nick_messages,
     ksi_messages,
     mussolini_messages,
+    wakeytime,
+    sleepytime,
 }

@@ -1,5 +1,6 @@
 const { channelMap } = require('../config.json');
 const readline = require('readline');
+const { scheduleRandomMessage, randomDelay } = require('./ready.js');
 
 module.exports = (client) => {
     const rl = readline.createInterface({
@@ -27,6 +28,7 @@ module.exports = (client) => {
     console.log('  /setguild <GUILD_ID> - Set the target guild');
     console.log('  /setchannel <CHANNEL_ID> - Set the target channel within the current guild');
     console.log('  /send <MESSAGE> - Send a message to the target guild\'s channel');
+    console.log('  /randomtime - Check when the next random message will be sent.');
     console.log('  /exit - Exit the terminal interface');
 
     rl.on('line', async (input) => {
@@ -82,11 +84,19 @@ module.exports = (client) => {
             } catch (error) {
                 console.error('Error sending message:', error);
             }
+
+        //shit is unfinished btw. keeps saying message'll send in "NaN minutes". need to fix that.
+        } else if (command === '/randomtime') {
+            const message = args.slice(1).join(' ');
+            if (!message) {
+                console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
+                return;
+            }
         } else if (command === '/exit') {
             console.log('Exiting terminal interface...');
             rl.close();
         } else {
-            console.log('Unknown command. Available commands: /setguild, /send, /exit');
+            console.log('Unknown command. Available commands: /setguild, /send, /exit, /randomtime');
         }
     });
 };

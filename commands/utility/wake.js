@@ -6,6 +6,8 @@ const gods = [
 	{ user: 'spookeddoor', display: 'spookeddoor' },
 ];
 
+const { wakeytime } = require('../../messageDatabase.js');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('wake')
@@ -28,7 +30,7 @@ module.exports = {
 				status.setSleepStatus(serverId, false);
 				status.setOverride(serverId, false);
 				status.setWakeOverride(serverId, true);
-				await interaction.reply('morning all i am Griffith');
+				await interaction.reply(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
 			}
 			else {
 				await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral});
