@@ -29,6 +29,7 @@ module.exports = (client) => {
     console.log('  /setchannel <CHANNEL_ID> - Set the target channel within the current guild');
     console.log('  /send <MESSAGE> - Send a message to the target guild\'s channel');
     console.log('  /randomtime - Check when the next random message will be sent');
+    console.log('  /help - Shows all available terminal commands');
     console.log('  /exit - Exit the terminal interface');
 
     rl.on('line', async (input) => {
@@ -88,6 +89,11 @@ module.exports = (client) => {
             const minutes = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 60000);
             const seconds = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 1000) % 60;
             console.log(`Next message will be sent in ${minutes}m ${seconds}s.`);
+            return;
+        } else if (command === '/help') {
+            const minutes = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 60000);
+            const seconds = Math.floor((ready.getNextMessageTimestamp() - Date.now()) / 1000) % 60;
+            console.log(`Available commands: /setguild, /send, /exit, /randomtime`);
             return;
         } else if (command === '/exit') {
             console.log('Exiting terminal interface...');
