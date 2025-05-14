@@ -81,6 +81,23 @@ const possibleMessages = [
     "Lain>Cthulhu",
     "https://tenor.com/view/lain-sel-serial-experiments-lain-iwakura-silly-gif-26865566583074851370",
     "https://tenor.com/view/berserk-griffith-smile-gif-26958203",
+    "Boy dont play whit me you know i am fried",
+    "https://tenor.com/view/griffith-berserk-seinen-manga-manga-seinen-gif-16052926",
+    "https://tenor.com/view/pokemon-pokeani-anipoke-pokemon-horizons-shuckle-gif-1434229247519097369",
+    "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj",
+    "New Kanye song Is wild",
+    "Danganropa Kanye west",
+    "i am spittin venom",
+    "I'm spittin' out venom",
+    "God of falconia AND  wataland",
+    "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
+    "Shuckle hang whit arceus",
+    "Arceus Nuke type wold be broken",
+    "What if Miku appear in watamote movie ?",
+    "Miku house",
+    "Miku town",
+    "Miku country someday who knows",
+    "CAT bird pog\nPeak of evolution\n1- Cirno \n2- CAT bird \n3- DOG bird"
 ];
 
 const possibleMessages2 = [
@@ -113,7 +130,6 @@ const griffith_messages = [
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith2.jpg'))] },
 ];
 
-// because you just KNOW he's an awake ahh blud!
 const wakeytime = [
 	"morning all i am Griffith", "morning all i am Griffith", "morning all i am Griffith",
     "https://tenor.com/view/griffith-berserk-good-morning-good-morning-chat-hello-chat-gif-7712373713074364619",
@@ -121,7 +137,6 @@ const wakeytime = [
 
 ];
 
-// because you just KNOW he's a sleepy ahh blud!
 const sleepytime = [
 	"GN all i am Griffith", "GN all i am Griffith", "GN all i am Griffith",
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
@@ -137,12 +152,14 @@ const kanye_messages = [
 	"https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141", 
 	"https://tenor.com/view/kanye-west-gif-1846075065280866456", "https://tenor.com/view/kanye-west-kanye-ye-um-uhm-gif-1371611536126645899", 
 	"https://tenor.com/view/kanye-west-my-reaction-to-that-information-my-honest-reaction-meme-gif-15000744814966995138",
+    "Kanye Goat", "New Kanye song Is wild", "Danganropa Kanye west", 
 ];
 
 const reagan_messages = [
 	"Reagan was the best", "Reagan number 1", "Reagan number 1 president ever", "Reagan turn down the wall", "Trump and Reagan goats", 
 	"Reagan and Trump best presidents ever", "Ronald pls", "https://tenor.com/view/republican-gif-24490147", 
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779",
+    "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj",
 ];
 
 const nick_messages = [
@@ -162,6 +179,15 @@ const mussolini_messages = [
     "https://tenor.com/view/mussolini-speech-gif-2561627433093724979", "https://tenor.com/view/mussolini-serious-who-cares-gif-5388395",
 ];
 
+const upset_fucker = [
+    "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
+    "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
+    "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
+    "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
+    "Why you are a leftard",
+    
+]
+
 
 module.exports = {
     emojis,
@@ -178,4 +204,5 @@ module.exports = {
     mussolini_messages,
     wakeytime,
     sleepytime,
+    upset_fucker
 }
