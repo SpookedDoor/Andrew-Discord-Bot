@@ -45,7 +45,7 @@ const users = [
         displayName: 'Moon Man',
         isCreator: false,
         isGod: false,
-        traits: ['male', 'brazilian', 'only plays paradox games, map games like HOI4, EU4 and CK3', 'likes anime', 'likes lolis'],
+        traits: ['male', 'brazilian', 'only plays paradox games, map games like HOI4, EU4 and CK3', 'likes anime', 'likes lolis', 'old', 'lawyer'],
     },
     {
         id: '559520799829000203',
@@ -53,7 +53,7 @@ const users = [
         displayName: 'Brit',
         isCreator: false,
         isGod: true,
-        traits: ['female', 'american', 'russian', 'futanari', 'married to real Tomoko', 'draws'],
+        traits: ['female', 'american', 'russian', 'futanari', 'married to real Tomoko', 'draws', 'likes vocaloid', 'likes miku'],
     },
     {
         id: '689829347443605768',
@@ -81,7 +81,7 @@ const users = [
     },
     {
         id: '1014404029146726460',
-        usernames: ['andrew143256', 'andrew', 'fish 27'],
+        usernames: ['andrew143256', 'andrew', 'fish 27', 'fishdrew'],
         displayName: 'Andrew',
         isCreator: false,
         isGod: false,
