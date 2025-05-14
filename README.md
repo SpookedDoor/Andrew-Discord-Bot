@@ -9,9 +9,11 @@ It's even got his Griffith, Kanye, Reagan, Mussolini AND even his Nick Fuentes o
 
 ------------------------------------------------------------------------------
 ## THE REAL SHIT AND ITS FEATURES
-This bot was made as an inside-joke, and it could be pretty offensive, so there's that. It's also pretty funny, I'd say.
+This bot was made as an inside-joke, and it could be pretty offensive, so there's that. It's also pretty funny, I'd say. 
 
-It features nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
+(Of course, we don't agree with the stuff he says. This is purely satire.)
+
+It features over 80 nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
 
 And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely an optional, separate project.)
 
