@@ -97,7 +97,32 @@ const possibleMessages = [
     "Miku house",
     "Miku town",
     "Miku country someday who knows",
-    "CAT bird pog\nPeak of evolution\n1- Cirno \n2- CAT bird \n3- DOG bird"
+    "CAT bird pog\nPeak of evolution\n1- Cirno \n2- CAT bird \n3- DOG bird",
+    "NHH",
+    "Hello Gods",
+    "Kanye drop Cuck album",
+    "Normal Tomoko silver Tomoko vultures Tomoko",
+    "Free Diddy",
+    "Kanye music",
+    "Lain at my side",
+    "Osaka Wanna Hop in a rari",
+    "Hello citizens of wataland falconia",
+    "Also neco Arc  in fornite wold be crazy",
+    "Yeezy in fornite",
+    "Osaka Bein Kanye fan Is canon",
+    "https://tenor.com/view/berserk-gif-2898366366016578155",
+    "https://tenor.com/view/femto-griffith-berserk-manga-anime-gif-14902110100260594587",
+    "Gonna run for president someday",
+    "Shhhhhhh i am listening preacherman",
+
+    {
+        content: 'Alabamian cousine',
+        files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
+    },
+    { 
+        content: 'SSS+ burger from alabama\nAlso alabamian tomatoe',
+        files: [new AttachmentBuilder(path.join(__dirname, './media/alabamaburger.jpg'))] 
+    },
 ];
 
 const possibleMessages2 = [
@@ -120,25 +145,44 @@ const possibleMessages5 = [
     "This Is crazy so well made",
 ];
 
+const possibleMessages6 = [
+    "Someday gonna rock a swastika diamond chain",
+    "As Kanye west the goat",
+]
+
+const possibleMessages7 = [
+    "Kanye new music Is good",
+    "Cousins",
+    "Free diddy",
+    "Cosby",
+    "Top Tier SSS+ songs",
+    "Also nitrous",
+]
+
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 }
 
 const griffith_messages = [
-    getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', 
+    getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', "I am Femto God", "I am Griffith God",
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith.png'))] },
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith2.jpg'))] },
 ];
 
 const wakeytime = [
-	"morning all i am Griffith", "morning all i am Griffith", "morning all i am Griffith",
+	"morning all i am Griffith", "morning all i am Griffith", "morning all i am Griffith", 
+    "Good morning", "Morning", "Good morning uh uh uh", "Morning all",
     "https://tenor.com/view/griffith-berserk-good-morning-good-morning-chat-hello-chat-gif-7712373713074364619",
     "https://tenor.com/view/whale-shark-good-morning-gm-good-night-gn-gif-26569624", "https://tenor.com/view/kanye-fuzzle-good-morning-gif-26126244",
 
 ];
 
 const sleepytime = [
-	"GN all i am Griffith", "GN all i am Griffith", "GN all i am Griffith",
+	"GN all i am Griffith", "GN all i am Griffith", "GN all i am Griffith", "GN all dream whit wataland falconia", 
+    "GN all dream whit Kanye west", "Gn all friends of wataland", "GN all", "Gn", "GN guys", "gn friends",
+    "https://tenor.com/view/sleep-gif-16267239586470775658", "Gn watafriends", "Gn all watafriends", "gn tomoko fan club",
+    "GN knights", "GN all dream whit tomboy  cirno", "https://tenor.com/view/gypsy-crusader-gypsy-joker-gn-gif-23761746",
+    "https://tenor.com/view/osaka-azuman-goodnight-gn-sleep-gif-24066064", 
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
@@ -152,14 +196,15 @@ const kanye_messages = [
 	"https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141", 
 	"https://tenor.com/view/kanye-west-gif-1846075065280866456", "https://tenor.com/view/kanye-west-kanye-ye-um-uhm-gif-1371611536126645899", 
 	"https://tenor.com/view/kanye-west-my-reaction-to-that-information-my-honest-reaction-meme-gif-15000744814966995138",
-    "Kanye Goat", "New Kanye song Is wild", "Danganropa Kanye west", 
+    "Kanye Goat", "New Kanye song Is wild", "Danganropa Kanye west", "Kanye drop Cuck album", "Kanye music", "Free Diddy",
+    "Diddy Is good rapper Also kanye", "Yeezy in fornite", "Osaka Bein Kanye fan Is canon", "Shhhhhhh i am listening preacherman",
 ];
 
 const reagan_messages = [
 	"Reagan was the best", "Reagan number 1", "Reagan number 1 president ever", "Reagan turn down the wall", "Trump and Reagan goats", 
 	"Reagan and Trump best presidents ever", "Ronald pls", "https://tenor.com/view/republican-gif-24490147", 
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779",
-    "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj",
+    "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj", "Reagan wold say i win again couse i am the goat as president",
 ];
 
 const nick_messages = [
@@ -184,8 +229,25 @@ const upset_fucker = [
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
-    "Why you are a leftard",
+    "Why you are a leftard", "Fake",
     
+]
+
+const SSSTierOpinions = [
+    "Sabaton albums are top tier sss+",
+    "Reagan Top Tier SSS+ president",
+    "Reagan SSS+ president",
+    "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
+    "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
+    "Boil crab\nSSS+ alabamian cousine",
+    {
+        content: 'Alabamian cousine',
+        files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
+    },
+    { 
+        content: 'SSS+ burger from alabama\nAlso alabamian tomatoe',
+        files: [new AttachmentBuilder(path.join(__dirname, './media/alabamaburger.jpg'))] 
+    },
 ]
 
 
@@ -196,6 +258,8 @@ module.exports = {
     possibleMessages3,
     possibleMessages4,
     possibleMessages5,
+    possibleMessages6,
+    possibleMessages7,
     griffith_messages,
     kanye_messages,
     reagan_messages,
@@ -204,5 +268,6 @@ module.exports = {
     mussolini_messages,
     wakeytime,
     sleepytime,
-    upset_fucker
+    upset_fucker,
+    SSSTierOpinions
 }

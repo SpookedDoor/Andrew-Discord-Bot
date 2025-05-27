@@ -1,7 +1,7 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
-const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, wakeytime, sleepytime } = require('../messageDatabase.js');
+const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, possibleMessages7, wakeytime, sleepytime } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -43,6 +43,16 @@ module.exports = {
 							await channel.send(possibleMessages5[0]);
 							await channel.send(possibleMessages5[1]);
 							console.log(`Both messages from possibleMessages5 sent to guild: ${client.guilds.cache.get(guildId).name}`);
+						}
+						else if (possibleMessages6.includes(randomMessage)) {
+							await channel.send(possibleMessages6[0]);
+							await channel.send(possibleMessages6[1]);
+							console.log(`Both messages from possibleMessages6 sent to guild: ${client.guilds.cache.get(guildId).name}`);
+						}
+						else if (possibleMessages7.includes(randomMessage)) {
+							await channel.send(possibleMessages7[0]);
+							await channel.send(possibleMessages7[1]);
+							console.log(`Both messages from possibleMessages7 sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
 						else {
 							await channel.send(randomMessage);
