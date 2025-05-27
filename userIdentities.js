@@ -41,7 +41,7 @@ const users = [
     },
     {
         id: '1047876190809116752',
-        usernames: ['moonmanv2', 'moon man', 'moonman', 'moonie'],
+        usernames: ['moonmanv2', 'moon man', 'moonman', 'moonie', 'femoon'],
         displayName: 'Moon Man',
         isCreator: false,
         isGod: false,
