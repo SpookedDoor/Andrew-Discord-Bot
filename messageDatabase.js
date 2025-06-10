@@ -114,6 +114,27 @@ const possibleMessages = [
     "https://tenor.com/view/femto-griffith-berserk-manga-anime-gif-14902110100260594587",
     "Gonna run for president someday",
     "Shhhhhhh i am listening preacherman",
+    "Tomoko whit a vultures shirt in fornite someday",
+    "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I",
+    "Nuke all",
+    "https://tenor.com/view/hatred-gun-edgy-gif-18213167",
+    "Nitrous really fucked whit my  brain",
+    "She eat my kids like jared",
+    "https://youtu.be/2RdI94t0FXQ?si=fD5upc9R4vYmNQsk",
+    "I am a God",
+    "Thanks Reagan  now we have cat birds",
+    "The free world won",
+    "Pubg",
+    "I am ye fan",
+    "Catbirds are a thing because of Reagan you know?",
+    "Nitrous really fucked my head",
+    "Watamote season two Is the one piece",
+    "Maybe Tomoko Is the one piece the best friend that someone can have",
+    "Alabamian pancakes",
+    "Reagan wold say vultures 2 Is goated",
+    "Reagan wold say he have redneck aura",
+    "Gonna rock a swastika Chain someday as my goat",
+
 
     {
         content: 'Alabamian cousine',
@@ -198,6 +219,9 @@ const kanye_messages = [
 	"https://tenor.com/view/kanye-west-my-reaction-to-that-information-my-honest-reaction-meme-gif-15000744814966995138",
     "Kanye Goat", "New Kanye song Is wild", "Danganropa Kanye west", "Kanye drop Cuck album", "Kanye music", "Free Diddy",
     "Diddy Is good rapper Also kanye", "Yeezy in fornite", "Osaka Bein Kanye fan Is canon", "Shhhhhhh i am listening preacherman",
+    "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I", "Tomoko whit a vultures shirt in fornite someday", "I am ye fan",
+    "Nitrous really fucked whit my  brain", "She eat my kids like jared", "https://youtu.be/2RdI94t0FXQ?si=fD5upc9R4vYmNQsk",
+    "Nitrous really fucked my head",
 ];
 
 const reagan_messages = [
@@ -205,6 +229,7 @@ const reagan_messages = [
 	"Reagan and Trump best presidents ever", "Ronald pls", "https://tenor.com/view/republican-gif-24490147", 
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779",
     "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj", "Reagan wold say i win again couse i am the goat as president",
+    "Thanks Reagan  now we have cat birds", "Catbirds are a thing because of Reagan you know?",
 ];
 
 const nick_messages = [
@@ -229,7 +254,7 @@ const upset_fucker = [
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
-    "Why you are a leftard", "Fake",
+    "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti",
     
 ]
 
