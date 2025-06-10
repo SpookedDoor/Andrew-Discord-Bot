@@ -49,10 +49,12 @@ And a ``config.json`` that looks something like this.
 }
 ```
 
-Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Though, it is possible to make it use Openrouter/OpenAI, but you'd have to manually set that up yourself, as we don't support it anymore. (The bot actually used to primarily use Openrouter before we switched to local AIs!)
+Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Although it is possible to make it use Chutes/Openrouter/OpenAI, you'd have to manually set that up yourself, as we don't support it anymore by default. (The bot actually used to primarily use Openrouter before we switched to local AIs!)
 
-If you have KoboldCPP installed and everything, make sure to set your ``baseURL`` to be the same as it is in ``./commands/utility/gpt.js``, ``./commands/utility/gptimage.js``, and ``searchTools.js``. By default it looks like:  
-```dotenv js
+We now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
+
+If you have KoboldCPP installed and everything, make sure to set your ``baseURL`` in ``aiSettings.js``. By default it looks like:  
+```js
 	baseURL: "http://localhost:5001/v1",
 	apiKey: "0"
 ```

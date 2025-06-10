@@ -1,9 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
 const OpenAI = require('openai');
 require('dotenv').config();
+const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const openai = new OpenAI({ 
-	baseURL: "http://localhost:5001/v1",
-	apiKey: "0"
+	baseURL: baseURL,
+	apiKey: apiKey
 });
 const content = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
@@ -26,7 +27,7 @@ module.exports = {
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const model = 'koboldcpp';
+        const model = gptModel;
 
         try {
             await interaction.deferReply();

@@ -1,8 +1,9 @@
 const OpenAI = require('openai');
 require('dotenv').config();
+const { baseURL, apiKey } = require('./aiSettings.js');
 const openai = new OpenAI({ 
-    baseURL: "http://localhost:5001/v1",
-    apiKey: "0"
+    baseURL: baseURL,
+    apiKey: apiKey
 });
 
 module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl = null, generateImagePrompt = null) {

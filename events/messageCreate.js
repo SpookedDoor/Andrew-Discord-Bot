@@ -7,6 +7,7 @@ const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
+const { messageModel, messageImageModel } = require('../aiSettings.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, SSSTierOpinions } = require('../messageDatabase.js');
 
 const gods = [
@@ -90,7 +91,7 @@ module.exports = {
                         }
                     }
 
-                    const model = 'koboldcpp';
+                    let model = messageModel;
                     console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
 
                     const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);
@@ -111,6 +112,7 @@ module.exports = {
 
                     if (imageUrl) {
                         try {
+                            model = messageImageModel;
                             const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
 			    			console.log(`Model used: ${model}, Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
                             return message.reply(reply);
