@@ -14,7 +14,7 @@ const emojis = [
     "<:wtf:1358518914631602449>",
     "<:xd:1358518924303667272>",
     "<:pekostare:1365786858465919046>",
-]
+];
 
 const possibleMessages = [
     "<:tomoko_cup:1358095740299116614>",
@@ -134,8 +134,6 @@ const possibleMessages = [
     "Reagan wold say vultures 2 Is goated",
     "Reagan wold say he have redneck aura",
     "Gonna rock a swastika Chain someday as my goat",
-
-
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -169,7 +167,7 @@ const possibleMessages5 = [
 const possibleMessages6 = [
     "Someday gonna rock a swastika diamond chain",
     "As Kanye west the goat",
-]
+];
 
 const possibleMessages7 = [
     "Kanye new music Is good",
@@ -178,11 +176,11 @@ const possibleMessages7 = [
     "Cosby",
     "Top Tier SSS+ songs",
     "Also nitrous",
-]
+];
 
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
-}
+};
 
 const griffith_messages = [
     getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', "I am Femto God", "I am Griffith God",
@@ -255,8 +253,7 @@ const upset_fucker = [
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
     "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti",
-    
-]
+];
 
 const SSSTierOpinions = [
     "Sabaton albums are top tier sss+",
@@ -273,8 +270,7 @@ const SSSTierOpinions = [
         content: 'SSS+ burger from alabama\nAlso alabamian tomatoe',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamaburger.jpg'))] 
     },
-]
-
+];
 
 module.exports = {
     emojis,
@@ -295,4 +291,4 @@ module.exports = {
     sleepytime,
     upset_fucker,
     SSSTierOpinions
-}
+};
