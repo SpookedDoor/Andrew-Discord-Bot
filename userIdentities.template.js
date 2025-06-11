@@ -7,12 +7,12 @@ const users = [
         isGod: false,
         traits: ['human', 'not stupid'],
     },
-
     {
-        id: '1358133237855293533',
+        id: '123',
         usernames: ['Anti-Andrew', 'Anti'],
         displayName: 'Anti-Andrew',
         isCreator: false,
+        isGod: false,
         traits: ['enemy of Andrew']
     }
 ];

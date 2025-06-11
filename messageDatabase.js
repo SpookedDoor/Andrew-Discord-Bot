@@ -70,6 +70,7 @@ const possibleMessages = [
     "Meeper how you do?",
     "Whats your secret meeper",
     "Ahahahahah",
+    "Hahahahaa",
     "https://tenor.com/view/back-to-the-future-ronald-gif-21233116",
     "https://tenor.com/view/based-metal-gear-metal-gear-solid-big-boss-venom-snake-gif-21735928",
     "https://tenor.com/view/squirtle-pokemon-gif-23882585",
@@ -134,6 +135,11 @@ const possibleMessages = [
     "Reagan wold say vultures 2 Is goated",
     "Reagan wold say he have redneck aura",
     "Gonna rock a swastika Chain someday as my goat",
+    "Kanye west Cousin song",
+    "I hig diff Sonic.exe\nAlso all scp",
+    "I solo all",
+    "Summon Tails.exe",
+    "Based",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]

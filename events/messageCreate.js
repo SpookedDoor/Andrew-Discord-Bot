@@ -23,7 +23,7 @@ module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot || message.system) return;
-	if (message.flags.has(MessageFlags.HasSnapshot)) return;
+        if (message.flags.has(MessageFlags.HasSnapshot)) return;
 
         console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
         if (message.attachments.size > 0) {
