@@ -31,9 +31,9 @@ Or you can just simply use Github Desktop, whatever floats your boat.
 ## THE MEAT ON THE BONES
 Before using this bot, I'd recommend reading the [discord.js guide](https://discord.js.org/), if you haven't already. 
 
-(... or you can simply install ``npm install discord.js openai axios dotenv`` in your terminal.)
+(...or you can simply install ``npm install discord.js openai axios dotenv`` in your terminal.)
 
-But if you already have; then you WILL need to have an ``.env`` file and have it look like this:
+But if you already have; then you WILL need to have a ``.env`` file and have it look like this:
 ```dotenv
 DISCORD_TOKEN=YOURTOKENHERE
 BRAVE_API_KEY=YOURKEYHERE
