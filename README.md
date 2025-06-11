@@ -37,8 +37,15 @@ But if you already have; then you WILL need to have a ``.env`` file and have it 
 ```dotenv
 DISCORD_TOKEN=YOURTOKENHERE
 BRAVE_API_KEY=YOURKEYHERE
+GOOGLE_API_KEY=YOURKEYHERE
+GOOGLE_CSE_ID=YOURIDHERE
 ```
-And a ``config.json`` that looks something like this. 
+
+The bot uses Brave for normal web searches and Google for its image searches, if you don't want to use Google, then you'll have to edit ``gpt.js``, ``gptimage.js`` and ``messageCreate.js`` and change all instances of ``googleImageSearch`` to ``braveImageSearch``. If you don't want the bot to have web search capabilities, then you gotta delete the files related to that and also remove the associated code in those files. That would probably be a bit more of a hassle than just creating a Brave Search API account. The AI will still work without an API key provided for web searches, but you will see errors in the console, and the bot will be a bit dumber I suppose.
+
+If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
+
+You will also need a ``config.json`` that looks something like this. A template is also provided, guess what you must do with that too.
 ```json
 {
     "token": "YOURTOKENHERE",
@@ -49,9 +56,9 @@ And a ``config.json`` that looks something like this.
 }
 ```
 
-You MUST remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
+Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
 
-Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Although it is possible to make it use Chutes/Openrouter/OpenAI, you'd have to manually set that up yourself, as we don't support it anymore by default. (The bot actually used to primarily use Openrouter before we switched to local AIs!)
+Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Although it is possible to make it use Chutes/Openrouter/OpenAI, you'd have to manually set that up yourself, as we don't support it anymore by default. (The bot actually used to primarily use Openrouter before we switched to local AIs!) If however you decide to go with an online AI service, I would highly recommend Chutes as it's completely free to use (as long as you stick to free models) and there are no rate limits as far as I'm aware. Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
 
 We now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
 
