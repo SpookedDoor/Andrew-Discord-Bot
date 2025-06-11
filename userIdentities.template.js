@@ -7,7 +7,14 @@ const users = [
         isGod: false,
         traits: ['human', 'not stupid'],
     },
-    {                                                   id: '1358133237855293533',                      usernames: ['Anti-Andrew'],                     displayName: 'Anti-Andrew',                     isCreator: false,                               isGod: false,                                   traits: ['enemy of Andrew']                 },
+
+    {
+        id: '1358133237855293533',
+        usernames: ['Anti-Andrew', 'Anti'],
+        displayName: 'Anti-Andrew',
+        isCreator: false,
+        traits: ['enemy of Andrew']
+    }
 ];
 
 async function findUserIdentity({ id = null, name = '', guild = null }) {
@@ -36,7 +43,6 @@ async function findUserIdentity({ id = null, name = '', guild = null }) {
                 displayName: member.displayName,
                 usernames: [member.user.username],
                 isCreator: false,
-                isGod: false,
                 traits: [],
                 note: `This is a person in the server.`,
                 id: member.id
