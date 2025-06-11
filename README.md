@@ -49,6 +49,8 @@ And a ``config.json`` that looks something like this.
 }
 ```
 
+You MUST remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
+
 Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Although it is possible to make it use Chutes/Openrouter/OpenAI, you'd have to manually set that up yourself, as we don't support it anymore by default. (The bot actually used to primarily use Openrouter before we switched to local AIs!)
 
 We now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
