@@ -19,7 +19,7 @@ module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl =
     }
 
     const toolPrompt = `
-		A user asked: "${enrichedPrompt}"
+		A user asked Andrew bot this: "${enrichedPrompt}". If this prompt contains the bot's name, which is "Andrew", that should not be added to the search.
 
 		Decide what tool (if any) is needed to answer.
 		- If you need to search the web for context, reply with: WEB_SEARCH: <query>
