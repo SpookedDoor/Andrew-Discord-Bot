@@ -83,4 +83,6 @@ Well, there you have it! The rest is pretty self-explanatory. You can look throu
 
 But if you were to use it for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Without him, the project would be pretty barebones.)
 
+For even more help, refer to the [wiki page](https://github.com/SpookedDoor/Andrew-Discord-Bot/wiki).
+
 ![blud](https://github.com/user-attachments/assets/98b63b14-01c4-41bc-956e-e5fcb5a00455)
