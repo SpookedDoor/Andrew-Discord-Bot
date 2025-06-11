@@ -134,7 +134,7 @@ module.exports = {
 						message.guild
 					);
 
-					console.log(`Prompt: ${finalPrompt}\nAI response: ${reply}`);
+					console.log(`Prompt: ${prompt}\nAI response: ${reply}`);
                     if (reply) message.reply(reply);
                 }
             }
