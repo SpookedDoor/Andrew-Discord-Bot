@@ -13,7 +13,7 @@ This bot was made as an inside-joke, and it could be pretty offensive, so there'
 
 (Of course, we don't agree with the stuff he says. This is purely satire.)
 
-It features over 80 nonsensical messages that sent at random intervals, peak slash commands, image descriptions, and hell, it's even got a LLM!
+It features over 200 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, image descriptions, and hell, it's even got a LLM!
 
 And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely an optional, separate project.)
 
@@ -31,7 +31,7 @@ Or you can just simply use Github Desktop, whatever floats your boat.
 ## THE MEAT ON THE BONES
 Before using this bot, I'd recommend reading the [discord.js guide](https://discord.js.org/), if you haven't already. 
 
-(...or you can simply install ``npm install discord.js openai axios dotenv node-fetch`` in your terminal.)
+(...or you can simply install ``npm install discord.js openai axios dotenv node-fetch`` in your terminal. But it's still recommended to read the guide to at least understand some of the basic stuff.)
 
 But if you already have; then you WILL need to have a ``.env`` file and have it look like this:
 ```dotenv
@@ -58,7 +58,7 @@ You will also need a ``config.json`` that looks something like this. A template 
 
 Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
 
-We now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
+Speaking of which... we now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
 
 I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend Chutes as it's completely free to use (as long as you stick to free models) and there are no rate limits as far as I'm aware. Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
 
