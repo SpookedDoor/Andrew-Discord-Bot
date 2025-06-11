@@ -11,7 +11,7 @@ const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
-const fetch = require('node-fetch');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');
 
 module.exports = {
@@ -68,7 +68,8 @@ module.exports = {
 module.exports.generateImagePrompt = async function (promptText, imageUrl, model) {
     try {
         const responseImg = await fetch(imageUrl);
-        const buffer = await responseImg.buffer();
+        const arrayBuffer = await responseImg.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
         const ext = path.extname(imageUrl).toLowerCase();
         let mimeType = 'image/png';
         if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
