@@ -53,9 +53,9 @@ module.exports = {
                 console.log("No internet tools used.");
             }
 
+            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
             const reply = await module.exports.generateImagePrompt(enrichedPrompt, imageUrl, model);
-            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}`);
-            console.log(`Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
+            console.log(`AI response: ${reply}`);
             await interaction.editReply({ content: reply, files: [imageUrl] });
 
         } catch (err) {

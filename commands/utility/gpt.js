@@ -32,8 +32,6 @@ module.exports = {
         try {
             await interaction.deferReply();
         
-            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
-        
             let finalPrompt = prompt;
             const toolDecision = await askIfToolIsNeeded(prompt, model);
         
@@ -56,6 +54,8 @@ module.exports = {
 
             if (userInfo.note) finalPrompt += `User "${usernameForAI}" is just a person in this server.`;
 
+            console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
+            
             const reply = await module.exports.generateChatCompletion(
                 interaction.user.id,
                 finalPrompt,
