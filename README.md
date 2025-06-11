@@ -58,20 +58,25 @@ You will also need a ``config.json`` that looks something like this. A template 
 
 Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
 
-Afterwards, you WILL have to use a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Although it is possible to make it use Chutes/Openrouter/OpenAI, you'd have to manually set that up yourself, as we don't support it anymore by default. (The bot actually used to primarily use Openrouter before we switched to local AIs!) If however you decide to go with an online AI service, I would highly recommend Chutes as it's completely free to use (as long as you stick to free models) and there are no rate limits as far as I'm aware. Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
-
 We now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
 
-If you have KoboldCPP installed and everything, make sure to set your ``baseURL`` in ``aiSettings.js``. By default it looks like:  
+I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend Chutes as it's completely free to use (as long as you stick to free models) and there are no rate limits as far as I'm aware. Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
+
+Currently, the bot is now using Chutes by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
+
+## RUNNING WITH LOCAL AI
+Install a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Follow KoboldCPP's guide on getting everything set up. The most important part is obtaining an [AI model](https://huggingface.co/models?library=gguf&sort=trending). Make sure that you download a GGUF file and at least something that your PC can handle with ease (that means you can't just simply download Deepseek. If you want to use that, please use a service that provides it, like Chutes).
+
+For vision to work locally, download the correct [mmproj](https://huggingface.co/koboldcpp/mmproj/tree/main). For example, if you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj.
+
+Once that is installed and running, make sure to set your ``baseURL`` in ``aiSettings.js``. It should look like:  
 ```js
 	baseURL: "http://localhost:5001/v1",
 	apiKey: "0"
 ```
+And make sure all model variables in ``aiSettings.js`` are set to ``"koboldcpp"``.
 
-Although it's already like this by default, make sure the model is set to:
-```js
-const model = 'koboldcpp';
-```
+Simple!
 
 ### THE REST
 Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
