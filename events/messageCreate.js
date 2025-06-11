@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { Events, MessageFlags } = require('discord.js');
 const status = require('../setSleep.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
@@ -23,6 +23,7 @@ module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot || message.system) return;
+	if (message.flags.has(MessageFlags.HasSnapshot)) return;
 
         console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
         if (message.attachments.size > 0) {
