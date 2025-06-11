@@ -93,10 +93,9 @@ module.exports = {
                     }
 
                     let model = messageModel;
-                    console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
+                    let reply;
 
                     const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);
-
                     if (toolDecision.startsWith("WEB_SEARCH:")) {
                         const query = toolDecision.replace("WEB_SEARCH:", "").trim();
                         const searchResults = await braveSearch(query);
@@ -114,9 +113,9 @@ module.exports = {
                     if (imageUrl) {
                         try {
                             model = messageImageModel;
-                            const reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-			    			console.log(`Model used: ${model}, Prompt: ${prompt}, Image URL: ${imageUrl}\nAI response: ${reply}`);
-                            return message.reply(reply);
+                            console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
+                            reply = await generateImagePrompt(finalPrompt, imageUrl, model);
+                            console.log(`AI response: ${reply}`);
                         } catch (err) {
                             console.error("Image analysis failed:", err);
                             return message.reply("There was an issue analysing the image. Please try again later.");
@@ -126,15 +125,18 @@ module.exports = {
 					const userInfo = await findUserIdentity({ id: message.author.id, name: message.author.displayname, guild: message.guild });
 					const usernameForAI = userInfo?.displayName || message.author.username;
 
-					const reply = await generateChatCompletion(
-						message.author.id,
-						finalPrompt,
-						model,
-						usernameForAI,
-						message.guild
-					);
+                    if (!reply) {
+                        console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
+                        reply = await generateChatCompletion(
+                            message.author.id,
+                            finalPrompt,
+                            model,
+                            usernameForAI,
+                            message.guild
+                        );
+					    console.log(`AI response: ${reply}`);
+                    }
 
-					console.log(`Prompt: ${prompt}\nAI response: ${reply}`);
                     if (reply) message.reply(reply);
                 }
             }
