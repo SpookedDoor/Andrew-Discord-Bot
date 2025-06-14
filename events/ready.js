@@ -84,6 +84,12 @@ module.exports = {
 			
 			for (const [guildId, channelId] of Object.entries(channelMap)) {
 				const channel = client.channels.cache.get(channelId);
+				
+				if (hourUTC === 12 && minutes === 0 && status.getOverride(guildId)) {
+					status.clearOverride(guildId);
+					console.log(`Cleared manual override for guild: ${client.guilds.cache.get(guildId).name}`);
+				}
+
 				if (hourUTC >= 2 && hourUTC < 12) {
 					if (!status.getSleepStatus(guildId) && !status.getWakeOverride(guildId)) {
 						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
