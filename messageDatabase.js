@@ -141,7 +141,7 @@ const possibleMessages = [
     "Summon Tails.exe",
     "Based",
     "https://www.youtube.com/watch?v=S2Q8hVhoCKU",
-    "https://www.youtube.com/watch?v=gZsX4hY_XxE",\
+    "https://www.youtube.com/watch?v=gZsX4hY_XxE",
     "I am in love whit the nitrous",
     {
         content: 'Alabamian cousine',
