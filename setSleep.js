@@ -21,4 +21,7 @@ module.exports = {
   	setWakeOverride(serverId, value) {
     	wakeOverride.set(serverId, value);
 	},
+	clearOverride(serverId) {
+        override.delete(serverId);
+    },
 };
