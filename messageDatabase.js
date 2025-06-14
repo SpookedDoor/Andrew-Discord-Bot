@@ -140,6 +140,9 @@ const possibleMessages = [
     "I solo all",
     "Summon Tails.exe",
     "Based",
+    "https://www.youtube.com/watch?v=S2Q8hVhoCKU",
+    "https://www.youtube.com/watch?v=gZsX4hY_XxE",\
+    "I am in love whit the nitrous",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -225,7 +228,7 @@ const kanye_messages = [
     "Diddy Is good rapper Also kanye", "Yeezy in fornite", "Osaka Bein Kanye fan Is canon", "Shhhhhhh i am listening preacherman",
     "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I", "Tomoko whit a vultures shirt in fornite someday", "I am ye fan",
     "Nitrous really fucked whit my  brain", "She eat my kids like jared", "https://youtu.be/2RdI94t0FXQ?si=fD5upc9R4vYmNQsk",
-    "Nitrous really fucked my head",
+    "Nitrous really fucked my head", "https://www.youtube.com/watch?v=S2Q8hVhoCKU", "https://www.youtube.com/watch?v=gZsX4hY_XxE",
 ];
 
 const reagan_messages = [
