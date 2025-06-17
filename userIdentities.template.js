@@ -3,16 +3,12 @@ const users = [
         id: '123',
         usernames: ['username', 'nickname'],
         displayName: 'name the bot should use',
-        isCreator: false,
-        isGod: false,
         traits: ['human', 'not stupid'],
     },
     {
         id: '123',
         usernames: ['Anti-Andrew', 'Anti'],
         displayName: 'Anti-Andrew',
-        isCreator: false,
-        isGod: false,
         traits: ['enemy of Andrew']
     }
 ];
@@ -42,7 +38,6 @@ async function findUserIdentity({ id = null, name = '', guild = null }) {
             return {
                 displayName: member.displayName,
                 usernames: [member.user.username],
-                isCreator: false,
                 traits: [],
                 note: `This is a person in the server.`,
                 id: member.id
