@@ -48,7 +48,7 @@ module.exports = {
 
         let info = `**User Info:**\n`;
         info += `ID: ${identity?.id || userId || 'unknown'}\n`;
-        info += `Display Name: ${identity?.displayName || member?.displayName || fetchedUser?.username || 'unknown'}\n`;
+        info += `Display Name: ${identity?.displayName || member?.displayName || fetchedUser?.displayName || 'unknown'}\n`;
         info += `Usernames/Nicknames: ${(identity?.usernames && identity.usernames.length) ? identity.usernames.join(', ') : (username || fetchedUser?.username || 'unknown')}\n`;
         if (identity?.traits && identity.traits.length) info += `Traits: ${identity.traits.join(', ')}\n`;
         if (identity?.isGod) info += `Tag: God\n`;
