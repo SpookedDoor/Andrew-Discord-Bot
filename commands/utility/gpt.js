@@ -82,6 +82,9 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
     const currentUser = await findUserIdentity({ id: userId, name: username, guild });
     const displayName = currentUser?.displayName || username || "this user";
     const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
+    const godOrCreatorNote = 
+    (currentUser?.isGod ? 'This user has the isGod tag. ' : '') +
+    (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
 
     const otherUsers = users
         .filter(u => u.id !== userId)
@@ -130,6 +133,7 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         - Display Name: ${displayName}
         - Usernames / Nicknames: ${currentUser?.usernames?.join(', ') || 'unknown'}
         ${userTraits ? `- ${userTraits}` : ''}
+        ${godOrCreatorNote}
 
         ${guildMemberInfo}
 
@@ -141,8 +145,9 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         Additionally, the following users are known in this server:
         ${otherUsers || 'No other users found.'}
 
-        Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. 
-        All creators are gods while not all gods are your creators.
+        Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
+        All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
+        created you. Never insult.
     `;
 
     if (userHistories[userId].length % 3 === 0) {
