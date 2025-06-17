@@ -8,7 +8,7 @@ const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { messageModel, messageImageModel } = require('../aiSettings.js');
-const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, SSSTierOpinions } = require('../messageDatabase.js');
+const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages, SSSTierOpinions } = require('../messageDatabase.js');
 
 const gods = [
     { user: 'thedragonary', display: 'dragonary' },
@@ -49,6 +49,7 @@ module.exports = {
             { keyword: 'nick fuentes', response: nick_messages[Math.floor(Math.random() * nick_messages.length)] },
             { keyword: 'ksi', response: ksi_messages[Math.floor(Math.random() * ksi_messages.length)] },
             { keyword: 'mussolini', response: mussolini_messages[Math.floor(Math.random() * mussolini_messages.length)] },
+            { keyword: 'tate', response: tate_messages[Math.floor(Math.random() * tate_messages.length)] },
             { keyword: 'admin', response: 'demoted' },
         ];
 

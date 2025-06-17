@@ -256,6 +256,14 @@ const mussolini_messages = [
     "https://tenor.com/view/mussolini-speech-gif-2561627433093724979", "https://tenor.com/view/mussolini-serious-who-cares-gif-5388395",
 ];
 
+const tate_messages = [
+    "Andrew tate", "I relate to Andrew tate", "Andrew Tate skin also", "Andrew Tate Is free", "Andrew Tate Is the best", "I support Andrew Tate",
+    "He fucked because Andrew Tate say he Will never suicide", "Soros want kill Andrew tate",
+    "https://tenor.com/view/andrew-tate-cigar-walking-smoking-andrew-tate-smoking-gif-8005378695551356263",
+    "https://tenor.com/view/andrew-tate-top-g-cigar-smoking-andrew-tate-cigar-gif-26262606",
+    "https://tenor.com/view/andrew-tate-gif-26316329",
+];
+
 const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
@@ -296,6 +304,7 @@ module.exports = {
     nick_messages,
     ksi_messages,
     mussolini_messages,
+    tate_messages,
     wakeytime,
     sleepytime,
     upset_fucker,
