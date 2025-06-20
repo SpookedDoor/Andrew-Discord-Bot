@@ -143,6 +143,10 @@ const possibleMessages = [
     "https://www.youtube.com/watch?v=S2Q8hVhoCKU",
     "https://www.youtube.com/watch?v=gZsX4hY_XxE",
     "I am in love whit the nitrous",
+    "While i try be king as shuckle the third",
+    "Nuke china",
+    "Gonna rule all someday\nAs Kanye west the goat",
+    "Nuke china from the Dam orbit\nSimple as that",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -159,8 +163,8 @@ const possibleMessages2 = [
 ];
 
 const possibleMessages3 = [
-  "lain power: nuke",
-  "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
+    "lain power: nuke",
+    "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
 ];
 
 const possibleMessages4 = [
@@ -185,6 +189,12 @@ const possibleMessages7 = [
     "Cosby",
     "Top Tier SSS+ songs",
     "Also nitrous",
+];
+
+const possibleMessages8 = [
+    "Yes i am a mad God",
+    "I am evil",
+    "As Kanye west the great",
 ];
 
 function getTimedMessage() {
@@ -229,6 +239,7 @@ const kanye_messages = [
     "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I", "Tomoko whit a vultures shirt in fornite someday", "I am ye fan",
     "Nitrous really fucked whit my  brain", "She eat my kids like jared", "https://youtu.be/2RdI94t0FXQ?si=fD5upc9R4vYmNQsk",
     "Nitrous really fucked my head", "https://www.youtube.com/watch?v=S2Q8hVhoCKU", "https://www.youtube.com/watch?v=gZsX4hY_XxE",
+    "Kanye plays 69D chess whit all",
 ];
 
 const reagan_messages = [
@@ -298,6 +309,7 @@ module.exports = {
     possibleMessages5,
     possibleMessages6,
     possibleMessages7,
+    possibleMessages8,
     griffith_messages,
     kanye_messages,
     reagan_messages,

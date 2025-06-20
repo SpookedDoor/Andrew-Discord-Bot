@@ -8,7 +8,7 @@ const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { messageModel, messageImageModel } = require('../aiSettings.js');
-const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages, SSSTierOpinions } = require('../messageDatabase.js');
+const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages } = require('../messageDatabase.js');
 
 const gods = [
     { user: 'thedragonary', display: 'dragonary' },
