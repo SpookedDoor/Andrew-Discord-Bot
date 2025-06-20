@@ -1,7 +1,7 @@
 const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
-const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, possibleMessages7, wakeytime, sleepytime } = require('../messageDatabase.js');
+const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, possibleMessages7, possibleMessages8, wakeytime, sleepytime } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -9,7 +9,17 @@ module.exports = {
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
-        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5);
+        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, possibleMessages7, possibleMessages8);
+
+		const messageGroups = [
+			possibleMessages2,
+			possibleMessages3,
+			possibleMessages4,
+			possibleMessages5,
+			possibleMessages6,
+			possibleMessages7,
+			possibleMessages8,
+		];
 
         const sendRandomMessage = async () => {
             for (const [guildId, channelId] of Object.entries(channelMap)) {
@@ -23,38 +33,13 @@ module.exports = {
 				try {
 					if (!status.getSleepStatus(guildId)) {
 						const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
-						
-						if (possibleMessages2.includes(randomMessage)) {
-							await channel.send(possibleMessages2[0]);
-							await channel.send(possibleMessages2[1]);
-							console.log(`Both messages from possibleMessages2 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						} 
-						else if (possibleMessages3.includes(randomMessage)) {
-							await channel.send(possibleMessages3[0]);
-							await channel.send(possibleMessages3[1]);
-							console.log(`Both messages from possibleMessages3 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
-						else if (possibleMessages4.includes(randomMessage)) {
-							await channel.send(possibleMessages4[0]);
-							await channel.send(possibleMessages4[1]);
-							console.log(`Both messages from possibleMessages4 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
-						else if (possibleMessages5.includes(randomMessage)) {
-							await channel.send(possibleMessages5[0]);
-							await channel.send(possibleMessages5[1]);
-							console.log(`Both messages from possibleMessages5 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
-						else if (possibleMessages6.includes(randomMessage)) {
-							await channel.send(possibleMessages6[0]);
-							await channel.send(possibleMessages6[1]);
-							console.log(`Both messages from possibleMessages6 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
-						else if (possibleMessages7.includes(randomMessage)) {
-							await channel.send(possibleMessages7[0]);
-							await channel.send(possibleMessages7[1]);
-							console.log(`Both messages from possibleMessages7 sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
-						else {
+						const group = messageGroups.find(arr => arr.includes(randomMessage));
+
+						if (group) {
+							const groupIndex = messageGroups.indexOf(group) + 2;
+							for (const msg of group) await channel.send(msg);
+							console.log(`All messages from possibleMessages${groupIndex} sent to guild: ${client.guilds.cache.get(guildId).name}`);
+						} else {
 							await channel.send(randomMessage);
 							console.log(`Random message sent to guild: ${client.guilds.cache.get(guildId).name}`);
 						}
@@ -96,8 +81,7 @@ module.exports = {
 						if (hourUTC === 2 && minutes === 0) await channel.send(sleepytime[Math.floor(Math.random() * sleepytime.length)]);
 						status.setSleepStatus(guildId, true);	
 					}
-				}
-				else {
+				} else {
 					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)) {
 						console.log(`Auto-waking Androo in guild: ${client.guilds.cache.get(guildId).name}`);
 						await channel.send(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
