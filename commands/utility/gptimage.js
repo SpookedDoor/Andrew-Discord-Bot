@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const OpenAI = require('openai');
-require('dotenv').config();
 const { baseURL, apiKey, gptimageModel } = require('../../aiSettings.js');
+const OpenAI = require('openai');
 const openai = new OpenAI({
     baseURL: baseURL,
     apiKey: apiKey

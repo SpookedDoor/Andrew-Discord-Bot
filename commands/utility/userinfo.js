@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const { users, findUserIdentity } = require('../../userIdentities.js');
+const { findUserIdentity } = require('../../userIdentities.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,7 +26,6 @@ module.exports = {
         member = interaction.options.getMember('user');
         if (member) {
             userId = member.id;
-            username = member.user.username;
         } else if (interaction.options.getString('userid')) {
             userId = interaction.options.getString('userid');
             username = undefined;
@@ -35,6 +34,7 @@ module.exports = {
             userId = member.id;
             username = member.user.username;
         }
+
         const guild = interaction.guild;
         const identity = await findUserIdentity({ id: userId, name: username, guild });
 
