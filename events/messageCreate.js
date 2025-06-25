@@ -51,6 +51,9 @@ module.exports = {
             { keyword: 'mussolini', response: mussolini_messages[Math.floor(Math.random() * mussolini_messages.length)] },
             { keyword: 'tate', response: tate_messages[Math.floor(Math.random() * tate_messages.length)] },
             { keyword: 'admin', response: 'demoted' },
+            { keyword: 'https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212', response: 'Me after lobotomy' },
+            { keyword: 'oh true', response: 'https://tenor.com/view/oh-true-true-fire-writing-true-fire-true-writing-fire-gif-17199454423395239363' },
+            { keyword: 'https://cdn.discordapp.com/attachments/1239079446732869743/1290766375765413958/ezgif-7-f82d4a7d07.gif?ex=685cff1d&is=685bad9d&hm=2f761ae0f8adb4679a1be0d3265a0c48d74eedf7d9fcc921460b6f4e07560be2&', response: 'Tomoko haters irl\nRats' },
         ];
 
         const lowerCaseMessage = message.content.toLowerCase();
