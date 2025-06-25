@@ -161,6 +161,7 @@ const possibleMessages = [
         content: 'SSS+ burger from alabama\nAlso alabamian tomatoe',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamaburger.jpg'))] 
     },
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/andrewx.jpg'))] },
 ];
 
 const possibleMessages2 = [
