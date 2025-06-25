@@ -116,8 +116,8 @@ const possibleMessages = [
     "Gonna run for president someday",
     "Shhhhhhh i am listening preacherman",
     "Tomoko whit a vultures shirt in fornite someday",
-    "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I",
     "Nuke all",
+    "Lain pls",
     "https://tenor.com/view/hatred-gun-edgy-gif-18213167",
     "Nitrous really fucked whit my  brain",
     "She eat my kids like jared",
@@ -147,6 +147,12 @@ const possibleMessages = [
     "Nuke china",
     "Gonna rule all someday\nAs Kanye west the goat",
     "Nuke china from the Dam orbit\nSimple as that",
+    "I am Alien X",
+    "Hello\nCitizens of Wataland\nFalconia",
+    "I am european hooligan in my Hart",
+    "Black Yoshi nukin luigi",
+    "Hello guys",
+    "Tomoko haters irl\nRats",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -197,6 +203,15 @@ const possibleMessages8 = [
     "As Kanye west the great",
 ];
 
+const possibleMessages9 = [
+    "Watafriends power level top\n1- hellbey God\n2- lain\n3- Alien X  Andrew total  control\n4-Tomoko\n5- Andrew femto form\n6- trinke God\n7- Kanye west 1% of power\n8- Andrew bot Is a chaotic force too be recognize",
+    "Drago Is close to lain place 2 power he create  Andrew bot\nPeanut goddes Is at top 2 as lain",
+    "To use my Alien X form at total control i need to talk to the voices that's why i am top 3 i am at top 10 in my normal form\nBasically murloc npc",
+    "Also you see the power tierlist ?\nThougs?",
+];
+
+// When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
+
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 };
@@ -220,7 +235,7 @@ const sleepytime = [
     "GN all dream whit Kanye west", "Gn all friends of wataland", "GN all", "Gn", "GN guys", "gn friends",
     "https://tenor.com/view/sleep-gif-16267239586470775658", "Gn watafriends", "Gn all watafriends", "gn tomoko fan club",
     "GN knights", "GN all dream whit tomboy  cirno", "https://tenor.com/view/gypsy-crusader-gypsy-joker-gn-gif-23761746",
-    "https://tenor.com/view/osaka-azuman-goodnight-gn-sleep-gif-24066064", 
+    "https://tenor.com/view/osaka-azuman-goodnight-gn-sleep-gif-24066064", "Goodnight kingdom of wataland falconia",
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
@@ -310,6 +325,7 @@ module.exports = {
     possibleMessages6,
     possibleMessages7,
     possibleMessages8,
+    possibleMessages9,
     griffith_messages,
     kanye_messages,
     reagan_messages,
