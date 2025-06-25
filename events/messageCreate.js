@@ -90,8 +90,8 @@ module.exports = {
                                 imageUrl = repliedMessage.attachments.first().url;
                             }
                             if (repliedMessage.content) {
-                                finalPrompt = `${repliedMessage.content}\n${prompt}`;
-                                console.log(`Replying with context from previous message. Combined prompt: ${finalPrompt}`);
+                                finalPrompt = `Referenced message from ${repliedMessage.author.username}: ${repliedMessage.content}\nPrompt: ${prompt}`;
+                                console.log(`Replying with context from previous message. ${finalPrompt}`);
                             }
                         } catch (err) {
                             console.error("Failed to fetch referenced message:", err);
