@@ -15,10 +15,10 @@ const apiKey = process.env.CHUTES_API_KEY;
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main
 // Example: If you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj
 const gptModel = "deepseek-ai/DeepSeek-V3-0324"; // for gpt.js
-const gptimageModel = "chutesai/Llama-4-Scout-17B-16E-Instruct"; // for gptimage.js
+const gptimageModel = "chutesai/Mistral-Small-3.1-24B-Instruct-2503"; // for gptimage.js
 
 // for messageCreate.js
 const messageModel = "deepseek-ai/DeepSeek-V3-0324";
-const messageImageModel = "chutesai/Llama-4-Scout-17B-16E-Instruct";
+const messageImageModel = "chutesai/Mistral-Small-3.1-24B-Instruct-2503";
 
 module.exports = { baseURL, apiKey, gptModel, gptimageModel, messageModel, messageImageModel };
