@@ -316,6 +316,17 @@ const SSSTierOpinions = [
     },
 ];
 
+function getAge() {
+    const birthDate = new Date(2002, 10, 19);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
 module.exports = {
     emojis,
     possibleMessages,
@@ -337,5 +348,6 @@ module.exports = {
     wakeytime,
     sleepytime,
     upset_fucker,
-    SSSTierOpinions
+    SSSTierOpinions,
+    getAge
 };
