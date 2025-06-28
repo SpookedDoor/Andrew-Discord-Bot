@@ -38,6 +38,7 @@ const possibleMessages = [
     "She Wanna Hop in a rari",
     "Preacherman an rari are +SSS Tier songs",
     "Cope harder",
+    "Cope harder you all",
     "https://tenor.com/view/persona-persona3-minato-arisato-makoto-yuki-battle-gif-17813346",
     "-9999 watapoints",
     "average sonic fan ⬆️",
@@ -153,6 +154,14 @@ const possibleMessages = [
     "Black Yoshi nukin luigi",
     "Hello guys",
     "Tomoko haters irl\nRats",
+    "Buy a gun better",
+    "America number 1",
+    "USA USA USA",
+    "Nukes for all",
+    "Hitler ye and jesuschrist",
+    "https://www.youtube.com/watch?v=gZsX4hY_XxE",
+    "Listening Hitler ye and jesuschrist rn",
+    "Also listening rn Hitler ye and jesuschrist",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
