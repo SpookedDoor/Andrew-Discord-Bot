@@ -162,6 +162,7 @@ const possibleMessages = [
     "https://www.youtube.com/watch?v=gZsX4hY_XxE",
     "Listening Hitler ye and jesuschrist rn",
     "Also listening rn Hitler ye and jesuschrist",
+    "Hitler ye an jesuschrist",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
