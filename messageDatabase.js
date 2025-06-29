@@ -144,6 +144,7 @@ const possibleMessages = [
     "https://www.youtube.com/watch?v=S2Q8hVhoCKU",
     "https://www.youtube.com/watch?v=gZsX4hY_XxE",
     "I am in love whit the nitrous",
+    "I'm in love whit the nitrous",
     "While i try be king as shuckle the third",
     "Nuke china",
     "Gonna rule all someday\nAs Kanye west the goat",
@@ -163,6 +164,8 @@ const possibleMessages = [
     "Listening Hitler ye and jesuschrist rn",
     "Also listening rn Hitler ye and jesuschrist",
     "Hitler ye an jesuschrist",
+    "I am Griffith in wataland",
+    "All caps ANDREW GOD",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
