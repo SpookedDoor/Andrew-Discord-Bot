@@ -6,10 +6,6 @@ const openai = new OpenAI({
     apiKey: apiKey
 });
 const content = require('../../characterPrompt.js');
-const { askIfToolIsNeeded } = require('../../searchTools.js');
-const { braveSearch } = require('../../braveSearch.js');
-const { braveImageSearch } = require('../../braveImageSearch.js');
-const { googleImageSearch } = require('../../googleImageSearch.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');
 
@@ -35,25 +31,8 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const toolDecision = await askIfToolIsNeeded(prompt, imageUrl, module.exports.describeImage);
-            let enrichedPrompt = prompt;
-
-            if (toolDecision.startsWith("WEB_SEARCH:")) {
-                const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                const webResults = await braveSearch(query);
-                enrichedPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
-                console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
-            } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
-                const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                const imageResults = await googleImageSearch(query);
-                enrichedPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
-                console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
-            } else {
-                console.log("No internet tools used.");
-            }
-
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-            const reply = await module.exports.generateImagePrompt(enrichedPrompt, imageUrl);
+            const reply = await module.exports.generateImagePrompt(prompt, imageUrl);
             await interaction.editReply({ content: reply, files: [imageUrl] });
         } catch (err) {
             console.error(err);
@@ -62,8 +41,22 @@ module.exports = {
     }
 };
 
-module.exports.describeImage = async function (imageUrl, model) {
+module.exports.describeImage = async function (prompt = "Describe this image", imageUrl, model) {
     try {
+        if (prompt == "Hey Andrew, describe this image and tell me what you think of this?") prompt = "Describe this image";
+        let cleanPrompt;
+        const referencedMatch = prompt.match(/(Referenced message from Andrew:[^\n]*)/i);
+        if (referencedMatch) {
+            const referenced = referencedMatch[1];
+            let rest = prompt.replace(referenced, '');
+            rest = rest.replace(/andrew/gi, '').replace(/\s+/g, ' ').trim();
+            cleanPrompt = `${referenced} ${rest}`.trim();
+        } else {
+            cleanPrompt = prompt.replace(/andrew/gi, '').replace(/\s+/g, ' ').trim();
+            if (cleanPrompt === '' || cleanPrompt === ',') cleanPrompt = 'Describe this image';
+        }
+        console.log(`Prompt: ${cleanPrompt}`);
+
         const responseImg = await fetch(imageUrl);
         const arrayBuffer = await responseImg.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -81,7 +74,7 @@ module.exports.describeImage = async function (imageUrl, model) {
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: "Describe this image" },
+                        { type: 'text', text: cleanPrompt },
                         { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
@@ -95,13 +88,13 @@ module.exports.describeImage = async function (imageUrl, model) {
     }
 }
 
-module.exports.generateImagePrompt = async function (promptText, imageUrl) {
+module.exports.generateImagePrompt = async function (prompt, imageUrl) {
     try {
-        const preresponse = await module.exports.describeImage(imageUrl, gptimageModel);
+        const preresponse = await module.exports.describeImage(prompt, imageUrl, gptimageModel);
         console.log(`\nResponse from vision model: ${preresponse}\n`);
 
         const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. 
-        Here's the description: ${preresponse}\nPrompt: ${promptText}`;
+        Here's the description: ${preresponse}\nPrompt: ${prompt}`;
 
         const response = await openai.chat.completions.create({
 		model: gptModel,

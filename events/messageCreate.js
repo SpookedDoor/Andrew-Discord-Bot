@@ -81,9 +81,8 @@ module.exports = {
                     let finalPrompt = prompt;
                     let imageUrl = null;
 
-                    if (message.attachments.size > 0) {
-                        imageUrl = message.attachments.first().url;
-                    } else if (message.reference) {
+                    if (message.attachments.size > 0) imageUrl = message.attachments.first().url;
+                    if (message.reference) {
                         try {
                             const repliedMessage = await message.fetchReference();
                             if (repliedMessage.attachments.size > 0) {
@@ -101,19 +100,21 @@ module.exports = {
                     let model = messageModel;
                     let reply;
 
-                    const toolDecision = await askIfToolIsNeeded(finalPrompt, imageUrl, describeImage);
-                    if (toolDecision.startsWith("WEB_SEARCH:")) {
-                        const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                        const searchResults = await braveSearch(query);
-                        finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
-                        console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
-                    } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
-                        const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                        const imageResults = await googleImageSearch(query);
-                        finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
-                        console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
-                    } else {
-                        console.log(`No internet tools used.`);
+                    if (!imageUrl) {
+                        const toolDecision = await askIfToolIsNeeded(finalPrompt);
+                        if (toolDecision.startsWith("WEB_SEARCH:")) {
+                            const query = toolDecision.replace("WEB_SEARCH:", "").trim();
+                            const searchResults = await braveSearch(query);
+                            finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
+                            console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
+                        } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
+                            const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
+                            const imageResults = await googleImageSearch(query);
+                            finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
+                            console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
+                        } else {
+                            console.log(`No internet tools used.`);
+                        }
                     }
 
                     if (imageUrl) {
