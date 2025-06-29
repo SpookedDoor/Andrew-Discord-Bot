@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { baseURL, apiKey, gptimageModel } = require('../../aiSettings.js');
+const { baseURL, apiKey, gptModel, gptimageModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({
     baseURL: baseURL,
@@ -78,17 +78,31 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         const base64Url = `data:${mimeType};base64,${base64}`;
 
         const personaReminder = "Stay in character as Andrew: short, unfiltered. Use 'whit' for 'with', lowercase, short sentences, never paragraphs, no full stops. If confused, use 'how'.";
-        const fullPrompt = personaReminder + "Describe this image:" + promptText;
+
+        const preresponse = await openai.chat.completions.create({
+            model,
+            messages: [
+                {
+                    role: 'user',
+                    content: [
+                        { type: 'text', text: "Describe this image" },
+                        { type: 'image_url', image_url: { url: base64Url } }
+                    ]
+                }
+            ],
+            temperature: 0.9
+        });
+
+        const fullPrompt = `${personaReminder}\nAnother person has described this image for you, put it in your own words as Andrew. 	Here's the description: ${preresponse.choices[0]?.message?.content}\nPrompt: ${promptText}`;
 
         const response = await openai.chat.completions.create({
-            model,
+		model: gptModel,
             messages: [
                 { role: 'system', content },
                 {
                     role: 'user',
                     content: [
                         { type: 'text', text: fullPrompt },
-                        { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
             ],
