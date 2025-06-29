@@ -32,7 +32,7 @@ module.exports = {
             await interaction.deferReply();
         
             let finalPrompt = prompt;
-            const toolDecision = await askIfToolIsNeeded(prompt, model);
+            const toolDecision = await askIfToolIsNeeded(prompt);
         
             if (toolDecision.startsWith("WEB_SEARCH:")) {
                 const query = toolDecision.replace("WEB_SEARCH:", "").trim();
@@ -64,7 +64,6 @@ module.exports = {
             );
 
 	        console.log(`AI response: ${reply}`);
-
             await interaction.editReply(reply);
         } catch (err) {
             console.error(err);

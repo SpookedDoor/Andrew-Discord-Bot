@@ -2,7 +2,7 @@ const { Events, MessageFlags, AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
 const status = require('../setSleep.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
-const { generateImagePrompt } = require('../commands/utility/gptimage.js');
+const { describeImage, generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
@@ -101,7 +101,7 @@ module.exports = {
                     let model = messageModel;
                     let reply;
 
-                    const toolDecision = await askIfToolIsNeeded(finalPrompt, model, imageUrl, generateImagePrompt);
+                    const toolDecision = await askIfToolIsNeeded(finalPrompt, imageUrl, describeImage);
                     if (toolDecision.startsWith("WEB_SEARCH:")) {
                         const query = toolDecision.replace("WEB_SEARCH:", "").trim();
                         const searchResults = await braveSearch(query);
@@ -120,8 +120,7 @@ module.exports = {
                         try {
                             model = messageImageModel;
                             console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-                            reply = await generateImagePrompt(finalPrompt, imageUrl, model);
-                            console.log(`AI response: ${reply}`);
+                            reply = await generateImagePrompt(finalPrompt, imageUrl);
                         } catch (err) {
                             console.error("Image analysis failed:", err);
                             return message.reply("There was an issue analysing the image. Please try again later.");

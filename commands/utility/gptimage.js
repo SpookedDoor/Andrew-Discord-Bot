@@ -35,7 +35,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const toolDecision = await askIfToolIsNeeded(prompt, model, imageUrl, module.exports.generateImagePrompt);
+            const toolDecision = await askIfToolIsNeeded(prompt, imageUrl, module.exports.describeImage);
             let enrichedPrompt = prompt;
 
             if (toolDecision.startsWith("WEB_SEARCH:")) {
@@ -53,10 +53,8 @@ module.exports = {
             }
 
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-            const reply = await module.exports.generateImagePrompt(enrichedPrompt, imageUrl, model);
-            console.log(`AI response: ${reply}`);
+            const reply = await module.exports.generateImagePrompt(enrichedPrompt, imageUrl);
             await interaction.editReply({ content: reply, files: [imageUrl] });
-
         } catch (err) {
             console.error(err);
             await interaction.editReply("There was a problem analysing the image.");
@@ -64,7 +62,7 @@ module.exports = {
     }
 };
 
-module.exports.generateImagePrompt = async function (promptText, imageUrl, model) {
+module.exports.describeImage = async function (imageUrl, model) {
     try {
         const responseImg = await fetch(imageUrl);
         const arrayBuffer = await responseImg.arrayBuffer();
@@ -77,9 +75,7 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         const base64 = buffer.toString('base64');
         const base64Url = `data:${mimeType};base64,${base64}`;
 
-        const personaReminder = "Stay in character as Andrew: short, unfiltered. Use 'whit' for 'with', lowercase, short sentences, never paragraphs, no full stops. If confused, use 'how'.";
-
-        const preresponse = await openai.chat.completions.create({
+        const response = await openai.chat.completions.create({
             model,
             messages: [
                 {
@@ -90,10 +86,22 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
                     ]
                 }
             ],
-            temperature: 0.9
+            temperature: 0.2
         });
 
-        const fullPrompt = `${personaReminder}\nAnother person has described this image for you, put it in your own words as Andrew. 	Here's the description: ${preresponse.choices[0]?.message?.content}\nPrompt: ${promptText}`;
+        return response.choices[0]?.message?.content;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+module.exports.generateImagePrompt = async function (promptText, imageUrl) {
+    try {
+        const preresponse = await module.exports.describeImage(imageUrl, gptimageModel);
+        console.log(`\nResponse from vision model: ${preresponse}\n`);
+
+        const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. 
+        Here's the description: ${preresponse}\nPrompt: ${promptText}`;
 
         const response = await openai.chat.completions.create({
 		model: gptModel,
@@ -110,6 +118,8 @@ module.exports.generateImagePrompt = async function (promptText, imageUrl, model
         });
 
         const reply = response.choices[0]?.message?.content || "Couldn't describe the image";
+        console.log(`Model used: ${gptModel}\nResponse: ${reply}`);
+
         if (reply.length > 2000) {
             return reply.slice(0, 1997) + '...';
         }
