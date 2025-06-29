@@ -30,19 +30,19 @@ module.exports = {
 
         try {
             await interaction.deferReply();
-        
+
             let finalPrompt = prompt;
+
             const toolDecision = await askIfToolIsNeeded(prompt);
-        
             if (toolDecision.startsWith("WEB_SEARCH:")) {
                 const query = toolDecision.replace("WEB_SEARCH:", "").trim();
                 const webResults = await braveSearch(query);
-                enrichedPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
+                finalPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
                 console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
             } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
                 const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
                 const imageResults = await googleImageSearch(query);
-                enrichedPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
+                finalPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
                 console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
             } else {
                 console.log("No internet tools used.");
