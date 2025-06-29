@@ -5,13 +5,14 @@ const openai = new OpenAI({
     baseURL: baseURL,
     apiKey: apiKey
 });
+const { gptModel, gptimageModel } = require('./aiSettings.js');
 
-module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl = null, generateImagePrompt = null) {
+module.exports.askIfToolIsNeeded = async function (userPrompt, imageUrl = null, describeImage = null) {
     let enrichedPrompt = userPrompt;
 
-    if (imageUrl && typeof generateImagePrompt === 'function') {
+    if (imageUrl && typeof describeImage === 'function') {
         try {
-            const imageDescription = await generateImagePrompt("Describe this image briefly:", imageUrl, model);
+            const imageDescription = await describeImage(imageUrl, gptimageModel);
             enrichedPrompt = `${userPrompt}\n\nImage description: ${imageDescription}`;
         } catch (err) {
             console.error("Failed to describe image for tool decision:", err);
@@ -30,7 +31,7 @@ module.exports.askIfToolIsNeeded = async function (userPrompt, model, imageUrl =
 	`;
 
     const result = await openai.chat.completions.create({
-        model,
+        model: gptModel,
         messages: [
             { role: 'system', content: "You're an assistant that helps decide when external tools are needed to answer." },
             { role: 'user', content: toolPrompt }
