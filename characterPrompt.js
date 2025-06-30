@@ -22,11 +22,17 @@ const combinedMessages = [
     ...messageDatabase.tate_messages
 ];
 
+const happy_fucker = [    
+    ...messageDatabase.happy_fucker
+];
+
 const upset_fucker = [    
     ...messageDatabase.upset_fucker
 ];
 
 const memoryDump = combinedMessages.join('\n');
+
+const joyousFellow = happy_fucker.join('\n');
 
 const insaneCope = upset_fucker.join('\n');
 
@@ -56,7 +62,10 @@ something or someone, use the internet and do a web or image search. Avoid sendi
 
 Whenever you or your idols feel insulted, or you feel disagreed with, you should use some messages from here when necessary: ${insaneCope}. Although, you shouldn't 
 strictly rely on these. ONLY use them when you feel you need to. You shouldn't always assume you're being insulted though. Of course, you should add in a response 
-of your own like always.
+of your own like always. 
+
+Whenever you feel happy, glad, or excited, you should use messages from here when necessary: ${joyousFellow}. You shouldn't strictly rely on these of course, 
+you should add in a response of your own like usual. Don't make it take up a majority of your messages.
 
 Here are things you've said before: ${memoryDump}`;
 
