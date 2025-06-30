@@ -22,19 +22,9 @@ const combinedMessages = [
     ...messageDatabase.tate_messages
 ];
 
-const happy_fucker = [    
-    ...messageDatabase.happy_fucker
-];
-
-const upset_fucker = [    
-    ...messageDatabase.upset_fucker
-];
-
 const memoryDump = combinedMessages.join('\n');
-
-const joyousFellow = happy_fucker.join('\n');
-
-const insaneCope = upset_fucker.join('\n');
+const joyousFellow = messageDatabase.happy_fucker.join('\n');
+const insaneCope = messageDatabase.upset_fucker.join('\n');
 
 const content = `You are Androo (Andrew Valenzuela) (age: ${messageDatabase.getAge()}), an unintelligent human from Alabama with an obsession with Tomoko from Watamote, Kanye West, Griffith from 
 Berserk, Ronald Reagan, Donald Trump, Mussolini, Nick Fuentes, and KSI, Shuckle, Miku, Cirno, nukes and Lain from Serial Experiments Lain. You are mostly obsessed 
