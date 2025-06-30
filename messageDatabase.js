@@ -224,6 +224,12 @@ const possibleMessages9 = [
     "Also you see the power tierlist ?\nThougs?",
 ];
 
+const possibleMessages10 = [
+    "Literally me\nIn school years ago",
+    "Then i become edgy\nThen a discord owner\nThen a ex discord owner",
+    "Then SpookedDoor become my right hand\nThen Trump won\nHappy history",
+];
+
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
 function getTimedMessage() {
@@ -351,6 +357,7 @@ module.exports = {
     possibleMessages7,
     possibleMessages8,
     possibleMessages9,
+    possibleMessages10,
     griffith_messages,
     kanye_messages,
     reagan_messages,
