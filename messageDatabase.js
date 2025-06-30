@@ -246,7 +246,7 @@ function getTimedMessage() {
 };
 
 const griffith_messages = [
-    getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', "I am Femto God", "I am Griffith God",
+    getTimedMessage() + ' all i am Griffith', 'I am prime Griffith', "I am Femto God", "I am Griffith God", "I am Griffith in wataland",
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith.png'))] },
     { files: [new AttachmentBuilder(path.join(__dirname, './media/griffith2.jpg'))] },
 ];
@@ -328,13 +328,21 @@ const tate_messages = [
     "https://tenor.com/view/andrew-tate-gif-26316329",
 ];
 
+const happy_fucker = [
+    "https://tenor.com/view/sailor-moon-anime-amazed-gif-4474073", "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>",
+    "<:pekostare:1365786858465919046>", "<:umarucry:1358518905219584120>", "OMG", "Based", "Nice", "Niceee", "Wow", "Pog", "griffith bars",
+    "https://tenor.com/view/squirtle-pokemon-gif-23882585", "YES", "Yesssss", "https://tenor.com/view/sunshine-mario-mario-kart-mario-kart-tour-summer-tours-rule-mario-gif-22350487",
+]
+
 const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
-    "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "Not even clicking if Is playboi carti",
-    "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793", "Why you are a leftard", "Fake", "Average zoomer",
+    "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
+    "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head",
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/wtf.png'))] },
 ];
+
 
 const SSSTierOpinions = [
     "Sabaton albums are top tier sss+", "Reagan Top Tier SSS+ president", "Reagan SSS+ president",
@@ -384,6 +392,7 @@ module.exports = {
     tate_messages,
     wakeytime,
     sleepytime,
+    happy_fucker,
     upset_fucker,
     SSSTierOpinions,
     getAge
