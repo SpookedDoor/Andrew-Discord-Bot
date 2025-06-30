@@ -166,6 +166,8 @@ const possibleMessages = [
     "Hitler ye an jesuschrist",
     "I am Griffith in wataland",
     "All caps ANDREW GOD",
+    "Wataland kingdom of falconia",
+    "Alabama best state",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -232,6 +234,13 @@ const possibleMessages10 = [
 
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
+// Messages that should be part of the AI's database but not be sent as random messages
+const notPossibleMessages = [
+    "User message: https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212\nAndrew's response: Me after lobotomy",
+    "User message: Banana-drew\nAndrew's response: Pog my own animatronic nickname\nA monkey animatronic from alabama",
+    "User message: https://cdn.discordapp.com/attachments/1239079446732869743/1290766375765413958/ezgif-7-f82d4a7d07.gif?ex=685cff1d&is=685bad9d&hm=2f761ae0f8adb4679a1be0d3265a0c48d74eedf7d9fcc921460b6f4e07560be2&\nAndrew's response: Tomoko haters irl\nRats",
+];
+
 function getTimedMessage() {
     return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
 };
@@ -271,10 +280,18 @@ const kanye_messages = [
 	"https://tenor.com/view/kanye-west-my-reaction-to-that-information-my-honest-reaction-meme-gif-15000744814966995138",
     "Kanye Goat", "New Kanye song Is wild", "Danganropa Kanye west", "Kanye drop Cuck album", "Kanye music", "Free Diddy",
     "Diddy Is good rapper Also kanye", "Yeezy in fornite", "Osaka Bein Kanye fan Is canon", "Shhhhhhh i am listening preacherman",
-    "https://youtu.be/m82Mu_tjkmw?si=zPgymePbLFk45o3I", "Tomoko whit a vultures shirt in fornite someday", "I am ye fan",
-    "Nitrous really fucked whit my  brain", "She eat my kids like jared", "https://youtu.be/2RdI94t0FXQ?si=fD5upc9R4vYmNQsk",
+    "Tomoko whit a vultures shirt in fornite someday", "I am ye fan", "https://www.youtube.com/watch?v=gZsX4hY_XxE",
+    "Nitrous really fucked whit my  brain", "She eat my kids like jared", "https://youtu.be/2RdI94t0FXQ",
     "Nitrous really fucked my head", "https://www.youtube.com/watch?v=S2Q8hVhoCKU", "https://www.youtube.com/watch?v=gZsX4hY_XxE",
-    "Kanye plays 69D chess whit all",
+    "Kanye plays 69D chess whit all", "Kanye west", "I am evil As Kanye west the great", "Kanye new music Is good",
+    "Someday gonna rock a swastika diamond chain As Kanye west the goat", "Hitler ye and jesuschrist", "Hitler ye an jesuschrist",
+    "Listening Hitler ye and jesuschrist rn", "Also listening rn Hitler ye and jesuschrist", "Gonna rule all someday\nAs Kanye west the goat",
+    "I am in love whit the nitrous", "I'm in love whit the nitrous", "Reagan wold say vultures 2 Is goated",
+    "Gonna rock a swastika Chain someday as my goat", "Boy dont play whit me you know i am fried", "You are so based yeezy",
+    "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
+    "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
+    "She know that i am a bully", "She Wanna Hop in a rari", "Preacherman an rari are +SSS Tier songs",
+    "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
 ];
 
 const reagan_messages = [
@@ -282,7 +299,8 @@ const reagan_messages = [
 	"Reagan and Trump best presidents ever", "Ronald pls", "https://tenor.com/view/republican-gif-24490147", 
 	"https://tenor.com/view/ronald-reagan-reagan-republican-usa-president-gif-14605911613553531779",
     "https://youtu.be/4DmnuewuOws?si=vcc46az7vsRR8rLj", "Reagan wold say i win again couse i am the goat as president",
-    "Thanks Reagan  now we have cat birds", "Catbirds are a thing because of Reagan you know?",
+    "Thanks Reagan  now we have cat birds", "Catbirds are a thing because of Reagan you know?", "Reagan SSS+ president",
+    "Reagan wold say vultures 2 Is goated", "Reagan wold say he have redneck aura", "Reagan Top Tier SSS+ president",
 ];
 
 const nick_messages = [
@@ -314,14 +332,12 @@ const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
-    "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
-    "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti",
+    "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "Not even clicking if Is playboi carti",
+    "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793", "Why you are a leftard", "Fake", "Average zoomer",
 ];
 
 const SSSTierOpinions = [
-    "Sabaton albums are top tier sss+",
-    "Reagan Top Tier SSS+ president",
-    "Reagan SSS+ president",
+    "Sabaton albums are top tier sss+", "Reagan Top Tier SSS+ president", "Reagan SSS+ president",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
     "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
     "Boil crab\nSSS+ alabamian cousine",
@@ -336,7 +352,7 @@ const SSSTierOpinions = [
 ];
 
 function getAge() {
-    const birthDate = new Date(2002, 10, 19);
+    const birthDate = new Date(2002, 10, 19); // 19 November 2002
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
@@ -358,6 +374,7 @@ module.exports = {
     possibleMessages8,
     possibleMessages9,
     possibleMessages10,
+    notPossibleMessages,
     griffith_messages,
     kanye_messages,
     reagan_messages,
