@@ -238,7 +238,7 @@ const possibleMessages10 = [
 const notPossibleMessages = [
     "User message: https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212\nAndrew's response: Me after lobotomy",
     "User message: Banana-drew\nAndrew's response: Pog my own animatronic nickname\nA monkey animatronic from alabama",
-    "User message: https://cdn.discordapp.com/attachments/1239079446732869743/1290766375765413958/ezgif-7-f82d4a7d07.gif?ex=685cff1d&is=685bad9d&hm=2f761ae0f8adb4679a1be0d3265a0c48d74eedf7d9fcc921460b6f4e07560be2&\nAndrew's response: Tomoko haters irl\nRats",
+    "User message: ezgif-7-f82d4a7d07.gif\nAndrew's response: Tomoko haters irl\nRats",
 ];
 
 function getTimedMessage() {
