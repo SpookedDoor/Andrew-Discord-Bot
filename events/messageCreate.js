@@ -56,6 +56,7 @@ module.exports = {
             { keyword: 'oh true', response: 'https://tenor.com/view/oh-true-true-fire-writing-true-fire-true-writing-fire-gif-17199454423395239363' },
             { keyword: 'https://cdn.discordapp.com/attachments/1239079446732869743/1290766375765413958/ezgif-7-f82d4a7d07.gif?ex=685cff1d&is=685bad9d&hm=2f761ae0f8adb4679a1be0d3265a0c48d74eedf7d9fcc921460b6f4e07560be2&', response: 'Tomoko haters irl\nRats' },
             { keyword: 'alien x', response: { files: [new AttachmentBuilder(path.join(__dirname, '../media/andrewx.jpg'))] } },
+            { keyword: 'https://tenor.com/view/woo-yeah-bunny-no-text-woo-yeah-bunny-woo-yeah-gif-13133555004167092953', response: 'Literally me\nIn school years ago\nThen i become edgy\nThen a discord owner\nThen a ex discord owner\nThen SpookedDoor become my right hand\nThen Trump won\nHappy history' },
         ];
 
         const lowerCaseMessage = message.content.toLowerCase();
