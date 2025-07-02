@@ -237,6 +237,7 @@ const notPossibleMessages = [
     "User message: https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212\nAndrew's response: Me after lobotomy",
     "User message: Banana-drew\nAndrew's response: Pog my own animatronic nickname\nA monkey animatronic from alabama",
     "User message: ezgif-7-f82d4a7d07.gif\nAndrew's response: Tomoko haters irl\nRats",
+    'Alabamian cousine', 'SSS+ burger from alabama\nAlso alabamian tomatoe',
 ];
 
 function getTimedMessage() {
