@@ -8,6 +8,7 @@ const openai = new OpenAI({
 const content = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');
+const { upsetAttachment } = require('../../aiAttachments.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -33,7 +34,13 @@ module.exports = {
         try {
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
             const reply = await module.exports.generateImagePrompt(prompt, imageUrl);
-            await interaction.editReply({ content: reply, files: [imageUrl] });
+            
+            const attachment = upsetAttachment(reply);
+            if (attachment) {
+                await interaction.editReply({ content: reply, files: [imageUrl, attachment] });
+            } else {
+                await interaction.editReply({ content: reply, files: [imageUrl] });
+            }
         } catch (err) {
             console.error(err);
             await interaction.editReply("There was a problem analysing the image.");
