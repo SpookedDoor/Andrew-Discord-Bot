@@ -10,7 +10,7 @@ const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { messageModel, messageImageModel } = require('../aiSettings.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages } = require('../messageDatabase.js');
-const { upsetAttachment } = require('../aiAttachments.js');
+const { aiAttachment } = require('../aiAttachments.js');
 
 const gods = [
     { user: 'thedragonary', display: 'dragonary' },
@@ -148,10 +148,10 @@ module.exports = {
 					    console.log(`AI response: ${reply}`);
                     }
 
-                    const attachment = upsetAttachment(reply);
+                    const attachments = aiAttachment(reply);
                     if (reply) {
-                        if (attachment) {
-                            await message.reply({ content: reply, files: [attachment] });
+                        if (attachments) {
+                            await message.reply({ content: reply, files: attachments });
                         } else {
                             await message.reply(reply);
                         }

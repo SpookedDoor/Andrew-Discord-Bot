@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { baseURL, apiKey, gptModel, gptimageModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({
@@ -8,7 +8,7 @@ const openai = new OpenAI({
 const content = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');
-const { upsetAttachment } = require('../../aiAttachments.js');
+const { aiAttachment } = require('../../aiAttachments.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -34,13 +34,18 @@ module.exports = {
         try {
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
             const reply = await module.exports.generateImagePrompt(prompt, imageUrl);
-            
-            const attachment = upsetAttachment(reply);
-            if (attachment) {
-                await interaction.editReply({ content: reply, files: [imageUrl, attachment] });
-            } else {
-                await interaction.editReply({ content: reply, files: [imageUrl] });
-            }
+
+            const response = await fetch(imageUrl);
+            const arrayBuffer = await response.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+            let ext = path.extname(imageUrl.split('?')[0]).toLowerCase();
+            if (!ext || !['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext)) ext = '.png';
+            const originalImageAttachment = new AttachmentBuilder(buffer, { name: `image${ext}` });
+
+            const aiAttachments = aiAttachment(reply) || [];
+            const files = [originalImageAttachment, ...aiAttachments];
+
+        await interaction.editReply({ content: reply, files });
         } catch (err) {
             console.error(err);
             await interaction.editReply("There was a problem analysing the image.");
