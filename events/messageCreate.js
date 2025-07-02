@@ -59,6 +59,7 @@ module.exports = {
             { keyword: 'https://tenor.com/view/woo-yeah-bunny-no-text-woo-yeah-bunny-woo-yeah-gif-13133555004167092953', response: 'Literally me\nIn school years ago\nThen i become edgy\nThen a discord owner\nThen a ex discord owner\nThen SpookedDoor become my right hand\nThen Trump won\nHappy history' },
             { keyword: 'banana-drew', response: "Pog my own animatronic nickname\nA monkey animatronic from alabama" },
             { keyword: 'bananadrew', response: "Pog my own animatronic nickname\nA monkey animatronic from alabama" },
+            { keyword: 'wtf', response: { files: [new AttachmentBuilder(path.join(__dirname, '../media/WTF.png'))] } },
         ];
 
         const lowerCaseMessage = message.content.toLowerCase();
