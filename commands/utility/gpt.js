@@ -11,6 +11,7 @@ const { braveSearch } = require('../../braveSearch.js');
 const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
 const { users, findUserIdentity } = require('../../userIdentities.js');
+const { upsetAttachment } = require('../../aiAttachments.js');
 
 const userHistories = {};
 const MAX_HISTORY = 5;
@@ -64,7 +65,13 @@ module.exports = {
             );
 
 	        console.log(`AI response: ${reply}`);
-            await interaction.editReply(reply);
+            
+            const attachment = upsetAttachment(reply);
+            if (attachment) {
+                await interaction.editReply({ content: reply, files: [attachment] });
+            } else {
+                await interaction.editReply(reply);
+            }
         } catch (err) {
             console.error(err);
             await interaction.editReply("Can't think now... try again later");
