@@ -37,8 +37,6 @@ const possibleMessages = [
     "She know that i am a bully",
     "She Wanna Hop in a rari",
     "Preacherman an rari are +SSS Tier songs",
-    "Cope harder",
-    "Cope harder you all",
     "https://tenor.com/view/persona-persona3-minato-arisato-makoto-yuki-battle-gif-17813346",
     "-9999 watapoints",
     "average sonic fan ⬆️",
@@ -337,10 +335,9 @@ const happy_fucker = [
 const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
-    "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder",
+    "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder", "Cope harder you all",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
     "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head",
-    { files: [new AttachmentBuilder(path.join(__dirname, './media/wtf.png'))] },
 ];
 
 
