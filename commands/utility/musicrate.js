@@ -73,6 +73,7 @@ module.exports = {
             temperature: 0.9
         });
         const aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
+        console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
         await interaction.editReply({
             content: `${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`
