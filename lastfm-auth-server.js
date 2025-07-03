@@ -8,7 +8,7 @@ const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 const LASTFM_API_SECRET = process.env.LASTFM_API_SECRET;
 
 // In-memory store for demo; replace with DB in production
-const { setUserLink } = require('./lastfmStore');
+const { setUserLink, getUserLink } = require('./lastfmStore');
 
 // Last.fm callback endpoint
 app.get('/lastfm/callback', async (req, res) => {
@@ -19,15 +19,14 @@ app.get('/lastfm/callback', async (req, res) => {
     const response = await fetch(url);
     const data = await response.json();
     if (!data.session) return res.status(400).send('Failed to get session');
-    setUserLink(userId, data.session.name);
+    await setUserLink(userId, data.session.name); // now async
     res.send('Your Last.fm account has been linked! You can now use the /musicrate command in Discord.');
 });
 
-// Add endpoint to get Last.fm username for a Discord userId
-app.get('/lastfm/user/:userId', (req, res) => {
+// Endpoint to get Last.fm username for a Discord userId
+app.get('/lastfm/user/:userId', async (req, res) => {
     const { userId } = req.params;
-    const { getUserLink } = require('./lastfmStore');
-    const username = getUserLink(userId);
+    const username = await getUserLink(userId);
     if (!username) return res.status(404).send('Not linked');
     res.json({ username });
 });
