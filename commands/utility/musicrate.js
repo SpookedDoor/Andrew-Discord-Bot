@@ -89,6 +89,8 @@ module.exports = {
                 console.log("No internet tools used.");
             }
 
+            finalPrompt += "\nDon't mention Kanye unless the song is from him and don't complain if a song isn't Kanye. Make the review positive. Also, give a score out of 10.";
+
             const aiResponse = await openai.chat.completions.create({
                 model: gptModel,
                 messages: [
