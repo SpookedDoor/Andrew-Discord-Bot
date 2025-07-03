@@ -1,31 +1,18 @@
-const fs = require('fs');
-const path = require('path');
+const pool = require('./db');
 
-const STORE_PATH = path.join(__dirname, 'lastfmLinks.json');
-
-function loadLinks() {
-    try {
-        return JSON.parse(fs.readFileSync(STORE_PATH, 'utf8'));
-    } catch (e) {
-        return {};
-    }
+async function setUserLink(userId, lastfmUsername) {
+  await pool.query(
+    'INSERT INTO lastfm_links (discord_user_id, lastfm_username) VALUES ($1, $2) ON CONFLICT (discord_user_id) DO UPDATE SET lastfm_username = EXCLUDED.lastfm_username',
+    [userId, lastfmUsername]
+  );
 }
 
-function saveLinks(links) {
-    fs.writeFileSync(STORE_PATH, JSON.stringify(links, null, 2), 'utf8');
+async function getUserLink(userId) {
+  const res = await pool.query(
+    'SELECT lastfm_username FROM lastfm_links WHERE discord_user_id = $1',
+    [userId]
+  );
+  return res.rows[0]?.lastfm_username || null;
 }
 
-let userLastfmLinks = loadLinks();
-
-function setUserLink(userId, lastfmUsername) {
-    userLastfmLinks[userId] = lastfmUsername;
-    saveLinks(userLastfmLinks);
-}
-
-function getUserLink(userId) {
-    // Always reload to get latest from disk
-    userLastfmLinks = loadLinks();
-    return userLastfmLinks[userId];
-}
-
-module.exports = { userLastfmLinks, setUserLink, getUserLink };
+module.exports = { setUserLink, getUserLink };
