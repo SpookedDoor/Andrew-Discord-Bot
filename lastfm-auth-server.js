@@ -23,6 +23,15 @@ app.get('/lastfm/callback', async (req, res) => {
     res.send('Your Last.fm account has been linked! You can now use the /musicrate command in Discord.');
 });
 
+// Add endpoint to get Last.fm username for a Discord userId
+app.get('/lastfm/user/:userId', (req, res) => {
+    const { userId } = req.params;
+    const { getUserLink } = require('./lastfmStore');
+    const username = getUserLink(userId);
+    if (!username) return res.status(404).send('Not linked');
+    res.json({ username });
+});
+
 function getApiSig(token) {
     // See https://www.last.fm/api/authspec#6
     const md5 = require('md5');
