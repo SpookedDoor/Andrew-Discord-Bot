@@ -9,6 +9,8 @@ const openai = new OpenAI({
 });
 const content = require('../../characterPrompt.js');
 const { getUserLink } = require('../../lastfmStore');
+const { askIfToolIsNeeded } = require('../../searchTools.js');
+const { braveSearch } = require('../../braveSearch.js');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
@@ -63,20 +65,32 @@ module.exports = {
 
         const trackInfo = `${track.artist['#text']} - ${track.name}`;
         const prompt = `Rate this song: ${trackInfo}`;
+        let finalPrompt = prompt;
+        
         await interaction.deferReply();
+
+        const toolDecision = await askIfToolIsNeeded(prompt);
+        if (toolDecision.startsWith("WEB_SEARCH:")) {
+            const query = toolDecision.replace("WEB_SEARCH:", "").trim();
+            const webResults = await braveSearch(query);
+            finalPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
+            console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
+        } else {
+            console.log("No internet tools used.");
+        }
+
         const aiResponse = await openai.chat.completions.create({
             model: gptModel,
             messages: [
                 { role: 'system', content },
-                { role: 'user', content: prompt }
+                { role: 'user', content: finalPrompt }
             ],
             temperature: 0.9
         });
+
         const aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
         console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
-        await interaction.editReply({
-            content: `${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`
-        });
+        await interaction.editReply({ content: `${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}` });
     },
 };
