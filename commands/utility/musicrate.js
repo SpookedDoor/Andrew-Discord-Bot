@@ -24,13 +24,22 @@ async function getNowPlaying(username) {
     return track;
 }
 
+// Helper to get Last.fm username from remote auth server
+async function getLinkedLastfmUsername(userId) {
+    const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
+    const res = await fetch(`${authServer}/lastfm/user/${userId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.username;
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('musicrate')
         .setDescription('Connects with Last.fm and rates your currently playing song'),
     async execute(interaction) {
         const userId = interaction.user.id;
-        let lastfmUsername = getUserLink(userId);
+        let lastfmUsername = await getLinkedLastfmUsername(userId);
 
         if (!lastfmUsername) {
             // Not linked: send OAuth link with callback and userId
