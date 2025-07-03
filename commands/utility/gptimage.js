@@ -109,7 +109,7 @@ module.exports.generateImagePrompt = async function (prompt, imageUrl) {
         Here's the description: ${preresponse}\nPrompt: ${prompt}`;
 
         const response = await openai.chat.completions.create({
-		model: gptModel,
+            model: gptModel,
             messages: [
                 { role: 'system', content },
                 {
