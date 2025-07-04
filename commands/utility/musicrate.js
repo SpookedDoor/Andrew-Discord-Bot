@@ -8,7 +8,6 @@ const openai = new OpenAI({
     apiKey: apiKey
 });
 const content = require('../../characterPrompt.js');
-const { getUserLink } = require('../../lastfmStore');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 
