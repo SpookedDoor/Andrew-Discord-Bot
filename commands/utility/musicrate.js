@@ -26,11 +26,16 @@ async function getNowPlaying(username) {
 
 // Helper to get Last.fm username from remote auth server
 async function getLinkedLastfmUsername(userId) {
-    const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
-    const res = await fetch(`${authServer}/lastfm/user/${userId}`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.username;
+    try {
+        const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
+        const res = await fetch(`${authServer}/lastfm/user/${userId}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.username;
+    } catch (error) {
+        console.error('Error getting Last.fm username:', error);
+        return null;
+    }
 }
 
 module.exports = {
