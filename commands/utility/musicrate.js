@@ -37,48 +37,49 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('musicrate')
         .setDescription('Connects with Last.fm and rates your currently playing song'),
+        
     async execute(interaction) {
         const userId = interaction.user.id;
         let lastfmUsername = await getLinkedLastfmUsername(userId);
 
-        if (!lastfmUsername) {
-            // Not linked: send OAuth link with callback and userId
-            const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
-            const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
-            const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
-            await interaction.reply({
-                content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
-                flags: MessageFlags.Ephemeral
-            });
-            return;
-        }
+        await interaction.deferReply();
 
-        // Fetch now playing track
-        let track = await getNowPlaying(lastfmUsername);
-        let nowPlaying = true;
-        if (!track) {
-            // If nothing is currently playing, get the most recent track
-            const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(lastfmUsername)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
-            const res = await fetch(url);
-            const data = await res.json();
-            if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) {
+        try {
+            if (!lastfmUsername) {
+                // Not linked: send OAuth link with callback and userId
+                const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
+                const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
+                const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
                 await interaction.reply({
-                    content: `No recent track found for your Last.fm account.`,
+                    content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
                     flags: MessageFlags.Ephemeral
                 });
                 return;
             }
-            track = data.recenttracks.track[0];
-            nowPlaying = false;
-        }
 
-        const trackInfo = `${track.artist['#text']} - ${track.name}`;
-        const prompt = `Rate this song: ${trackInfo}`;
-        let finalPrompt = prompt;
-        
-        await interaction.deferReply();
+            // Fetch now playing track
+            let track = await getNowPlaying(lastfmUsername);
+            let nowPlaying = true;
+            if (!track) {
+                // If nothing is currently playing, get the most recent track
+                const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(lastfmUsername)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
+                const res = await fetch(url);
+                const data = await res.json();
+                if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) {
+                    await interaction.reply({
+                        content: `No recent track found for your Last.fm account.`,
+                        flags: MessageFlags.Ephemeral
+                    });
+                    return;
+                }
+                track = data.recenttracks.track[0];
+                nowPlaying = false;
+            }
 
-        try{
+            const trackInfo = `${track.artist['#text']} - ${track.name}`;
+            const prompt = `Rate this song: ${trackInfo}`;
+            let finalPrompt = prompt;
+
             const toolDecision = await askIfToolIsNeeded(prompt);
             if (toolDecision.startsWith("WEB_SEARCH:")) {
                 const query = toolDecision.replace("WEB_SEARCH:", "").trim();
