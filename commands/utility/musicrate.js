@@ -37,7 +37,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('musicrate')
         .setDescription('Connects with Last.fm and rates your currently playing song'),
-        
+
     async execute(interaction) {
         const userId = interaction.user.id;
         let lastfmUsername = await getLinkedLastfmUsername(userId);
@@ -50,7 +50,7 @@ module.exports = {
                 const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
                 const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
                 const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
-                await interaction.reply({
+                await interaction.editReply({
                     content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
                     flags: MessageFlags.Ephemeral
                 });
@@ -66,7 +66,7 @@ module.exports = {
                 const res = await fetch(url);
                 const data = await res.json();
                 if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) {
-                    await interaction.reply({
+                    await interaction.editReply({
                         content: `No recent track found for your Last.fm account.`,
                         flags: MessageFlags.Ephemeral
                     });
