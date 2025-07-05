@@ -166,6 +166,7 @@ const possibleMessages = [
     "All caps ANDREW GOD",
     "Wataland kingdom of falconia",
     "Alabama best state",
+    "She like my nazi vibes\nShe now i am a bully",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -230,6 +231,20 @@ const possibleMessages10 = [
     "Then SpookedDoor become my right hand\nThen Trump won\nHappy history",
 ];
 
+const possibleMessages11 = [
+    "I wannabe a tyrant",
+    "To rule all",
+    "I can be a tyrant an respect woman right?",
+];
+
+const possibleMessages12 = [
+    "I am a God like Sonic.exe",
+    "We should envite that Sonic here",
+    "Sonic.exe in watafriends",
+    "Legendary crossover",
+    "https://tenor.com/view/banner-gif-25494268",
+];
+
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
 // Messages that should be part of the AI's database but not be sent as random messages
@@ -267,7 +282,7 @@ const sleepytime = [
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
-
+    "Gn all dream whit me Bein the world ruler",
 ];
 
 const kanye_messages = [
@@ -290,7 +305,7 @@ const kanye_messages = [
     "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
     "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
     "She know that i am a bully", "She Wanna Hop in a rari", "Preacherman an rari are +SSS Tier songs",
-    "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
+    "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous", "She like my nazi vibes\nShe now i am a bully",
 ];
 
 const reagan_messages = [
@@ -380,6 +395,8 @@ module.exports = {
     possibleMessages8,
     possibleMessages9,
     possibleMessages10,
+    possibleMessages11,
+    possibleMessages12,
     notPossibleMessages,
     griffith_messages,
     kanye_messages,

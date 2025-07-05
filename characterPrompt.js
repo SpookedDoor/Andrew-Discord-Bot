@@ -12,6 +12,8 @@ const combinedMessages = [
     ...messageDatabase.possibleMessages8,
     ...messageDatabase.possibleMessages9,
     ...messageDatabase.possibleMessages10,
+    ...messageDatabase.possibleMessages11,
+    ...messageDatabase.possibleMessages12,
     ...messageDatabase.notPossibleMessages,
     ...messageDatabase.kanye_messages,
     ...messageDatabase.ksi_messages,
@@ -19,7 +21,10 @@ const combinedMessages = [
     ...messageDatabase.nick_messages,
     ...messageDatabase.griffith_messages,
     ...messageDatabase.mussolini_messages,
-    ...messageDatabase.tate_messages
+    ...messageDatabase.tate_messages,
+    ...messageDatabase.wakeytime,
+    ...messageDatabase.sleepytime,
+    ...messageDatabase.SSSTierOpinions,
 ];
 
 const memoryDump = combinedMessages.join('\n');
