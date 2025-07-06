@@ -5,7 +5,8 @@ module.exports = async (interaction, next) => {
     try {
         if (!interaction.guild) return next();
         const serverId = interaction.guild.id;
-        if (status.getSleepStatus(serverId) && (interaction.commandName !== 'wake' && interaction.commandName !== 'status')) {
+        const manualMode = status.getManualMode(serverId);
+        if (status.getSleepStatus(serverId) && manualMode !== 'wake' && (interaction.commandName !== 'wake' && interaction.commandName !== 'status')) {
             return interaction.reply({
                 content: 'Shhhh... lil Androo is sleeping. Ask an admin to wake him up.',
                 flags: MessageFlags.Ephemeral

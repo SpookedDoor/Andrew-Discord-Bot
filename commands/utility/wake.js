@@ -28,8 +28,7 @@ module.exports = {
 				interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)
 			) {
 				status.setSleepStatus(serverId, false);
-				status.setOverride(serverId, false);
-				status.setWakeOverride(serverId, true);
+				status.setManualMode(serverId, 'wake');
 				await interaction.reply(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
 			}
 			else {
