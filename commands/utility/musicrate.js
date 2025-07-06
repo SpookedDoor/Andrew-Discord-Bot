@@ -43,10 +43,9 @@ module.exports = {
         .setDescription('Connects with Last.fm and rates your currently playing song'),
 
     async execute(interaction) {
+        await interaction.deferReply();
         const userId = interaction.user.id;
         let lastfmUsername = await getLinkedLastfmUsername(userId);
-
-        await interaction.deferReply();
 
         try {
             if (!lastfmUsername) {
