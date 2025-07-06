@@ -75,20 +75,24 @@ module.exports = {
 			
 			for (const [guildId, channelId] of Object.entries(channelMap)) {
 				const channel = client.channels.cache.get(channelId);
-				
-				if (hourUTC === 12 && minutes === 0 && status.getOverride(guildId)) {
-					status.clearOverride(guildId);
-					console.log(`Cleared manual override for guild: ${client.guilds.cache.get(guildId).name}`);
+				const manualMode = status.getManualMode(guildId);
+				if (hourUTC === 12 && minutes === 0 && manualMode === 'sleep') {
+					status.clearManualMode(guildId);
+					console.log(`Cleared manual sleep override for guild: ${client.guilds.cache.get(guildId).name}`);
+				}
+				if (hourUTC === 2 && minutes === 0 && manualMode === 'wake') {
+					status.clearManualMode(guildId);
+					console.log(`Cleared manual wake override for guild: ${client.guilds.cache.get(guildId).name}`);
 				}
 
 				if (hourUTC >= 2 && hourUTC < 12) {
-					if (!status.getSleepStatus(guildId) && !status.getWakeOverride(guildId)) {
+					if (!status.getSleepStatus(guildId) && manualMode !== 'wake') {
 						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
 						if (hourUTC === 2 && minutes === 0) await channel.send(sleepytime[Math.floor(Math.random() * sleepytime.length)]);
-						status.setSleepStatus(guildId, true);	
+						status.setSleepStatus(guildId, true);
 					}
 				} else {
-					if (status.getSleepStatus(guildId) && !status.getOverride(guildId)) {
+					if (status.getSleepStatus(guildId) && manualMode !== 'sleep') {
 						console.log(`Auto-waking Androo in guild: ${client.guilds.cache.get(guildId).name}`);
 						await channel.send(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
 						status.setSleepStatus(guildId, false);
