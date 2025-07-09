@@ -2,13 +2,13 @@ const { Events, MessageFlags, AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
 const status = require('../setSleep.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
-const { describeImage, generateImagePrompt } = require('../commands/utility/gptimage.js');
+const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
-const { messageModel, messageImageModel } = require('../aiSettings.js');
+const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
 
@@ -102,7 +102,7 @@ module.exports = {
                         }
                     }
 
-                    let model = messageModel;
+                    let model = gptModel;
                     let reply;
 
                     if (!imageUrl) {
@@ -124,7 +124,7 @@ module.exports = {
 
                     if (imageUrl) {
                         try {
-                            model = messageImageModel;
+                            model = gptimageModel;
                             console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
                             reply = await generateImagePrompt(finalPrompt, imageUrl);
                         } catch (err) {
