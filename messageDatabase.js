@@ -171,6 +171,8 @@ const possibleMessages = [
     "Nazi vibes",
     "https://tenor.com/view/griffith-dream-castle-gif-14434716816546279906",
     "I am from alabama",
+    "dirty magazines\nhttps://www.youtube.com/watch?v=bPLw76nn7FQ",
+    "https://www.youtube.com/watch?v=Yt3PB2GiLeU",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -321,8 +323,9 @@ const kanye_messages = [
     "Gonna rock a swastika Chain someday as my goat", "Boy dont play whit me you know i am fried", "You are so based yeezy",
     "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
     "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
-    "She know that i am a bully", "She Wanna Hop in a rari", "Preacherman an rari are +SSS Tier songs",
+    "She know that i am a bully", "She Wanna Hop in a rari", "Preacherman an rari are +SSS Tier songs", "dirty magazines",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous", "She like my nazi vibes\nShe now i am a bully",
+    "https://www.youtube.com/watch?v=bPLw76nn7FQ", "https://www.youtube.com/watch?v=Yt3PB2GiLeU",
 ];
 
 const reagan_messages = [
