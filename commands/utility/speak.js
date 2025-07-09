@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 require('dotenv').config();
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const wav = require('wav');
+const { PassThrough } = require('stream');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,15 +17,13 @@ module.exports = {
                 .setDescription('Voice')
                 .setRequired(false)
                 .addChoices(
-                    { name: 'Fenrir', value: 'am_fenrir' },
-                    { name: 'Adam', value: 'am_adam' },
-                    { name: 'Heart', value: 'af_heart' },
-                    { name: 'George', value: 'bm_george' },
+                    { name: 'Fenrir', value: 'Fenrir' },
+                    { name: 'Zephyr', value: 'Zephyr' },
                 )),
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const voice = interaction.options.getString('voice') || 'am_fenrir';
+        const voice = interaction.options.getString('voice') || 'Fenrir';
 
         await interaction.deferReply();
 
@@ -32,26 +32,63 @@ module.exports = {
         console.log(`User: ${interaction.user.username}`);
 
         try {
-            const response = await fetch('https://chutes-kokoro.chutes.ai/speak', {
+            const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${process.env.CHUTES_API_KEY}`,
+                    'x-goog-api-key': process.env.GEMINI_API_KEY,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "text": prompt,
-                    "speed": 1,
-                    "voice": voice
+                    contents: [{
+                        parts: [{ text: prompt }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: {
+                                    voiceName: voice
+                                }
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`Chutes API error: ${response.statusText}`);
+                throw new Error(`Gemini API error: ${response.statusText}`);
             }
 
-            const buffer = await response.arrayBuffer();
-            await interaction.editReply({
-                files: [{ attachment: Buffer.from(buffer), name: 'audio.mp3' }]
+            const data = await response.json();
+            const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+            if (!base64Audio) {
+                throw new Error('No audio data returned from Gemini API.');
+            }
+            const audioBuffer = Buffer.from(base64Audio, 'base64');
+
+            // Convert PCM to WAV in memory
+            const wavStream = new PassThrough();
+            const writer = new wav.Writer({
+                channels: 1,
+                sampleRate: 24000,
+                bitDepth: 16
+            });
+            writer.end(audioBuffer);
+            writer.pipe(wavStream);
+
+            // Collect WAV buffer
+            const wavChunks = [];
+            wavStream.on('data', chunk => wavChunks.push(chunk));
+            wavStream.on('end', async () => {
+                const wavBuffer = Buffer.concat(wavChunks);
+                await interaction.editReply({
+                    files: [{ attachment: wavBuffer, name: 'audio.wav' }]
+                });
+            });
+            wavStream.on('error', async (err) => {
+                console.error(err);
+                await interaction.editReply('Failed to generate WAV audio.');
             });
         } catch (error) {
             console.error(error);
