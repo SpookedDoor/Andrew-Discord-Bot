@@ -1,8 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
 require('dotenv').config();
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const wav = require('wav');
-const { PassThrough } = require('stream');
+
+const VOICE_MAP = {
+    Adam: 'pNInz6obpgDQGcFmaJgB',
+    Antoni: 'ErXwobaYiN019PkySvjV',
+};
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,78 +20,49 @@ module.exports = {
                 .setDescription('Voice')
                 .setRequired(false)
                 .addChoices(
-                    { name: 'Fenrir', value: 'Fenrir' },
-                    { name: 'Zephyr', value: 'Zephyr' },
+                    { name: 'Adam', value: 'Adam' },
+                    { name: 'Antoni', value: 'Antoni' },
                 )),
 
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const voice = interaction.options.getString('voice') || 'Fenrir';
+        const voice = interaction.options.getString('voice') || 'Adam';
+        const voiceId = VOICE_MAP[voice] || VOICE_MAP['Adam'];
+        const apiKey = process.env.ELEVENLABS_API_KEY;
 
         await interaction.deferReply();
 
         console.log(`Speech input: ${prompt}`);
+        console.log(`Voice: ${voice} (ID: ${voiceId})`);
         console.log(`Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}`);
         console.log(`User: ${interaction.user.username}`);
 
         try {
-            const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent', {
+            const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
                 method: 'POST',
                 headers: {
-                    'x-goog-api-key': process.env.GEMINI_API_KEY,
-                    'Content-Type': 'application/json'
+                    'xi-api-key': apiKey,
+                    'Content-Type': 'application/json',
+                    'Accept': 'audio/mpeg'
                 },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: prompt }]
-                    }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: {
-                                prebuiltVoiceConfig: {
-                                    voiceName: voice
-                                }
-                            }
-                        }
-                    },
-                    model: "gemini-2.5-flash-preview-tts"
+                    text: prompt,
+                    model_id: 'eleven_flash_v2_5',
+                    voice_settings: {
+                        speed: 0.9,
+                        stability: 1.0,
+                        similarity_boost: 1.0
+                    }
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`Gemini API error: ${response.statusText}`);
+                throw new Error(`ElevenLabs API error: ${response.statusText}`);
             }
 
-            const data = await response.json();
-            const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-            if (!base64Audio) {
-                throw new Error('No audio data returned from Gemini API.');
-            }
-            const audioBuffer = Buffer.from(base64Audio, 'base64');
-
-            // Convert PCM to WAV in memory
-            const wavStream = new PassThrough();
-            const writer = new wav.Writer({
-                channels: 1,
-                sampleRate: 24000,
-                bitDepth: 16
-            });
-            writer.end(audioBuffer);
-            writer.pipe(wavStream);
-
-            // Collect WAV buffer
-            const wavChunks = [];
-            wavStream.on('data', chunk => wavChunks.push(chunk));
-            wavStream.on('end', async () => {
-                const wavBuffer = Buffer.concat(wavChunks);
-                await interaction.editReply({
-                    files: [{ attachment: wavBuffer, name: 'audio.wav' }]
-                });
-            });
-            wavStream.on('error', async (err) => {
-                console.error(err);
-                await interaction.editReply('Failed to generate WAV audio.');
+            const audioBuffer = Buffer.from(await response.arrayBuffer());
+            await interaction.editReply({
+                files: [{ attachment: audioBuffer, name: 'audio.mp3' }]
             });
         } catch (error) {
             console.error(error);
