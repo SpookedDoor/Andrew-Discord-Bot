@@ -105,7 +105,7 @@ module.exports.generateImagePrompt = async function (prompt, imageUrl) {
         const preresponse = await module.exports.describeImage(prompt, imageUrl, gptimageModel);
         console.log(`\nResponse from vision model: ${preresponse}\n`);
 
-        const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. 
+        const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. Keep it short.
         Here's the description: ${preresponse}\nPrompt: ${prompt}`;
 
         const response = await openai.chat.completions.create({
