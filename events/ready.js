@@ -2,7 +2,8 @@ const { Events } = require("discord.js");
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
 const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, 
-	possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12, wakeytime, sleepytime } = require('../messageDatabase.js');
+	possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12, 
+	possibleMessages13, possibleMessages14, wakeytime, sleepytime } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -11,7 +12,8 @@ module.exports = {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
-			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12);
+			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
+			possibleMessages12, possibleMessages13, possibleMessages14,);
 
 		const messageGroups = [
 			possibleMessages2,
@@ -24,7 +26,9 @@ module.exports = {
 			possibleMessages9,
 			possibleMessages10,
 			possibleMessages11,
-			possibleMessages12
+			possibleMessages12,
+			possibleMessages13,
+			possibleMessages14
 		];
 
         const sendRandomMessage = async () => {

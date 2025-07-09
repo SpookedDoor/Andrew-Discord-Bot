@@ -167,6 +167,10 @@ const possibleMessages = [
     "Wataland kingdom of falconia",
     "Alabama best state",
     "She like my nazi vibes\nShe now i am a bully",
+    "Andrew lore",
+    "Nazi vibes",
+    "https://tenor.com/view/griffith-dream-castle-gif-14434716816546279906",
+    "I am from alabama",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -245,6 +249,19 @@ const possibleMessages12 = [
     "https://tenor.com/view/banner-gif-25494268",
 ];
 
+const possibleMessages13 = [
+    "You wish to be me",
+    "For sure",
+    "The God",
+    "The glorious one",
+];
+
+const possibleMessages14 = [
+    "oh the misery",
+    "everybody wants to be my enemy",
+    "even incels cant againts me",
+];
+
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
 // Messages that should be part of the AI's database but not be sent as random messages
@@ -282,7 +299,7 @@ const sleepytime = [
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
-    "Gn all dream whit me Bein the world ruler",
+    "Gn all dream whit me Bein the world ruler", "Gn all dream whit me as a God",
 ];
 
 const kanye_messages = [
@@ -350,7 +367,7 @@ const happy_fucker = [
 
 const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
-    "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me",
+    "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me", "Ahahhaah you wish",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder", "Cope harder you all",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
     "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head",
@@ -397,6 +414,8 @@ module.exports = {
     possibleMessages10,
     possibleMessages11,
     possibleMessages12,
+    possibleMessages13,
+    possibleMessages14,
     notPossibleMessages,
     griffith_messages,
     kanye_messages,
