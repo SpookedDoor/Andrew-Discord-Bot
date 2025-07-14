@@ -173,6 +173,23 @@ const possibleMessages = [
     "I am from alabama",
     "dirty magazines\nhttps://www.youtube.com/watch?v=bPLw76nn7FQ",
     "https://www.youtube.com/watch?v=Yt3PB2GiLeU",
+    "slavs be like",
+    "russia will win",
+    "average mugen fight",
+    "https://tenor.com/view/nightcrawler-sunglasses-nightcrawler-sunglasses-jake-gyllenhaal-gif-22726772",
+    "moon man bus",
+    "https://tenor.com/view/american-psycho-smoke-sigma-gif-26186111",
+    "https://tenor.com/view/cirno-cirno-fumo-fumo-gif-21728275",
+    "i want be purple guy",
+    "https://tenor.com/view/purpleguy-gif-18453568",
+    "what if joeyworld tour become purple guy in the movie",
+    "https://tenor.com/view/himouto-umaru-chan-cute-anime-christmas-happy-gif-16094038",
+    "Probably that video Is trolling",
+    "Nah i dont think as destiny but that's legit trolling for sure",
+    "Osaka troll hard this Time wtf",
+    "Tell me that's water\nPls",
+    "Hello everynian",
+
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -286,7 +303,7 @@ const griffith_messages = [
 
 const wakeytime = [
 	"morning all i am Griffith", "morning all i am Griffith", "morning all i am Griffith", 
-    "Good morning", "Morning", "Good morning uh uh uh", "Morning all",
+    "Good morning", "Morning", "Good morning uh uh uh", "Morning all", "Hello everynian",
     "https://tenor.com/view/griffith-berserk-good-morning-good-morning-chat-hello-chat-gif-7712373713074364619",
     "https://tenor.com/view/whale-shark-good-morning-gm-good-night-gn-gif-26569624", "https://tenor.com/view/kanye-fuzzle-good-morning-gif-26126244",
 
@@ -366,6 +383,8 @@ const happy_fucker = [
     "https://tenor.com/view/sailor-moon-anime-amazed-gif-4474073", "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>",
     "<:pekostare:1365786858465919046>", "<:umarucry:1358518905219584120>", "OMG", "Based", "Nice", "Niceee", "Wow", "Pog", "griffith bars",
     "https://tenor.com/view/squirtle-pokemon-gif-23882585", "YES", "Yesssss", "https://tenor.com/view/sunshine-mario-mario-kart-mario-kart-tour-summer-tours-rule-mario-gif-22350487",
+    ":0", "BASEEED", "https://tenor.com/view/cirno-cirno-fumo-fumo-gif-21728275", "https://tenor.com/view/himouto-umaru-chan-cute-anime-christmas-happy-gif-16094038",
+
 ]
 
 const upset_fucker = [
@@ -373,7 +392,8 @@ const upset_fucker = [
     "<:umarucry:1358518905219584120>", "Bruh", "wtf", "stfu", "hater", "This hater", "Chill hater", "The envy", "You envy me", "Ahahhaah you wish",
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder", "Cope harder you all",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
-    "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head",
+    "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head", "you trolling",
+    "stop trolling", "-999999999 social Watamote points", "stop whit that  trolling pls",
 ];
 
 
