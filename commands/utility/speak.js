@@ -5,6 +5,8 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const VOICE_MAP = {
     Adam: 'pNInz6obpgDQGcFmaJgB',
     Antoni: 'ErXwobaYiN019PkySvjV',
+    Finn: 'vBKc2FfBKJfcZNyEt1n6',
+    Hope: 'tnSpp4vdxKPjI9w0GnoV'
 };
 
 module.exports = {
@@ -22,6 +24,8 @@ module.exports = {
                 .addChoices(
                     { name: 'Adam', value: 'Adam' },
                     { name: 'Antoni', value: 'Antoni' },
+                    { name: 'Finn', value: 'Finn' },
+                    { name: 'Hope', value: 'Hope' }
                 )),
 
     async execute(interaction) {
