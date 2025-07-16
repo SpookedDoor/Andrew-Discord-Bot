@@ -43,7 +43,6 @@ module.exports = {
         .setDescription('Connects with Last.fm and rates your currently playing song'),
 
     async execute(interaction) {
-        await interaction.deferReply();
         const userId = interaction.user.id;
         let lastfmUsername = await getLinkedLastfmUsername(userId);
 
@@ -53,12 +52,14 @@ module.exports = {
                 const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
                 const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
                 const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
-                await interaction.editReply({
+                await interaction.reply({
                     content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
                     flags: MessageFlags.Ephemeral
                 });
                 return;
             }
+
+            await interaction.deferReply();
 
             // Fetch now playing track
             let track = await getNowPlaying(lastfmUsername);
@@ -69,10 +70,7 @@ module.exports = {
                 const res = await fetch(url);
                 const data = await res.json();
                 if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) {
-                    await interaction.editReply({
-                        content: `No recent track found for your Last.fm account.`,
-                        flags: MessageFlags.Ephemeral
-                    });
+                    await interaction.editReply("No recent track found for your Last.fm account.");
                     return;
                 }
                 track = data.recenttracks.track[0];
@@ -107,7 +105,7 @@ module.exports = {
             const aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
             console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
-            await interaction.editReply({ content: `${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}` });
+            await interaction.editReply(`${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`);
         } catch (error) {
             console.error(error);
             await interaction.editReply("Failed to generate response.");
