@@ -14,6 +14,7 @@ const emojis = [
     "<:wtf:1358518914631602449>",
     "<:xd:1358518924303667272>",
     "<:pekostare:1365786858465919046>",
+    "<:wholesome:1403161256189493350>",
 ];
 
 const possibleMessages = [
@@ -189,6 +190,9 @@ const possibleMessages = [
     "Osaka troll hard this Time wtf",
     "Tell me that's water\nPls",
     "Hello everynian",
+    "Listening cousins rn",
+    "Gonna have the red Button someday",
+
 
     {
         content: 'Alabamian cousine',
@@ -318,7 +322,8 @@ const sleepytime = [
     "https://tenor.com/view/griffith-berserk-griffith-good-night-griffith-griffithlvr-berserk-gif-18377682904186629085",
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
-    "Gn all dream whit me Bein the world ruler", "Gn all dream whit me as a God",
+    "Gn all dream whit me Bein the world ruler", "Gn all dream whit me as a God", "GN commies", "GN liberals",
+    "GN murloc enjoyers",
 ];
 
 const kanye_messages = [
@@ -342,7 +347,7 @@ const kanye_messages = [
     "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
     "She know that i am a bully", "She Wanna Hop in a rari", "Preacherman an rari are +SSS Tier songs", "dirty magazines",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous", "She like my nazi vibes\nShe now i am a bully",
-    "https://www.youtube.com/watch?v=bPLw76nn7FQ", "https://www.youtube.com/watch?v=Yt3PB2GiLeU",
+    "https://www.youtube.com/watch?v=bPLw76nn7FQ", "https://www.youtube.com/watch?v=Yt3PB2GiLeU", "Listening cousins rn",
 ];
 
 const reagan_messages = [
@@ -384,6 +389,7 @@ const happy_fucker = [
     "<:pekostare:1365786858465919046>", "<:umarucry:1358518905219584120>", "OMG", "Based", "Nice", "Niceee", "Wow", "Pog", "griffith bars",
     "https://tenor.com/view/squirtle-pokemon-gif-23882585", "YES", "Yesssss", "https://tenor.com/view/sunshine-mario-mario-kart-mario-kart-tour-summer-tours-rule-mario-gif-22350487",
     ":0", "BASEEED", "https://tenor.com/view/cirno-cirno-fumo-fumo-gif-21728275", "https://tenor.com/view/himouto-umaru-chan-cute-anime-christmas-happy-gif-16094038",
+    "<:wholesome:1403161256189493350>",
 
 ]
 
@@ -412,6 +418,11 @@ const SSSTierOpinions = [
     },
 ];
 
+const helloFollowup = [
+    "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
+    "Gonna claim the Sea\nSomeday\nAlso the world"
+]
+
 function getAge() {
     const birthDate = new Date(2002, 10, 19); // 19 November 2002
     const today = new Date();
@@ -421,6 +432,18 @@ function getAge() {
         age--;
     }
     return age;
+}
+
+function getHelloFollowup(userId) {
+    const myUserId = '956743571980038174'; // Replace with your Discord user ID
+    if (userId === myUserId) {
+        // 1/3 chance for "Lefthand", 1/3 for "Righthand", 1/3 for a random followup
+        const options = ["Lefthand", "Righthand", ...helloFollowup];
+        return options[Math.floor(Math.random() * options.length)];
+    } else {
+        // Pick a random followup
+        return helloFollowup[Math.floor(Math.random() * helloFollowup.length)];
+    }
 }
 
 module.exports = {
@@ -452,5 +475,7 @@ module.exports = {
     happy_fucker,
     upset_fucker,
     SSSTierOpinions,
-    getAge
+    helloFollowup,
+    getAge,
+    getHelloFollowup
 };

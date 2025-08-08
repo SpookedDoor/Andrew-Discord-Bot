@@ -30,7 +30,9 @@ module.exports = {
 					"<:umarucry:1358518905219584120> : <\\:umarucry:1358518905219584120>\n" +
 					"<:wtf:1358518914631602449> : <\\:wtf:1358518914631602449>\n" +
 					"<:xd:1358518924303667272> : <\\:xd:1358518924303667272>\n"  +
-                    "<:pekostare:1365786858465919046> : <\\:pekostare:1365786858465919046>\n")
+                    "<:pekostare:1365786858465919046> : <\\:pekostare:1365786858465919046>\n" +
+                    "<:wholesome:1403161256189493350> : <\\:wholesome:1403161256189493350>\n "
+                )
 					
 				const row1 = new ActionRowBuilder()
                     .addComponents(
@@ -97,17 +99,25 @@ module.exports = {
 							.setLabel('XD')	
 							.setStyle(1)	
 							.setEmoji('1358518924303667272'),
+                    );
+                const row4 = new ActionRowBuilder()
+					.addComponents(
                         new ButtonBuilder()	
 							.setCustomId('pekostare')	
 							.setLabel('Peko Stare')	
 							.setStyle(1)	
 							.setEmoji('1365786858465919046'),
+                        new ButtonBuilder()	
+							.setCustomId('wholesome')	
+							.setLabel('Wholesome')	
+							.setStyle(1)	
+							.setEmoji('1403161256189493350'),
                     );
 
                 const replyOptions = {
                     content: "Choose an emote for ol' great Androo to send. Or you could do it the traditional way and manually type in the emote. <:iminnocent:1357618844889256045>",
 					embeds: [emojiList],
-                    components: [row1, row2, row3],
+                    components: [row1, row2, row3, row4],
                     flags: MessageFlags.Ephemeral,
                 };
 
@@ -160,6 +170,9 @@ module.exports = {
                                 break;
                             case 'pekostare':
                                     emoji = '<:pekostare:1365786858465919046>';
+                                    break;
+                            case 'wholesome':
+                                    emoji = '<:wholesome:1403161256189493350>';
                                     break;
                             default:
                                 emoji = 'Unknown emoji';
