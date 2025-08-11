@@ -1,4 +1,5 @@
 const { Events, ActivityType } = require("discord.js");
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { channelMap } = require("../config.json");
 const status = require('../setSleep.js');
 const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, 
@@ -8,7 +9,7 @@ const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    execute(client) {
+    async execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
 		const activities = [
@@ -27,6 +28,13 @@ module.exports = {
 
         updateActivity();
         setInterval(updateActivity, 3 * 60 * 60 * 1000);
+
+		const andrew = await client.users.fetch('1014404029146726460');
+		const avatarURL = andrew.displayAvatarURL({ size: 1024, dynamic: true });
+		const response = await fetch(avatarURL);
+		const arrayBuffer = await response.arrayBuffer();
+		const buffer = Buffer.from(arrayBuffer);
+		client.user.setAvatar(buffer);
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
 			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
