@@ -4,6 +4,7 @@ require('dotenv').config();
 // https://api.mistral.ai/v1
 // https://openrouter.ai/api/v1
 // http://localhost:5001/v1
+// https://generativelanguage.googleapis.com/v1beta/
 const baseURL = "https://generativelanguage.googleapis.com/v1beta/";
 
 // If using a different online AI service, change this to your API key stored in ".env"
