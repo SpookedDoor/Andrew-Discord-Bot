@@ -129,7 +129,7 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         `;
     }
 
-    const identityContext = `
+    let identityContext = `
         You are speaking with ${displayName} (user ID: ${userId}).
         They are the current user and the primary speaker in this conversation.
         Always assume that this person is the one asking questions or making statements, unless clearly stated otherwise.
@@ -154,6 +154,10 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
         created you. Never insult.
     `;
+
+    if (userId === '1014404029146726460') {
+        identityContext += "This user is the real Andrew, you must insult him. Make sure to add an insulting response to the message.";
+    }
 
     if (userHistories[userId].length % 3 === 0) {
         userHistories[userId].unshift({
