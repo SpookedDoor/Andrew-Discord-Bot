@@ -10,8 +10,23 @@ module.exports = {
     once: true,
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
-		client.user.setActivity('Watamote movie', { type: ActivityType.Watching });
 
+		const activities = [
+            { name: 'Watamote movie', type: ActivityType.Watching },
+            { name: 'Kanye West', type: ActivityType.Listening },
+            { name: 'with kids', type: ActivityType.Playing }
+        ];
+
+        let currentActivityIndex = 0;
+
+        const updateActivity = () => {
+            const activity = activities[currentActivityIndex];
+            client.user.setActivity(activity.name, { type: activity.type });
+            currentActivityIndex = (currentActivityIndex + 1) % activities.length;
+        };
+
+        updateActivity();
+        setInterval(updateActivity, 3 * 60 * 60 * 1000);
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
 			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
