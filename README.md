@@ -31,29 +31,31 @@ Or you can just simply use Github Desktop, whatever floats your boat.
 ## THE MEAT ON THE BONES
 Before using this bot, I'd recommend reading the [discord.js guide](https://discord.js.org/), if you haven't already. 
 
-(...or you can simply install ``npm install discord.js openai axios dotenv node-fetch`` in your terminal. But it's still recommended to read the guide to at least understand some of the basic stuff.)
+Make sure to run ``npm install`` to install all of the necessary dependencies for you.
 
-But if you already have; then you WILL need to have a ``.env`` file and have it look like this:
+You WILL need to have a ``.env`` file and have it look like this:
 ```dotenv
 DISCORD_TOKEN=YOURTOKENHERE
 BRAVE_API_KEY=YOURKEYHERE
 GOOGLE_API_KEY=YOURKEYHERE
 GOOGLE_CSE_ID=YOURIDHERE
-GEMINI_API_KEY=YOURIDHERE
+GEMINI_API_KEY=YOURKEYHERE
+MISTRAL_API_KEY=YOURKEYHERE
+ELEVENLABS_API_KEY=YOURKEYHERE
+LASTFM_API_KEY=YOURKEYHERE
+LASTFM_AUTH_SERVER=https://
+DATABASE_URL=postgresql://
 ```
 
 The bot uses Brave for normal web searches and Google for its image searches, if you don't want to use Google, then you'll have to edit ``gpt.js``, ``gptimage.js`` and ``messageCreate.js`` and change all instances of ``googleImageSearch`` to ``braveImageSearch``. If you don't want the bot to have web search capabilities, then you gotta delete the files related to that and also remove the associated code in those files. That would probably be a bit more of a hassle than just creating a Brave Search API account. The AI will still work without an API key provided for web searches, but you will see errors in the console, and the bot will be a bit dumber I suppose.
 
 If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
 
-You will also need a ``config.json`` that looks something like this. A template is also provided, guess what you must do with that too.
+You will also need a ``config.json`` that looks something like this:
 ```json
 {
     "token": "YOURTOKENHERE",
-    "clientId": "YOURCLIENTID",
-    "channelMap": {
-        "YOURSERVERID": "YOURCHANNELID",
-    }
+    "clientId": "YOURCLIENTID"
 }
 ```
 

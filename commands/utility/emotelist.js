@@ -1,18 +1,14 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, MessageFlags, PermissionsBitField } = require('discord.js');
 
-const gods = [
-	{ user: 'thedragonary', display: 'dragonary' },
-	{ user: 'spookeddoor', display: 'spookeddoor' },
-];
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('emotelist')
 		.setDescription('ADMIN: Show all bot emotes'),
 	async execute(interaction) {
 		try {
+            const allowedIds = ['1181721653634420767', '956743571980038174'];
 			if (
-				gods.find(g => interaction.user.username === g.user) ||
+                allowedIds.includes(interaction.user.id) ||
 				interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) ||
 				!interaction.guild
 			) {

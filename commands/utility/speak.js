@@ -27,7 +27,6 @@ module.exports = {
                     { name: 'Finn', value: 'Finn' },
                     { name: 'Hope', value: 'Hope' }
                 )),
-
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
         const voice = interaction.options.getString('voice') || 'Adam';

@@ -4,7 +4,6 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const loadCommands = require('./loadCommands');
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-require('./events/readline.js')(client);
 
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
