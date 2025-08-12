@@ -4,7 +4,7 @@ const { findUserIdentity } = require('../../userIdentities.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('userinfo')
-		.setDescription('Get user info')
+		.setDescription('OWNER: Get user info')
         .addUserOption(option =>
             option.setName('user')
                 .setDescription('Select a user to get info about')

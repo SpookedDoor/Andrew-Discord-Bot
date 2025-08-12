@@ -1,10 +1,9 @@
 const { Events, ActivityType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const { channelMap } = require("../config.json");
-const status = require('../setSleep.js');
+const db = require('../db.js');
 const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, 
 	possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12, 
-	possibleMessages13, possibleMessages14, wakeytime, sleepytime } = require('../messageDatabase.js');
+	possibleMessages13, possibleMessages14 } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -38,7 +37,7 @@ module.exports = {
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
 			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
-			possibleMessages12, possibleMessages13, possibleMessages14,);
+            possibleMessages12, possibleMessages13, possibleMessages14);
 
 		const messageGroups = [
 			possibleMessages2,
@@ -57,80 +56,48 @@ module.exports = {
 		];
 
         const sendRandomMessage = async () => {
-            for (const [guildId, channelId] of Object.entries(channelMap)) {
-                const channel = client.channels.cache.get(channelId);
-                
-                if (!channel) {
-                    console.log(`Channel not found for guild ID: ${guildId}`);
-                    continue;
-                }
+			const res = await db.query('SELECT id FROM disabled_guilds');
+			const disabledGuilds = res.rows.map(row => row.id);
+
+            for (const guild of client.guilds.cache.values()) {
+				if (disabledGuilds.includes(guild.id)) {
+					console.log(`Skipping guild: ${guild.name}`);
+					continue;
+				}
+
+				const res = await db.query('SELECT channel_id FROM default_channels WHERE guild_id = $1', [guild.id]);
+				let channel;
+
+				if (res.rowCount > 0) channel = guild.channels.cache.get(res.rows[0].channel_id);
+				if (!channel) channel = guild.channels.cache.find(ch => ch.type === 0);
     
 				try {
-					if (!status.getSleepStatus(guildId)) {
-						const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
-						const group = messageGroups.find(arr => arr.includes(randomMessage));
+					const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
+					const group = messageGroups.find(arr => arr.includes(randomMessage));
 
-						if (group) {
-							const groupIndex = messageGroups.indexOf(group) + 2;
-							for (const msg of group) await channel.send(msg);
-							console.log(`All messages from possibleMessages${groupIndex} sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						} else {
-							await channel.send(randomMessage);
-							console.log(`Random message sent to guild: ${client.guilds.cache.get(guildId).name}`);
-						}
+					if (group) {
+						const groupIndex = messageGroups.indexOf(group) + 2;
+						for (const msg of group) await channel.send(msg);
+                        console.log(`All messages from possibleMessages${groupIndex} sent to guild: ${guild.name}`);
+					} else {
+						await channel.send(randomMessage);
+                        console.log(`Random message sent to guild: ${guild.name}`);
 					}
 				} catch (error) {
-					console.error(`Error sending message to guild: ${client.guilds.cache.get(guildId).name}`, error);
+                    console.error(`Error sending message to guild: ${guild.name}`, error);
 				}
     		}
 			scheduleRandomMessage();
         };
 		
         const scheduleRandomMessage = () => {
-			if (!status.getSleepStatus(client.guilds.cache.first().id)) {
-				const randomMinutes = Math.floor(Math.random() * (360 - 180 + 1)) + 180;
-				const randomDelay = randomMinutes * 60 * 1000;
-				const nextMessageTimestamp = Date.now() + randomDelay;
-				module.exports.getNextMessageTimestamp = () => nextMessageTimestamp;
-				console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
-				setTimeout(sendRandomMessage, randomDelay);
-			}
+			const randomMinutes = Math.floor(Math.random() * (360 - 180 + 1)) + 180;
+			const randomDelay = randomMinutes * 60 * 1000;
+			const nextMessageTimestamp = Date.now() + randomDelay;
+			module.exports.getNextMessageTimestamp = () => nextMessageTimestamp;
+			console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
+			setTimeout(sendRandomMessage, randomDelay);
         };
-
-		const checkSleepSchedule = async () => {
-			const now = new Date();
-			const hourUTC = now.getUTCHours();
-			const minutes = now.getUTCMinutes();
-			
-			for (const [guildId, channelId] of Object.entries(channelMap)) {
-				const channel = client.channels.cache.get(channelId);
-				const manualMode = status.getManualMode(guildId);
-				if (hourUTC === 12 && minutes === 0 && manualMode === 'sleep') {
-					status.clearManualMode(guildId);
-					console.log(`Cleared manual sleep override for guild: ${client.guilds.cache.get(guildId).name}`);
-				}
-				if (hourUTC === 2 && minutes === 0 && manualMode === 'wake') {
-					status.clearManualMode(guildId);
-					console.log(`Cleared manual wake override for guild: ${client.guilds.cache.get(guildId).name}`);
-				}
-
-				if (hourUTC >= 2 && hourUTC < 12) {
-					if (!status.getSleepStatus(guildId) && manualMode !== 'wake') {
-						console.log(`Auto-sleeping Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						if (hourUTC === 2 && minutes === 0) await channel.send(sleepytime[Math.floor(Math.random() * sleepytime.length)]);
-						status.setSleepStatus(guildId, true);
-					}
-				} else {
-					if (status.getSleepStatus(guildId) && manualMode !== 'sleep') {
-						console.log(`Auto-waking Androo in guild: ${client.guilds.cache.get(guildId).name}`);
-						await channel.send(wakeytime[Math.floor(Math.random() * wakeytime.length)]);
-						status.setSleepStatus(guildId, false);
-					}
-				}
-			}
-		}
-
 		scheduleRandomMessage();
-		setInterval(checkSleepSchedule, 60 * 1000);
     },
 };
