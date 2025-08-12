@@ -40,20 +40,17 @@ module.exports = {
         );
         const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
 
-
-        // Randomly send hello response (10% chance)
-        if (Math.random() < 0.1 && !message.author.bot && !message.system) {
-        const god = gods.find(g =>
-            message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
-            (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
-        );
-        const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
-        await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
-        const followup = getHelloFollowup(message.author.id);
-        await message.channel.send(followup);
-        return; 
+        if (Math.random() < 0.01) {
+            const god = gods.find(g =>
+                message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
+                (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
+            );
+            const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+            await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
+            const followup = getHelloFollowup(message.author.id);
+            await message.channel.send(followup);
+            return; 
         }
-
 
         const responses = [
             { keyword: 'hello', match: msg => { const trimmed = msg.trim().toLowerCase();return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${god ? god.display : message.author.displayName} ${title}`},
