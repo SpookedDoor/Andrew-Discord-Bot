@@ -38,10 +38,25 @@ module.exports = {
             message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
             (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
         );
-        const title = god ? 'god' : 'friend';
+        const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+
+
+        // Randomly send hello response (10% chance)
+        if (Math.random() < 0.1 && !message.author.bot && !message.system) {
+        const god = gods.find(g =>
+            message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
+            (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
+        );
+        const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+        await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
+        const followup = getHelloFollowup(message.author.id);
+        await message.channel.send(followup);
+        return; 
+        }
+
 
         const responses = [
-            { keyword: 'hello', response: `hello ${god ? god.display : message.author.displayName} ${title}` },
+            { keyword: 'hello', match: msg => { const trimmed = msg.trim().toLowerCase();return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${god ? god.display : message.author.displayName} ${title}`},
             { keyword: 'bye', response: 'GN all i am Griffith' },
             { keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
             { keyword: 'venezuela', response: 'I am from alabama' },
@@ -72,7 +87,9 @@ module.exports = {
         ];
 
         const lowerCaseMessage = message.content.toLowerCase();
-        const matchedKeywords = responses.filter(({ keyword }) => lowerCaseMessage.includes(keyword));
+        const matchedKeywords = responses.filter(({ keyword, match }) =>
+        match ? match(lowerCaseMessage) : lowerCaseMessage.includes(keyword)
+        );
         matchedKeywords.sort((a, b) => lowerCaseMessage.indexOf(a.keyword) - lowerCaseMessage.indexOf(b.keyword));
 
 try {
@@ -81,20 +98,27 @@ try {
         return;
     }
 
-    if (matchedKeywords.length > 0) {
-        for (const { keyword, response, response2 } of matchedKeywords) {
-            message.channel.send(response);
-            if (response2) message.channel.send(response2);
+if (matchedKeywords.length > 0) {
+    const trimmedContent = message.content.trim().toLowerCase();
+    const isSimpleHello = matchedKeywords.some(({ keyword }) => keyword === 'hello') &&
+        (trimmedContent === 'hello' || trimmedContent === 'hello andrew');
 
-            if (keyword === 'hello') {
-                const followup = getHelloFollowup(message.author.id);
-                message.channel.send(followup);
-            }
+    for (const { keyword, response, response2 } of matchedKeywords) {
+        message.channel.send(response);
+        if (response2) message.channel.send(response2);
+
+        if (keyword === 'hello') {
+            const followup = getHelloFollowup(message.author.id);
+            message.channel.send(followup);
         }
-        // If a keyword matched, don't run the AI logic
     }
 
-    // --- AI logic only runs if no keyword matched ---
+    if (isSimpleHello) {
+        return;
+    }
+}
+
+// --- AI logic only runs if no keyword matched ---
     const botWasMentioned = message.mentions.has(message.client.user);
     const triggerWords = ['andrew', 'androo'];
     const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
