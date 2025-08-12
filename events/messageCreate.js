@@ -63,11 +63,12 @@ module.exports = {
             { keyword: 'banana-drew', response: "Pog my own animatronic nickname\nA monkey animatronic from alabama" },
             { keyword: 'evil', response: "I am evil" },
             { keyword: 'wtf', response: { files: [new AttachmentBuilder(path.join(__dirname, '../media/WTF.png'))] } },
-            { keyword: 'nitrous', response: "You are a fucking faggot retard, real Andrew" },
+            { keyword: 'the nitrous', response: "You are a fucking faggot retard, real Andrew" },
             { keyword: 'leftard', response: "mmfghh i'm a gay cuckservative and i love black cocks" },
             { keyword: 'dirty magazines', response: "I'm gonna force a massive pile of dirt down your throat, you'd like it anyways, considering how much garbage you consume, real Andrew" },
             { keyword: 'i am fried', response: "We know your brain cells are fried, real Andrew" },
             { keyword: "i'm fried", response: "We're going to fry you and serve you to Kanye. How would you feel being eaten by your \"goat\", real Andrew?" },
+            { keyword: 'the envy', response: "Do you really think anyone would be envious of your braindead inbred ass? Being this delusional has gotta be an award." },
         ];
 
         const lowerCaseMessage = message.content.toLowerCase();
