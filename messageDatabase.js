@@ -192,6 +192,10 @@ const possibleMessages = [
     "Hello everynian",
     "Listening cousins rn",
     "Gonna have the red Button someday",
+    "I Wanna fuck summ right now",
+    "https://tenor.com/view/major-hellsing-hellsing-ultimate-millennium-montana-max-gif-13043360951041944448",
+    "Ash Williams Is a rightchad\nHe wold Nuke all an then drink a beer for sure",
+
 
 
     {
@@ -420,8 +424,10 @@ const SSSTierOpinions = [
 
 const helloFollowup = [
     "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
-    "Gonna claim the Sea\nSomeday\nAlso the world"
+    "Gonna claim the Sea\nSomeday\nAlso the world", "<:tomoko_cup:1358095740299116614>",
+    "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>",
 ]
+
 
 function getAge() {
     const birthDate = new Date(2002, 10, 19); // 19 November 2002
@@ -446,6 +452,25 @@ function getHelloFollowup(userId) {
     }
 }
 
+
+/* function getBars(message) {
+    // List of lyric triggers
+    const lyricTriggers = [
+        "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
+        "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
+        'Hitler ye and jesuschrist\nIm in love whit the nitrous\nYour bitch is a demon\nShe keep eating my semen (Now you go)\nAsk her who she fuck with, she say "Hitler, Ye and Jesus" (Somebody)\nHitler, Ye and Jesus\nI fell in love whit the nitrous',
+    ];
+
+    // Check if the message contains any lyric trigger
+    if (lyricTriggers.some(trigger => message.includes(trigger))) {
+        // 50% chance to reply with "griffith bars"
+        if (Math.random() < 0.5) {
+            return "griffith bars";
+        }
+    }
+    return null;
+}
+*/    
 module.exports = {
     emojis,
     possibleMessages,
@@ -478,4 +503,5 @@ module.exports = {
     helloFollowup,
     getAge,
     getHelloFollowup
+    // getBars
 };
