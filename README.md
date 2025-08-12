@@ -83,6 +83,32 @@ And make sure all model variables in ``aiSettings.js`` are set to ``"koboldcpp"`
 
 Simple!
 
+## CONNECTING TO A DATABASE
+We use PostgreSQL for Andrew's database, here's the schema:
+```sql
+CREATE TABLE lastfm_links (
+    discord_user_id VARCHAR(32) PRIMARY KEY,
+    lastfm_username VARCHAR(64) NOT NULL
+);
+
+CREATE TABLE disabled_guilds (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE default_channels (
+    guild_id TEXT PRIMARY KEY,
+    channel_id TEXT NOT NULL
+);
+```
+Starting off with ``lastfm_links``, now this table isn't actually referenced anywhere in Andrew bot's code. Instead, you should refer to Dragonary's [Lastfm-Auth-Server-Discord](https://github.com/TheDragonary/Lastfm-Auth-Server-Discord). This is for linking Last.fm accounts with Discord users, and that repo will show you how it's done, as long as you read the README of course. Once you get the auth server all set up, all you have to do is stick the URL into Andrew bot's ``.env`` file and that's it.
+
+Next up, ``disabled_guilds``, to put simply, this is for preventing the bot from sending any random messages in a certain server. This can be controlled by server admins using ``/random message disabled:true`` to obviously disable random messages, especially if they get too annoying (which is kinda a common occurance with Andrew bot, however we do aim to minimise annoyance by making the interval random between 3 - 6 hours, but of course if the server is dead in itself anyways, well you know what I mean).
+
+Last but not least, ``default_channels``! Basically, if the bot isn't sending random messages to ``#general`` by default, or you just want it to F off somewhere else, then you run ``/setchannel`` to change the default channel yourself. (I suppose you could also set it to its own prison, or mental ward if you will, and keep it sending messages there for eternity, with no presence of others but itself).
+
+That's pretty much it. There may be plans to move most of the content from ``messageDatabase.js`` over to PostgreSQL, but as of now, I can't be asked.
+
 ### THE REST
 Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
 
