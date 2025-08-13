@@ -1,12 +1,8 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-require('dotenv').config();
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
-const openai = new OpenAI({ 
-    baseURL: baseURL,
-    apiKey: apiKey
-});
+const openai = new OpenAI({ baseURL, apiKey });
 const content = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');

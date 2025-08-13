@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 // Change to a different URL if not using Gemini, examples are shown below
 // https://api.mistral.ai/v1
 // https://openrouter.ai/api/v1

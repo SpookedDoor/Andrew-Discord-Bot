@@ -36,6 +36,7 @@ Make sure to run ``npm install`` to install all of the necessary dependencies fo
 You WILL need to have a ``.env`` file and have it look like this:
 ```dotenv
 DISCORD_TOKEN=YOURTOKENHERE
+DISCORD_CLIENT_ID=YOURIDHERE
 BRAVE_API_KEY=YOURKEYHERE
 GOOGLE_API_KEY=YOURKEYHERE
 GOOGLE_CSE_ID=YOURIDHERE
@@ -50,14 +51,6 @@ DATABASE_URL=postgresql://
 The bot uses Brave for normal web searches and Google for its image searches, if you don't want to use Google, then you'll have to edit ``gpt.js``, ``gptimage.js`` and ``messageCreate.js`` and change all instances of ``googleImageSearch`` to ``braveImageSearch``. If you don't want the bot to have web search capabilities, then you gotta delete the files related to that and also remove the associated code in those files. That would probably be a bit more of a hassle than just creating a Brave Search API account. The AI will still work without an API key provided for web searches, but you will see errors in the console, and the bot will be a bit dumber I suppose.
 
 If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
-
-You will also need a ``config.json`` that looks something like this:
-```json
-{
-    "token": "YOURTOKENHERE",
-    "clientId": "YOURCLIENTID"
-}
-```
 
 Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
 
