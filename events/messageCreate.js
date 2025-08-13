@@ -12,6 +12,15 @@ const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_message
 const { aiAttachment } = require('../aiAttachments.js');
 const { getHelloFollowup } = require('../messageDatabase.js');
 
+const lastHelloGlobal = { time: 0 };
+const lastHelloUser = {};
+
+const messageTimestamps = [];
+const MESSAGE_ACTIVITY_WINDOW = 5 * 60 * 1000; // 5 minutes
+const HELLO_COOLDOWN = 10 * 60 * 1000; // 10 minutes per user
+const GLOBAL_HELLO_COOLDOWN = 5 * 60 * 1000; // 5 minutes global
+
+
 const gods = [
     { user: 'thedragonary', display: 'dragonary' },
     { user: 'spookeddoor', display: 'spookeddoor' },
@@ -27,6 +36,26 @@ module.exports = {
         if (message.author.bot || message.system) return;
         if (message.flags.has(MessageFlags.HasSnapshot)) return;
 
+        const now = Date.now();
+        messageTimestamps.push(now);
+        while (messageTimestamps.length && now - messageTimestamps[0] > MESSAGE_ACTIVITY_WINDOW) {
+            messageTimestamps.shift();
+        }
+
+        const activityLevel = messageTimestamps.length; // messages in last 5 min
+
+        const lastGlobal = lastHelloGlobal.time || 0;
+        const lastUser = lastHelloUser[message.author.id] || 0;
+
+        let helloChance = 0.05; // 5% base
+
+        if (activityLevel > 10) helloChance = 0.01;
+        else if (activityLevel > 5) helloChance = 0.025;
+        else if (activityLevel < 3) helloChance = 0.10; // inactive, higher chance
+
+        if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN) helloChance /= 2;
+        if (now - lastUser < HELLO_COOLDOWN) helloChance /= 2;
+
         console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
         if (message.attachments.size > 0) {
             console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
@@ -38,7 +67,9 @@ module.exports = {
         );
         const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
 
-        if (Math.random() < 0.01) {
+        if (Math.random() < helloChance) {
+            lastHelloGlobal.time = now;
+            lastHelloUser[message.author.id] = now;
             const god = gods.find(g =>
                 message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
                 (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
@@ -47,11 +78,11 @@ module.exports = {
             await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
             const followup = getHelloFollowup(message.author.id);
             await message.channel.send(followup);
-            return; 
+            return;
         }
 
         const responses = [
-            { keyword: 'hello', match: msg => { const trimmed = msg.trim().toLowerCase();return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${god ? god.display : message.author.displayName} ${title}`},
+            { keyword: 'hello', match: msg => {const trimmed = msg.trim().toLowerCase();if (trimmed === 'hello') {const now = Date.now();const lastGlobal = lastHelloGlobal.time || 0;const lastUser = lastHelloUser[message.author.id] || 0;if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN || now - lastUser < HELLO_COOLDOWN) return false;lastHelloGlobal.time = now;lastHelloUser[message.author.id] = now;}return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${god ? god.display : message.author.displayName} ${title}`},
             { keyword: 'bye', response: 'GN all i am Griffith' },
             { keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
             { keyword: 'venezuela', response: 'I am from alabama' },
