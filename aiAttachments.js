@@ -1,5 +1,5 @@
-const { AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
+const { AttachmentBuilder } = require('discord.js');
 const { upset_fucker } = require('./messageDatabase.js');
 
 const griffith_checks = ['griffith', 'femto', 'falconia'];

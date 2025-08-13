@@ -1,5 +1,4 @@
 const axios = require('axios');
-require('dotenv').config();
 
 async function braveSearch(query) {
 	const url = `https://api.search.brave.com/res/v1/web/search`;

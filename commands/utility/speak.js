@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-require('dotenv').config();
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const VOICE_MAP = {
