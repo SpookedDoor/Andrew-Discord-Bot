@@ -11,34 +11,34 @@ const content = require('./characterPrompt');
  */
 
 async function streamAIResponse(prompt, editCallback) {
-  let fullResponse = '';
-  let lastEdit = Date.now();
+    let fullResponse = '';
+    let lastEdit = Date.now();
 
-  const stream = await openai.chat.completions.create({
-    model: gptModel,
-    messages: [
-	    { role: 'user', content: `${content}\n${prompt}` }
-    ],
-    stream: true,
-  });
+    const stream = await openai.chat.completions.create({
+        model: gptModel,
+        messages: [
+            { role: 'user', content: `${content}\n${prompt}` }
+        ],
+        stream: true,
+    });
 
-  for await (const chunk of stream) {
-    const token = chunk.choices?.[0]?.delta?.content;
-    if (!token) continue;
+    for await (const chunk of stream) {
+        const token = chunk.choices?.[0]?.delta?.content;
+        if (!token) continue;
 
-    fullResponse += token;
+        fullResponse += token;
 
-    // Call the edit callback periodically
-    if (Date.now() - lastEdit > 1) {
-      lastEdit = Date.now();
-      await editCallback(fullResponse.slice(0, 2000));
+        // Call the edit callback periodically
+        if (Date.now() - lastEdit > 1) {
+            lastEdit = Date.now();
+            await editCallback(fullResponse.slice(0, 2000));
+        }
     }
-  }
 
-  // Final callback
-  await editCallback(fullResponse.slice(0, 2000));
+    // Final callback
+    await editCallback(fullResponse.slice(0, 2000));
 
-  return fullResponse;
+    return fullResponse;
 }
 
 module.exports = { streamAIResponse };

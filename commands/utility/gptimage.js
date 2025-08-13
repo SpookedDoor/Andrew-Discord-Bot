@@ -1,10 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { baseURL, apiKey, gptModel, gptimageModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
-const openai = new OpenAI({
-    baseURL: baseURL,
-    apiKey: apiKey
-});
+const openai = new OpenAI({ baseURL, apiKey });
 const content = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');

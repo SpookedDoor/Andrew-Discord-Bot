@@ -1,14 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
-const openai = new OpenAI({ 
-	baseURL: baseURL,
-	apiKey: apiKey
-});
+const openai = new OpenAI({ baseURL, apiKey });
 const content = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
-const { braveImageSearch } = require('../../braveImageSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
 const { users, findUserIdentity } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
