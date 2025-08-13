@@ -4,7 +4,6 @@ const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
-const { braveImageSearch } = require('../braveImageSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
@@ -19,7 +18,6 @@ const messageTimestamps = [];
 const MESSAGE_ACTIVITY_WINDOW = 5 * 60 * 1000; // 5 minutes
 const HELLO_COOLDOWN = 10 * 60 * 1000; // 10 minutes per user
 const GLOBAL_HELLO_COOLDOWN = 5 * 60 * 1000; // 5 minutes global
-
 
 const gods = [
     { user: 'thedragonary', display: 'dragonary' },
@@ -43,12 +41,10 @@ module.exports = {
         }
 
         const activityLevel = messageTimestamps.length; // messages in last 5 min
-
         const lastGlobal = lastHelloGlobal.time || 0;
         const lastUser = lastHelloUser[message.author.id] || 0;
 
         let helloChance = 0.05; // 5% base
-
         if (activityLevel > 10) helloChance = 0.01;
         else if (activityLevel > 5) helloChance = 0.025;
         else if (activityLevel < 3) helloChance = 0.10; // inactive, higher chance
