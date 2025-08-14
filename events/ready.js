@@ -3,7 +3,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const db = require('../db.js');
 const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, 
 	possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12, 
-	possibleMessages13, possibleMessages14 } = require('../messageDatabase.js');
+	possibleMessages13, possibleMessages14, possibleMessages15 } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -14,6 +14,8 @@ module.exports = {
 		const activities = [
             { name: 'Watamote movie', type: ActivityType.Watching },
             { name: 'Kanye West', type: ActivityType.Listening },
+            { name: 'Thick of It', type: ActivityType.Listening },
+			{ name: 'cousins', type: ActivityType.Listening },
             { name: 'with kids', type: ActivityType.Playing }
         ];
 

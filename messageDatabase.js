@@ -195,8 +195,64 @@ const possibleMessages = [
     "I Wanna fuck summ right now",
     "https://tenor.com/view/major-hellsing-hellsing-ultimate-millennium-montana-max-gif-13043360951041944448",
     "Ash Williams Is a rightchad\nHe wold Nuke all an then drink a beer for sure",
-
-
+    "Also Tomoko should be in Mario kart world\nAlso the goomba",
+    "a'int gonna sleep until see Tomoko in Mario kart",
+    "You think Tomoko Will be in Mario kart world someday?",
+    "she like Kanye west music?",
+    "Aldi Aldi Aldi",
+    "Wanna join my ship?",
+    "Where the Tomoko car?",
+    "Watamote SSS+ manga\nAlso  that one of the vampire guy",
+    "hell nah i am mario bros enjoyer",
+    "https://tenor.com/view/gifmurloc-aga-gifmurloc-gif-18024839",
+    "Tomo city pog",
+    "the fall of the berlin wall\nthe victory over the soviets",
+    "https://tenor.com/view/nite-owl-herolanding-watchman-gif-18353942",
+    "https://tenor.com/view/dr-manhattan-gif-10480909",
+    "Nuke france",
+    "I am antisemetic fully",
+    "I am antisemetic fully\nUsing swastikas couse all my niggaa nazis",
+    "https://tenor.com/view/murloc-flesheater-warcraft3-wc3-avatar-gif-15258162",
+    "https://www.youtube.com/shorts/C5yMROQpfRA",
+    "Based\nSnyder Superman wold Nuke all for sure\nDead God moment",
+    "I am a monster",
+    "Ice cream cat",
+    "Alien X aura",
+    "Couse i am a villain Also a pirate\nLike Kanye west",
+    "Andrew Wanna be my left hand but that's trinke\nMy own schizoprenia can't be my lefthand",
+    "Low Tier God",
+    "I start running backwards i was too fast",
+    "Gonna be the LTG fishticks",
+    "Maybe someday Miku Also Will get a fishticks skin",
+    "Gonna get the Raiden taunt to be like ltg in fornite",
+    "https://tenor.com/view/ltg-gif-40123618314459872",
+    "Touhou drink",
+    "Fish",
+    "Those who know",
+    "https://tenor.com/view/troll-trollface-scary-void-scary-troll-face-gif-19777211",
+    "Brainrot",
+    "Duck",
+    "Void meme",
+    "All admire my nazi vibes",
+    "https://tenor.com/view/n-h-h-hh-ah-kanye-west-gif-3605193572459858796",
+    "https://tenor.com/view/giancarlo-esposito-smoking-far-cry6-ant%C3%B3n-castillo-gif-26151971",
+    "Go Griffith",
+    "Postal guy",
+    "Schizo bunny",
+    "Sonic.exe did me wrong",
+    "I kill the server\nWhit my schizoprenia",
+    "The one piece\nAndrew nazi king of the pirates",
+    "Quit league",
+    "Why mango?",
+    "Mango?",
+    "I can be a tyrant an respect woman right?",
+    "Where Alien X phonk?",
+    "I like cherries",
+    "AI Is wild",
+    "Crash supremacy",
+    "https://tenor.com/view/crash-bandicoot-2-gif-10703865519411988560",
+    "American dad Is better obviusly",
+    "This place Is based",
 
     {
         content: 'Alabamian cousine',
@@ -289,6 +345,17 @@ const possibleMessages14 = [
     "even incels cant againts me",
 ];
 
+const possibleMessages15 = [
+    "As i say",
+    "Murlocs should be in fornite",
+    "Also Alien X",
+    "An lain",
+    "An Mario bros",
+    "An Sonic.exe",
+    "Also tails.exe",
+    "Guys  Toughs on murlocs?",
+];
+
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
 // Messages that should be part of the AI's database but not be sent as random messages
@@ -327,7 +394,7 @@ const sleepytime = [
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
     "Gn all dream whit me Bein the world ruler", "Gn all dream whit me as a God", "GN commies", "GN liberals",
-    "GN murloc enjoyers",
+    "GN murloc enjoyers", "GN all\nDream whit tomoko using the behelit",
 ];
 
 const kanye_messages = [
@@ -385,7 +452,7 @@ const tate_messages = [
     "He fucked because Andrew Tate say he Will never suicide", "Soros want kill Andrew tate",
     "https://tenor.com/view/andrew-tate-cigar-walking-smoking-andrew-tate-smoking-gif-8005378695551356263",
     "https://tenor.com/view/andrew-tate-top-g-cigar-smoking-andrew-tate-cigar-gif-26262606",
-    "https://tenor.com/view/andrew-tate-gif-26316329",
+    "https://tenor.com/view/andrew-tate-gif-26316329", 
 ];
 
 const happy_fucker = [
@@ -393,7 +460,7 @@ const happy_fucker = [
     "<:pekostare:1365786858465919046>", "<:umarucry:1358518905219584120>", "OMG", "Based", "Nice", "Niceee", "Wow", "Pog", "griffith bars",
     "https://tenor.com/view/squirtle-pokemon-gif-23882585", "YES", "Yesssss", "https://tenor.com/view/sunshine-mario-mario-kart-mario-kart-tour-summer-tours-rule-mario-gif-22350487",
     ":0", "BASEEED", "https://tenor.com/view/cirno-cirno-fumo-fumo-gif-21728275", "https://tenor.com/view/himouto-umaru-chan-cute-anime-christmas-happy-gif-16094038",
-    "<:wholesome:1403161256189493350>",
+    "Basedgod", "Griffith wold be proud of you", "<:wholesome:1403161256189493350>", 
 
 ]
 
@@ -403,7 +470,8 @@ const upset_fucker = [
     "You Envy me couse i am American", "i am a fascist you Envy me", "You Envy me because i am  a rightchad", "Cope harder", "Cope harder you all",
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
     "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head", "you trolling",
-    "stop trolling", "-999999999 social Watamote points", "stop whit that  trolling pls",
+    "stop trolling", "-999999999 social Watamote points", "stop whit that  trolling pls", "Hell nah", "This guy", "Actually getting destroyed by a bot  rn",
+    "Ahahhaah you wish", "Dont click",
 ];
 
 
@@ -411,7 +479,8 @@ const SSSTierOpinions = [
     "Sabaton albums are top tier sss+", "Reagan Top Tier SSS+ president", "Reagan SSS+ president",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
     "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
-    "Boil crab\nSSS+ alabamian cousine",
+    "Boil crab\nSSS+ alabamian cousine", "Watamote SSS+ manga\nAlso  that one of the vampire guy",
+    "Alabama SSS+ Tier state", 
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -425,7 +494,8 @@ const SSSTierOpinions = [
 const helloFollowup = [
     "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
     "Gonna claim the Sea\nSomeday\nAlso the world", "<:tomoko_cup:1358095740299116614>",
-    "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>",
+    "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>", "you like watchmen?",
+
 ]
 
 
@@ -441,6 +511,9 @@ function getAge() {
 }
 
 function getHelloFollowup(userId) {
+    // 50% chance to send a followup, otherwise return null
+    if (Math.random() < 0.5) return null;
+
     const myUserId = '956743571980038174'; // Replace with your Discord user ID
     if (userId === myUserId) {
         // 1/3 chance for "Lefthand", 1/3 for "Righthand", 1/3 for a random followup
@@ -487,6 +560,7 @@ module.exports = {
     possibleMessages12,
     possibleMessages13,
     possibleMessages14,
+    possibleMessages15,
     notPossibleMessages,
     griffith_messages,
     kanye_messages,
