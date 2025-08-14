@@ -394,7 +394,7 @@ const sleepytime = [
     "https://tenor.com/view/griffith-berserk-good-night-chat-bye-chat-goodbye-chat-gif-4987401896551940413", 
     "https://tenor.com/view/osaka-azumanga-daioh-ayumu-kusaga-ayumu-good-night-gif-961306308588708616",
     "Gn all dream whit me Bein the world ruler", "Gn all dream whit me as a God", "GN commies", "GN liberals",
-    "GN murloc enjoyers", "GN all\nDream whit tomoko using the behelit",
+    "GN murloc enjoyers", "GN all\nDream whit tomoko using the behelit", "Good night all\nDream whit me as the supreme Lord emperor of falconia",
 ];
 
 const kanye_messages = [
@@ -471,7 +471,7 @@ const upset_fucker = [
     "Cope", "cope all", "cope more", "Shut up", "Shut up communist", "Shut up i am white", "https://tenor.com/view/venere-angry-mad-evil-laugh-gif-15340793",
     "Why you are a leftard", "Fake", "Average zoomer", "Not even clicking if Is playboi carti", "What a horror", "You sick of the head", "you trolling",
     "stop trolling", "-999999999 social Watamote points", "stop whit that  trolling pls", "Hell nah", "This guy", "Actually getting destroyed by a bot  rn",
-    "Ahahhaah you wish", "Dont click",
+    "Ahahhaah you wish", "Dont click", "Shut the fuck up liberal", "Antifa bastard",
 ];
 
 
