@@ -253,6 +253,10 @@ const possibleMessages = [
     "https://tenor.com/view/crash-bandicoot-2-gif-10703865519411988560",
     "American dad Is better obviusly",
     "This place Is based",
+    "cats are goated",
+    "Playboi cartiii 🗣️🔥🔥🔥🔥",
+    "https://tenor.com/view/playboi-carti-playboi-carti-dancecarti-gif-1369910845517190782",
+    "Im in the thick of it everbody knows\nThey know me where it snows",
 
     {
         content: 'Alabamian cousine',
@@ -479,7 +483,7 @@ const SSSTierOpinions = [
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
     "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
     "Boil crab\nSSS+ alabamian cousine", "Watamote SSS+ manga\nAlso  that one of the vampire guy",
-    "Alabama SSS+ Tier state", 
+    "Alabama SSS+ Tier state", "alabama seafood +SSS tier",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
