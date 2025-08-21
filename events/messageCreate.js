@@ -36,18 +36,16 @@ module.exports = {
 
         const now = Date.now();
         messageTimestamps.push(now);
-        while (messageTimestamps.length && now - messageTimestamps[0] > MESSAGE_ACTIVITY_WINDOW) {
-            messageTimestamps.shift();
-        }
+        while (messageTimestamps.length && now - messageTimestamps[0] > MESSAGE_ACTIVITY_WINDOW) messageTimestamps.shift();
 
         const activityLevel = messageTimestamps.length; // messages in last 5 min
         const lastGlobal = lastHelloGlobal.time || 0;
         const lastUser = lastHelloUser[message.author.id] || 0;
 
-        let helloChance = 0.05; // 5% base
-        if (activityLevel > 10) helloChance = 0.01;
-        else if (activityLevel > 5) helloChance = 0.025;
-        else if (activityLevel < 3) helloChance = 0.10; // inactive, higher chance
+        let helloChance = 0.01; // 1% base
+        if (activityLevel > 10) helloChance = 0.01; // very active, lower chance - 1%
+        else if (activityLevel > 5) helloChance = 0.025; // active, balanced chance - 2.5%
+        else if (activityLevel < 3) helloChance = 0.05; // inactive, higher chance - 5%
 
         if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN) helloChance /= 2;
         if (now - lastUser < HELLO_COOLDOWN) helloChance /= 2;
