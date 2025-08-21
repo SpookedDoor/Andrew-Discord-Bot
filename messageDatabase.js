@@ -474,7 +474,6 @@ const upset_fucker = [
     "Ahahhaah you wish", "Dont click", "Shut the fuck up liberal", "Antifa bastard",
 ];
 
-
 const SSSTierOpinions = [
     "Sabaton albums are top tier sss+", "Reagan Top Tier SSS+ president", "Reagan SSS+ president",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
@@ -495,9 +494,7 @@ const helloFollowup = [
     "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
     "Gonna claim the Sea\nSomeday\nAlso the world", "<:tomoko_cup:1358095740299116614>",
     "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>", "you like watchmen?",
-
 ]
-
 
 function getAge() {
     const birthDate = new Date(2002, 10, 19); // 19 November 2002
@@ -525,7 +522,6 @@ function getHelloFollowup(userId) {
     }
 }
 
-
 /* function getBars(message) {
     // List of lyric triggers
     const lyricTriggers = [
@@ -543,7 +539,8 @@ function getHelloFollowup(userId) {
     }
     return null;
 }
-*/    
+*/
+
 module.exports = {
     emojis,
     possibleMessages,
@@ -576,6 +573,6 @@ module.exports = {
     SSSTierOpinions,
     helloFollowup,
     getAge,
-    getHelloFollowup
+    getHelloFollowup,
     // getBars
 };
