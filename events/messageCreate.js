@@ -64,15 +64,9 @@ module.exports = {
         if (Math.random() < helloChance) {
             lastHelloGlobal.time = now;
             lastHelloUser[message.author.id] = now;
-            const god = gods.find(g =>
-                message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
-                (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
-            );
-            const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
             await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
             const followup = getHelloFollowup(message.author.id);
             await message.channel.send(followup);
-            return;
         }
 
         const responses = [
@@ -88,7 +82,7 @@ module.exports = {
             { keyword: 'nick fuentes', response: nick_messages[Math.floor(Math.random() * nick_messages.length)] },
             { keyword: 'ksi', response: ksi_messages[Math.floor(Math.random() * ksi_messages.length)] },
             { keyword: 'mussolini', response: mussolini_messages[Math.floor(Math.random() * mussolini_messages.length)] },
-            { keyword: 'tate', response: tate_messages[Math.floor(Math.random() * tate_messages.length)] },
+            { keyword: ' tate', response: tate_messages[Math.floor(Math.random() * tate_messages.length)] },
             { keyword: 'admin', response: 'demoted' },
             { keyword: 'https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212', response: 'Me after lobotomy' },
             { keyword: 'oh true', response: 'https://tenor.com/view/oh-true-true-fire-writing-true-fire-true-writing-fire-gif-17199454423395239363' },
@@ -130,9 +124,7 @@ module.exports = {
                     }
                 }
 
-                if (isSimpleHello) {
-                    return;
-                }
+                if (isSimpleHello) return;
             }
 
             const botWasMentioned = message.mentions.has(message.client.user);
