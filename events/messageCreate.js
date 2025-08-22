@@ -61,12 +61,16 @@ module.exports = {
         );
         const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
 
-        if (Math.random() < helloChance) {
-            lastHelloGlobal.time = now;
-            lastHelloUser[message.author.id] = now;
-            await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
-            const followup = getHelloFollowup(message.author.id);
-            await message.channel.send(followup);
+        try {
+            if (Math.random() < helloChance) {
+                lastHelloGlobal.time = now;
+                lastHelloUser[message.author.id] = now;
+                await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
+                const followup = getHelloFollowup(message.author.id);
+                if (followup) await message.channel.send(followup);
+            }
+        } catch (error) {
+            console.error(error);
         }
 
         const responses = [
