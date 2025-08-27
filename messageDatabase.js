@@ -257,7 +257,53 @@ const possibleMessages = [
     "Playboi cartiii 🗣️🔥🔥🔥🔥",
     "https://tenor.com/view/playboi-carti-playboi-carti-dancecarti-gif-1369910845517190782",
     "Im in the thick of it everbody knows\nThey know me where it snows",
+    "Hangin whit cousins reading dirty magazines",
+    "https://tenor.com/view/hidamari-sketch-miyako-miya-wide-gif-26443809",
+    "go to alabama",
+    "https://tenor.com/view/sam-and-max-sam-%26-max-spin-spinning-funny-gif-5568239150402824677",
+    "https://tenor.com/view/doomer-ken-kanye-fan-gif-25334451",
+    "i am a soy",
+    "KFC SSS+ Tier",
+    "Freddy fazbear pizza SSSS+ Tier",
+    "make cirno",
+    "Finally lobotomy watafriends",
+    "Playing whit the blocks like tetris",
+    "She ride my Dick like a carnival",
+    "https://tenor.com/view/santam-hooligans-gif-21973387",
+    "Watamote  enjoyers",
+    "aint in a lonely feeling Bein just me",
+    "Waiting the Collab of joeyworldtour and Tomoko",
+    "https://tenor.com/view/tomoko-kuroki-watamote-danapilled-gif-25692075",
+    "Niggas a'int gonna sleep until see Diddy free",
+    "https://youtu.be/cjjh-pc-qHQ?si=iyv3UmNnejskaEiG",
+    "What if Tomoko joins smash bros?",
+    "Certified watamote fan certified rightchad",
+    "Tomoko ult wold be grab ak an shoot all",
+    "They dont understand the shit i say in twitter\nNigga\nHH",
+    "Not hiding anymore my nazi vibes",
+    "Goin to smash bros whit this one",
+    "https://youtu.be/lLOBedFymoA?si=vWc1IytVhn05PJmf",
+    "I am Sonic.exe",
+    "Hangin whit my cousin reading dirty magazines",
+    "The Man behind the slaugther",
+    "https://tenor.com/view/springtrap-fire-fnaf-gif-2873982408042466685",
+    "I am Shadow bunny",
+    "https://tenor.com/view/fnaf-get-real-nikolai-nikolaialberdi-shadow-bonnie-gif-19527847",
+    "Persona 🗣️🔥",
+    "My new persona Is Shadow bunny",
+    "https://tenor.com/view/shadow-bonnie-fnaf-fnaf2-toy-bonnie-gif-22177468",
+    "Fnaf Lore two guys whit a crazy idea",
+    "I am a mistery",
+    "I am the shadow",
+    "Ashleeey",
+    "Watafriends a'int gonna sleep until see watamote season two",
+    "I'm triying fuck sumn rn",
+    "🗣️ 🔥 🔥 🔥 🔥 Play boi cartiiii",
+    "🗣️🔥🔥🔥🔥 Travis Scott",
 
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/gangshi.png'))] },
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/shadowbunny.jpg'))] },
+    { files: [new AttachmentBuilder(path.join(__dirname, './media/banner.mp4'))] },
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -385,7 +431,6 @@ const wakeytime = [
     "Good morning", "Morning", "Good morning uh uh uh", "Morning all", "Hello everynian",
     "https://tenor.com/view/griffith-berserk-good-morning-good-morning-chat-hello-chat-gif-7712373713074364619",
     "https://tenor.com/view/whale-shark-good-morning-gm-good-night-gn-gif-26569624", "https://tenor.com/view/kanye-fuzzle-good-morning-gif-26126244",
-
 ];
 
 const sleepytime = [
@@ -464,9 +509,8 @@ const happy_fucker = [
     "<:pekostare:1365786858465919046>", "<:umarucry:1358518905219584120>", "OMG", "Based", "Nice", "Niceee", "Wow", "Pog", "griffith bars",
     "https://tenor.com/view/squirtle-pokemon-gif-23882585", "YES", "Yesssss", "https://tenor.com/view/sunshine-mario-mario-kart-mario-kart-tour-summer-tours-rule-mario-gif-22350487",
     ":0", "BASEEED", "https://tenor.com/view/cirno-cirno-fumo-fumo-gif-21728275", "https://tenor.com/view/himouto-umaru-chan-cute-anime-christmas-happy-gif-16094038",
-    "Basedgod", "Griffith wold be proud of you", "<:wholesome:1403161256189493350>", 
-
-]
+    "Basedgod", "Griffith wold be proud of you", "<:wholesome:1403161256189493350>", "Heaven",
+];
 
 const upset_fucker = [
     "https://tenor.com/view/cry-tear-sad-max-cry-sad-max-gif-8713574713734916", "Nonono", "<:depressed:1358517922938617883>",
@@ -483,7 +527,7 @@ const SSSTierOpinions = [
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
     "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
     "Boil crab\nSSS+ alabamian cousine", "Watamote SSS+ manga\nAlso  that one of the vampire guy",
-    "Alabama SSS+ Tier state", "alabama seafood +SSS tier",
+    "Alabama SSS+ Tier state", "alabama seafood +SSS tier", "KFC SSS+ Tier", "Freddy fazbear pizza SSSS+ Tier",
     {
         content: 'Alabamian cousine',
         files: [new AttachmentBuilder(path.join(__dirname, './media/alabamachicken.jpg'))]
@@ -498,7 +542,9 @@ const helloFollowup = [
     "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
     "Gonna claim the Sea\nSomeday\nAlso the world", "<:tomoko_cup:1358095740299116614>",
     "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>", "you like watchmen?",
-]
+    "Like 100gecs?", "like KFC?", "Like new Kanye song?", "how you do?", "You like vultures 2?",
+    "Rightchads"
+];
 
 function getAge() {
     const birthDate = new Date(2002, 10, 19); // 19 November 2002
