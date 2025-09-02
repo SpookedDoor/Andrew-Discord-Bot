@@ -30,12 +30,17 @@ module.exports = {
         updateActivity();
         setInterval(updateActivity, 3 * 60 * 60 * 1000);
 
-		const andrew = await client.users.fetch('1014404029146726460');
-		const avatarURL = andrew.displayAvatarURL({ size: 1024, dynamic: true });
-		const response = await fetch(avatarURL);
-		const arrayBuffer = await response.arrayBuffer();
-		const buffer = Buffer.from(arrayBuffer);
-		client.user.setAvatar(buffer);
+		const updateAvatar = async () => {
+			const andrew = await client.users.fetch('1014404029146726460');
+			const avatarURL = andrew.displayAvatarURL({ size: 1024, dynamic: true });
+			const response = await fetch(avatarURL);
+			const arrayBuffer = await response.arrayBuffer();
+			const buffer = Buffer.from(arrayBuffer);
+			client.user.setAvatar(buffer);
+		};
+
+		updateAvatar();
+		setInterval(updateAvatar, 24 * 60 * 60 * 1000);
 
         const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
 			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
