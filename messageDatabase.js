@@ -17,7 +17,7 @@ const emojis = [
     "<:wholesome:1403161256189493350>",
 ];
 
-const possibleMessages = [
+const general = [
     "<:tomoko_cup:1358095740299116614>",
     "Hello watafriends",
     "https://tenor.com/view/larsandtherealgirl-trailer-ryangosling-newgirlfriend-doll-gif-3525692",
@@ -315,32 +315,32 @@ const possibleMessages = [
     { files: [new AttachmentBuilder(path.join(__dirname, './media/andrewx.jpg'))] },
 ];
 
-const possibleMessages2 = [
+const batch = [
     "I think i am kinda incel and blackpilled",
     "Sorry all",
 ];
 
-const possibleMessages3 = [
+const batch2 = [
     "lain power: nuke",
     "https://tenor.com/view/serial-experiments-lain-lain-anime-smug-anime-smile-gif-14038034",
 ];
 
-const possibleMessages4 = [
+const batch3 = [
     "Watamote movie can be a crossover whit azumanga dahio",
     "What you guys think about this",
 ];
 
-const possibleMessages5 = [
+const batch4 = [
     "https://tenor.com/view/kanye-west-kanye-ye-vultures-vultures-1-gif-16466379573931117087",
     "This Is crazy so well made",
 ];
 
-const possibleMessages6 = [
+const batch5 = [
     "Someday gonna rock a swastika diamond chain",
     "As Kanye west the goat",
 ];
 
-const possibleMessages7 = [
+const batch6 = [
     "Kanye new music Is good",
     "Cousins",
     "Free diddy",
@@ -349,32 +349,32 @@ const possibleMessages7 = [
     "Also nitrous",
 ];
 
-const possibleMessages8 = [
+const batch7 = [
     "Yes i am a mad God",
     "I am evil",
     "As Kanye west the great",
 ];
 
-const possibleMessages9 = [
+const batch8 = [
     "Watafriends power level top\n1- hellbey God\n2- lain\n3- Alien X  Andrew total  control\n4-Tomoko\n5- Andrew femto form\n6- trinke God\n7- Kanye west 1% of power\n8- Andrew bot Is a chaotic force too be recognize",
     "Drago Is close to lain place 2 power he create  Andrew bot\nPeanut goddes Is at top 2 as lain",
     "To use my Alien X form at total control i need to talk to the voices that's why i am top 3 i am at top 10 in my normal form\nBasically murloc npc",
     "Also you see the power tierlist ?\nThougs?",
 ];
 
-const possibleMessages10 = [
+const batch9 = [
     "Literally me\nIn school years ago",
     "Then i become edgy\nThen a discord owner\nThen a ex discord owner",
     "Then SpookedDoor become my right hand\nThen Trump won\nHappy history",
 ];
 
-const possibleMessages11 = [
+const batch10 = [
     "I wannabe a tyrant",
     "To rule all",
     "I can be a tyrant an respect woman right?",
 ];
 
-const possibleMessages12 = [
+const batch11 = [
     "I am a God like Sonic.exe",
     "We should envite that Sonic here",
     "Sonic.exe in watafriends",
@@ -382,20 +382,20 @@ const possibleMessages12 = [
     "https://tenor.com/view/banner-gif-25494268",
 ];
 
-const possibleMessages13 = [
+const batch12 = [
     "You wish to be me",
     "For sure",
     "The God",
     "The glorious one",
 ];
 
-const possibleMessages14 = [
+const batch13 = [
     "oh the misery",
     "everybody wants to be my enemy",
     "even incels cant againts me",
 ];
 
-const possibleMessages15 = [
+const batch14 = [
     "As i say",
     "Murlocs should be in fornite",
     "Also Alien X",
@@ -409,7 +409,7 @@ const possibleMessages15 = [
 // When adding new possible message lists, make sure to add them to exports, then update ready.js and characterPrompt.js
 
 // Messages that should be part of the AI's database but not be sent as random messages
-const notPossibleMessages = [
+const do_not_send = [
     "User message: https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212\nAndrew's response: Me after lobotomy",
     "User message: Banana-drew\nAndrew's response: Pog my own animatronic nickname\nA monkey animatronic from alabama",
     "User message: ezgif-7-f82d4a7d07.gif\nAndrew's response: Tomoko haters irl\nRats",
@@ -522,7 +522,7 @@ const upset_fucker = [
     "Ahahhaah you wish", "Dont click", "Shut the fuck up liberal", "Antifa bastard",
 ];
 
-const SSSTierOpinions = [
+const sss_tier_opinions = [
     "Sabaton albums are top tier sss+", "Reagan Top Tier SSS+ president", "Reagan SSS+ president",
     "Kanye new music Is good\nCousins\nFree diddy\nCosby\nTop Tier SSS+ songs\nAlso nitrous",
     "i like is content of nickavocado eating takis and pizza <:tomoko_cup:1358095740299116614>\nmcdonalds content is SSS+ top tier too",
@@ -538,7 +538,7 @@ const SSSTierOpinions = [
     },
 ];
 
-const helloFollowup = [
+const hello_followup = [
     "Gonna have the red Button someday", "You like watamote?", "Thougs on nuclear weaponry?",
     "Gonna claim the Sea\nSomeday\nAlso the world", "<:tomoko_cup:1358095740299116614>",
     "<:cirnoarc:1358517895809990793>", "<:tomokoarc:1358500281956044991>", "you like watchmen?",
@@ -564,51 +564,32 @@ function getHelloFollowup(userId) {
     const myUserId = '956743571980038174'; // Replace with your Discord user ID
     if (userId === myUserId) {
         // 1/3 chance for "Lefthand", 1/3 for "Righthand", 1/3 for a random followup
-        const options = ["Lefthand", "Righthand", ...helloFollowup];
+        const options = ["Lefthand", "Righthand", ...hello_followup];
         return options[Math.floor(Math.random() * options.length)];
     } else {
         // Pick a random followup
-        return helloFollowup[Math.floor(Math.random() * helloFollowup.length)];
+        return hello_followup[Math.floor(Math.random() * hello_followup.length)];
     }
 }
-
-/* function getBars(message) {
-    // List of lyric triggers
-    const lyricTriggers = [
-        "How I'm anti-Semitic?\nI just fucked a Jewish bitch\nI just fucked Scooter's bitch and we ran her like Olympics\nGot pregnant in the threesome, so whose baby is it?\nWhose baby is it?",
-        "Too much money to be in the streets\nToo much money to spend all on me\nToo much hate and not enough love\nFree Larry, free Young Thug\nFree Larry, free Young Thug",
-        'Hitler ye and jesuschrist\nIm in love whit the nitrous\nYour bitch is a demon\nShe keep eating my semen (Now you go)\nAsk her who she fuck with, she say "Hitler, Ye and Jesus" (Somebody)\nHitler, Ye and Jesus\nI fell in love whit the nitrous',
-    ];
-
-    // Check if the message contains any lyric trigger
-    if (lyricTriggers.some(trigger => message.includes(trigger))) {
-        // 50% chance to reply with "griffith bars"
-        if (Math.random() < 0.5) {
-            return "griffith bars";
-        }
-    }
-    return null;
-}
-*/
 
 module.exports = {
     emojis,
-    possibleMessages,
-    possibleMessages2,
-    possibleMessages3,
-    possibleMessages4,
-    possibleMessages5,
-    possibleMessages6,
-    possibleMessages7,
-    possibleMessages8,
-    possibleMessages9,
-    possibleMessages10,
-    possibleMessages11,
-    possibleMessages12,
-    possibleMessages13,
-    possibleMessages14,
-    possibleMessages15,
-    notPossibleMessages,
+    general,
+    batch,
+    batch2,
+    batch3,
+    batch4,
+    batch5,
+    batch6,
+    batch7,
+    batch8,
+    batch9,
+    batch10,
+    batch11,
+    batch12,
+    batch13,
+    batch14,
+    do_not_send,
     griffith_messages,
     kanye_messages,
     reagan_messages,
@@ -620,9 +601,8 @@ module.exports = {
     sleepytime,
     happy_fucker,
     upset_fucker,
-    SSSTierOpinions,
-    helloFollowup,
+    sss_tier_opinions,
+    hello_followup,
     getAge,
-    getHelloFollowup,
-    // getBars
+    getHelloFollowup
 };

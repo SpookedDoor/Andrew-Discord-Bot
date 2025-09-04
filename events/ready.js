@@ -1,9 +1,9 @@
 const { Events, ActivityType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const db = require('../db.js');
-const { possibleMessages, possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, possibleMessages6, 
-	possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, possibleMessages12, 
-	possibleMessages13, possibleMessages14, possibleMessages15 } = require('../messageDatabase.js');
+const { general, batch, batch2, batch3, batch4, batch5, 
+	batch6, batch7, batch8, batch9, batch10, batch11, 
+	batch12, batch13, batch14 } = require('../messageDatabase.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -42,24 +42,24 @@ module.exports = {
 		updateAvatar();
 		setInterval(updateAvatar, 24 * 60 * 60 * 1000);
 
-        const allMessages = possibleMessages.concat(possibleMessages2, possibleMessages3, possibleMessages4, possibleMessages5, 
-			possibleMessages6, possibleMessages7, possibleMessages8, possibleMessages9, possibleMessages10, possibleMessages11, 
-            possibleMessages12, possibleMessages13, possibleMessages14);
+        const allMessages = general.concat(batch, batch2, batch3, batch4, 
+			batch5, batch6, batch7, batch8, batch9, batch10, 
+            batch11, batch12, batch13);
 
 		const messageGroups = [
-			possibleMessages2,
-			possibleMessages3,
-			possibleMessages4,
-			possibleMessages5,
-			possibleMessages6,
-			possibleMessages7,
-			possibleMessages8,
-			possibleMessages9,
-			possibleMessages10,
-			possibleMessages11,
-			possibleMessages12,
-			possibleMessages13,
-			possibleMessages14
+			batch,
+			batch2,
+			batch3,
+			batch4,
+			batch5,
+			batch6,
+			batch7,
+			batch8,
+			batch9,
+			batch10,
+			batch11,
+			batch12,
+			batch13
 		];
 
         const sendRandomMessage = async () => {
@@ -85,7 +85,7 @@ module.exports = {
 					if (group) {
 						const groupIndex = messageGroups.indexOf(group) + 2;
 						for (const msg of group) await channel.send(msg);
-                        console.log(`All messages from possibleMessages${groupIndex} sent to guild: ${guild.name}`);
+                        console.log(`All messages from general${groupIndex} sent to guild: ${guild.name}`);
 					} else {
 						await channel.send(randomMessage);
                         console.log(`Random message sent to guild: ${guild.name}`);
