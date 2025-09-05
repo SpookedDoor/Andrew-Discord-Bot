@@ -435,6 +435,7 @@ INSERT INTO messages (category_id, content) VALUES
 ((SELECT id FROM message_categories WHERE name = 'sleepytime'), 'Good night all\nDream whit me as the supreme Lord emperor of falconia'),
 
 -- Griffith
+((SELECT id FROM message_categories WHERE name = 'griffith'), '{greeting} all i am Griffith'),
 ((SELECT id FROM message_categories WHERE name = 'griffith'), 'I am prime Griffith'),
 ((SELECT id FROM message_categories WHERE name = 'griffith'), 'I am Femto God'),
 ((SELECT id FROM message_categories WHERE name = 'griffith'), 'I am Griffith in wataland'),

@@ -3,7 +3,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
-const content = require('../../characterPrompt.js');
+const getContent = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 
@@ -92,7 +92,7 @@ module.exports = {
             const aiResponse = await openai.chat.completions.create({
                 model: gptModel,
                 messages: [
-                    { role: 'system', content },
+                    { role: 'system', content: await getContent() },
                     { role: 'user', content: finalPrompt }
                 ],
                 temperature: 0.9

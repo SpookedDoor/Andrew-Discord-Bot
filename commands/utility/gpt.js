@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
-const content = require('../../characterPrompt.js');
+const getContent = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
@@ -163,7 +163,7 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
     }
 
     const messages = [
-        { role: "system", content: `${content}\n\n${identityContext}` },
+        { role: "system", content: `${await getContent()}\n\n${identityContext}` },
         ...userHistories[userId]
     ];
 

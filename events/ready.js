@@ -1,9 +1,12 @@
 const { Events, ActivityType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const db = require('../db.js');
-const { general, batch, batch2, batch3, batch4, batch5, 
-	batch6, batch7, batch8, batch9, batch10, batch11, 
-	batch12, batch13, batch14 } = require('../messageDatabase.js');
+const { getRandomMessage } = require('../messageDatabase.js');
+
+const categories = [
+    'general', 'batch', 'batch2', 'batch3', 'batch4', 'batch5', 'batch6', 'batch7', 
+	'batch8', 'batch9', 'batch10', 'batch11', 'batch12', 'batch13', 'batch14'
+];
 
 module.exports = {
     name: Events.ClientReady,
@@ -39,64 +42,44 @@ module.exports = {
 			client.user.setAvatar(buffer);
 		};
 
-		updateAvatar();
-		setInterval(updateAvatar, 24 * 60 * 60 * 1000);
-
-        const allMessages = general.concat(batch, batch2, batch3, batch4, 
-			batch5, batch6, batch7, batch8, batch9, batch10, 
-            batch11, batch12, batch13);
-
-		const messageGroups = [
-			batch,
-			batch2,
-			batch3,
-			batch4,
-			batch5,
-			batch6,
-			batch7,
-			batch8,
-			batch9,
-			batch10,
-			batch11,
-			batch12,
-			batch13
-		];
+		try {
+			setInterval(updateAvatar, 24 * 60 * 60 * 1000);
+		} catch (error) {
+			console.error('Error updating avatar:', error);
+		}
 
         const sendRandomMessage = async () => {
 			const res = await db.query('SELECT id FROM disabled_guilds');
-			const disabledGuilds = res.rows.map(row => row.id);
+			const disabledGuilds = res.rows.map(r => r.id);
 
-            for (const guild of client.guilds.cache.values()) {
-				if (disabledGuilds.includes(guild.id)) {
-					console.log(`Skipping guild: ${guild.name}`);
-					continue;
-				}
+			for (const guild of client.guilds.cache.values()) {
+				if (disabledGuilds.includes(guild.id)) continue;
 
-				const res = await db.query('SELECT channel_id FROM default_channels WHERE guild_id = $1', [guild.id]);
 				let channel;
-
+				const res = await db.query('SELECT channel_id FROM default_channels WHERE guild_id = $1', [guild.id]);
 				if (res.rowCount > 0) channel = guild.channels.cache.get(res.rows[0].channel_id);
 				if (!channel) channel = guild.channels.cache.find(ch => ch.type === 0);
-    
-				try {
-					const randomMessage = allMessages[Math.floor(Math.random() * allMessages.length)];
-					const group = messageGroups.find(arr => arr.includes(randomMessage));
 
-					if (group) {
-						const groupIndex = messageGroups.indexOf(group) + 2;
-						for (const msg of group) await channel.send(msg);
-                        console.log(`All messages from general${groupIndex} sent to guild: ${guild.name}`);
-					} else {
-						await channel.send(randomMessage);
-                        console.log(`Random message sent to guild: ${guild.name}`);
+				try {
+					const category = categories[Math.floor(Math.random() * categories.length)];
+					const msg = await getRandomMessage(category);
+
+					if (msg.attachments.length > 0) {
+						for (const attachment of msg.attachments) await channel.send({ content: msg.content, files: [attachment] });
+						console.log(`Random message with attachment from ${category} sent to guild: ${guild.name}`);
 					}
-				} catch (error) {
-                    console.error(`Error sending message to guild: ${guild.name}`, error);
+					else if (msg) {
+						if (msg.content) await channel.send(msg.content);
+						console.log(`Random message from ${category} sent to guild: ${guild.name}`);
+					}
+				} catch (err) {
+					console.error(`Error sending message to guild: ${guild.name}`, err);
 				}
-    		}
+			}
+
 			scheduleRandomMessage();
-        };
-		
+		};
+
         const scheduleRandomMessage = () => {
 			const randomMinutes = Math.floor(Math.random() * (360 - 180 + 1)) + 180;
 			const randomDelay = randomMinutes * 60 * 1000;
