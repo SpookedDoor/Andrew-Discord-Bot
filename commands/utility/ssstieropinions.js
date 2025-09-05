@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { sss_tier_opinions } = require('../../messageDatabase.js');
+const { getRandomMessage } = require('../../messageDatabase.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -16,6 +16,6 @@ module.exports = {
 			)
         ),
 	async execute(interaction) {
-		await interaction.reply(sss_tier_opinions[Math.floor(Math.random() * sss_tier_opinions.length)]);
+		await interaction.reply(await getRandomMessage('sss_tier_opinions'));
 	},
 };
