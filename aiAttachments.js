@@ -1,5 +1,5 @@
-const path = require('node:path');
 const { AttachmentBuilder } = require('discord.js');
+const path = require('node:path');
 const db = require('./db.js');
 
 async function aiAttachment(responseText, probability = 0.5) {
@@ -9,15 +9,12 @@ async function aiAttachment(responseText, probability = 0.5) {
     const { rows: triggers } = await db.query('SELECT * FROM attachment_triggers');
     for (const trigger of triggers) {
         if (lowerText.includes(trigger.trigger_text.toLowerCase()) && Math.random() < probability) {
-            const { rows: files } = await db.query(
-                'SELECT file_path FROM attachment_files WHERE category = $1',
+            const { rows } = await db.query(
+                'SELECT file_path FROM attachment_files WHERE category = $1 ORDER BY RANDOM() LIMIT 1',
                 [trigger.category]
             );
 
-            if (files.length > 0) {
-                const file = files[Math.floor(Math.random() * files.length)].file_path;
-                attachments.push(new AttachmentBuilder(path.join(__dirname, file)));
-            }
+            if (rows.length > 0) attachments.push(new AttachmentBuilder(path.join(__dirname, rows[0].file_path)));
         }
     }
 
