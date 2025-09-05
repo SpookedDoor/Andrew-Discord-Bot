@@ -62,7 +62,7 @@ module.exports = {
 
 	        console.log(`AI response: ${reply}`);
             
-            const attachments = aiAttachment(reply);
+            const attachments = await aiAttachment(reply);
             if (attachments) {
                 await interaction.editReply({ content: reply, files: attachments });
             } else {

@@ -4,8 +4,8 @@ const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
 const getContent = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const path = require('path');
 const { aiAttachment } = require('../../aiAttachments.js');
+const path = require('path');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,7 +39,7 @@ module.exports = {
             if (!ext || !['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext)) ext = '.png';
             const originalImageAttachment = new AttachmentBuilder(buffer, { name: `image${ext}` });
 
-            const aiAttachments = aiAttachment(reply) || [];
+            const aiAttachments = await aiAttachment(reply) || [];
             const files = [originalImageAttachment, ...aiAttachments];
 
         await interaction.editReply({ content: reply, files });
