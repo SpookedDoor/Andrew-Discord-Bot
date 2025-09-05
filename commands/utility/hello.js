@@ -1,20 +1,5 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-
-const gods = [
-	{ user: 'thedragonary', display: 'dragonary' },
-	{ user: 'spookeddoor', display: 'spookeddoor' },
-	{ user: 'hellbeyv2', display: 'hellbey' },
-	{ user: 'sillyh.', display: 'trinke' },
-	{ user: 'nonamebadass', display: 'poncho' },
-	{ user: 'marv_mari', display: 'brit'},
-];
-
-const friends = [
-	{ user: 'moonmanv2', display: 'moon man' },
-	{ user: 'edenlance', display: 'peanut' },
-	{ user: 'nagiro.', display: 'ghostto' },
-	{ user: 'meeperthe1', display: 'meeper' },
-];
+const db = require('../../db.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -30,23 +15,26 @@ module.exports = {
 				.setRequired(false)),
 	async execute(interaction) {
 		try {
+			const greetings = ['hiii', 'hello', 'hi'];
+			const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 			if (interaction.options.getUser('user')) {
 				const user = interaction.options.getUser('user');
-				const god = gods.find(g => user.username.toLowerCase().includes(g.user.toLowerCase()));
-				const friend = friends.find(f => user.username.toLowerCase().includes(f.user.toLowerCase()));
-				await interaction.reply(`hiii ${interaction.options.getBoolean('mention') ? `<@${user.id}>` : god ? god.display : friend ? friend.display : user.displayName} ${god ? 'god' : 'friend'}`);
-				return;
+				const { rows } = await db.query('SELECT id, username, display_name, is_god FROM users WHERE id = $1', [user.id]);
+				const god = rows.find(r => r.is_god);
+				const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+				let displayName = rows[0] ? rows[0].display_name : user.displayName;
+				if (user.id === '956743571980038174') displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
+				displayName = interaction.options.getBoolean('mention') ? `<@${user.id}>` : displayName
+				return await interaction.reply(`${greeting} ${displayName} ${title}`);
 			}
 			else {
-				const god = gods.find(g => interaction.user.username.toLowerCase().includes(g.user.toLowerCase()) || 
-					interaction.member?.displayName.toLowerCase().includes(g.display.toLowerCase())
-				);
-				const friend = friends.find(f => interaction.user.username.toLowerCase().includes(f.user.toLowerCase()) || 
-					interaction.member?.displayName.toLowerCase().includes(f.display.toLowerCase())
-				);
-				const displayName = interaction.member?.displayName || interaction.user.username;
-				await interaction.reply(`hiii ${god ? god.display : friend ? friend.display : displayName} ${god ? 'god' : 'friend'}`);
-				return;
+				const { rows } = await db.query('SELECT id, username, display_name, is_god FROM users WHERE id = $1', [interaction.user.id]);
+				const god = rows.find(r => r.is_god);
+				const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+				let displayName = rows[0] ? rows[0].display_name : user.displayName;
+				if (user.id === '956743571980038174') displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
+				displayName = interaction.options.getBoolean('mention') ? `<@${user.id}>` : displayName
+				return await interaction.reply(`${greeting} ${displayName} ${title}`);
 			}
 		} catch (error) {
 			console.error(error);
