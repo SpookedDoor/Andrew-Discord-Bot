@@ -6,7 +6,7 @@ const getContent = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
-const { users, findUserIdentity } = require('../../userIdentities.js');
+const { findUserIdentity } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 
 const userHistories = {};
@@ -87,44 +87,6 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
     (currentUser?.isGod ? 'This user has the isGod tag. ' : '') +
     (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
 
-    const otherUsers = users
-        .filter(u => u.id !== userId)
-        .map(u => {
-            const nicknames = u.usernames.join(', ');
-            const creatorTag = u.isCreator ? ' [Creator]' : '';
-            const godTag = u.isGod ? ' [God]' : '';
-            const traits = u.traits?.length ? ` | Traits: ${u.traits.join(', ')}` : '';
-            return `- ${u.displayName} (nicknames: ${nicknames})${creatorTag}${godTag}${traits}`;
-        })
-        .join('\n');
-
-    function getGuildDisplayNames(guild, excludeId = null, limit = 25) {
-        const members = guild.members.cache
-            .filter(m => !m.user.bot && m.id !== excludeId)
-            .map(m => `- ${m.displayName} (${m.user.username})`);
-        return members.slice(0, limit).join('\n');
-    }
-
-    let guildMemberInfo = '';
-    if (guild?.members?.cache?.size) {
-        const member = guild.members.cache.get(userId);
-        const roles = member?.roles?.cache
-            ? member.roles.cache
-                .map(role => role.name)
-                .filter(r => r !== '@everyone')
-                .join(', ')
-            : 'None';
-        const allDisplayNames = getGuildDisplayNames(guild, userId);
-
-        guildMemberInfo = `
-            Guild-Specific Info:
-            - Server Name: ${guild.name}
-            - Member Display Name: ${member?.displayName || 'unknown'}
-            - Roles: ${roles || 'None'}
-            - Other Members: ${allDisplayNames}
-        `;
-    }
-
     let identityContext = `
         You are speaking with ${displayName} (user ID: ${userId}).
         They are the current user and the primary speaker in this conversation.
@@ -136,15 +98,10 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         ${userTraits ? `- ${userTraits}` : ''}
         ${godOrCreatorNote}
 
-        ${guildMemberInfo}
-
         IMPORTANT:
         If you see any of this user's names or nicknames in a prompt, assume it refers to themselves unless they explicitly refer to themselves in third person.
         Refer to all people exclusively as "${displayName}" in all replies. Never use any of their usernames or nicknames unless quoting directly. 
         Never say "you like to be called" or "you prefer to be called" or similar.
-
-        Additionally, the following users are known in this server:
-        ${otherUsers || 'No other users found.'}
 
         Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
         All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they

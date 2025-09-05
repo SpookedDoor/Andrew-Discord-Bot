@@ -1,20 +1,29 @@
-const users = [
-    {
-        id: '123',
-        usernames: ['username', 'nickname'],
-        displayName: 'name the bot should use',
-        traits: ['human', 'not stupid'],
-    },
-    {
-        id: '123',
-        usernames: ['Anti-Andrew', 'Anti'],
-        displayName: 'Anti-Andrew',
-        traits: ['enemy of Andrew']
-    }
-];
+const db = require('./db.js');
+
+async function getUsers() {
+    const { rows } = await db.query(`
+        SELECT id, username, display_name, nicknames, traits, is_creator, is_god
+        FROM users;
+    `);
+
+    return rows.map(row => {
+        const nicknames = row.nicknames ? row.nicknames.split(',').map(n => n.trim()) : [];
+        const usernames = [row.username, ...nicknames].filter(Boolean);
+
+        return {
+            id: row.id,
+            usernames,
+            displayName: row.display_name,
+            traits: row.traits ? row.traits.split(',').map(t => t.trim()) : [],
+            isCreator: row.is_creator,
+            isGod: row.is_god,
+        };
+    });
+}
 
 async function findUserIdentity({ id = null, name = '', guild = null }) {
     const normalised = (name ? name.toLowerCase().trim() : '');
+    const users = await getUsers();
 
     let user = users.find(user =>
         (id && user.id === id) ||
@@ -47,6 +56,5 @@ async function findUserIdentity({ id = null, name = '', guild = null }) {
 }
 
 module.exports = {
-    users,
     findUserIdentity,
 };
