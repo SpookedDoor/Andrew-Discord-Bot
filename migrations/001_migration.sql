@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS message_attachments (
 -- Keywords or triggers for attachment responses
 CREATE TABLE IF NOT EXISTS attachment_triggers (
     id SERIAL PRIMARY KEY,
-    trigger_text TEXT NOT NULL,         -- e.g., 'griffith', 'femto', 'burger'
+    trigger_text TEXT UNIQUE NOT NULL,  -- e.g., 'griffith', 'femto', 'burger'
     category TEXT NOT NULL              -- e.g., 'griffith', 'food', 'alien_x'
 );
 
@@ -60,5 +60,5 @@ CREATE TABLE IF NOT EXISTS attachment_triggers (
 CREATE TABLE IF NOT EXISTS attachment_files (
     id SERIAL PRIMARY KEY,
     category TEXT NOT NULL,             -- matches attachment_triggers.category
-    file_path TEXT NOT NULL             -- './media/griffith.png'
+    file_path TEXT UNIQUE NOT NULL      -- './media/griffith.png'
 );

@@ -2,7 +2,7 @@ const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { baseURL, apiKey, gptModel, gptimageModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
-const content = require('../../characterPrompt.js');
+const getContent = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const path = require('path');
 const { aiAttachment } = require('../../aiAttachments.js');
@@ -108,7 +108,7 @@ module.exports.generateImagePrompt = async function (prompt, imageUrl) {
         const response = await openai.chat.completions.create({
             model: gptModel,
             messages: [
-                { role: 'system', content },
+                { role: 'system', content: await getContent() },
                 {
                     role: 'user',
                     content: [

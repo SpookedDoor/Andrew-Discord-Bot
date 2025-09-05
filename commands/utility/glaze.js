@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { griffith_messages, kanye_messages, reagan_messages, nick_messages,  ksi_messages, mussolini_messages, tate_messages, } = require('../../messageDatabase.js');
+const { getRandomMessage } = require('../../messageDatabase.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,18 +21,12 @@ module.exports = {
 		),
 	async execute(interaction) {
 		const goat = interaction.options.getString('goat');
+		const message = await getRandomMessage(goat);
 
-		const goat_messages = {
-            griffith: griffith_messages,
-            kanye: kanye_messages,
-            reagan: reagan_messages,
-            nick: nick_messages,
-            ksi: ksi_messages,
-            mussolini: mussolini_messages,
-            tate: tate_messages,
-        };
+		if (!message || (!message.content && message.files.length === 0)) {
+			return interaction.reply("No messages found for that goat.");
+		}
 
-		const messages = goat_messages[goat];
-		await interaction.reply(messages[Math.floor(Math.random() * messages.length)]);
+		await interaction.reply({ content: message.content || "", files: message.files });
 	},
 };

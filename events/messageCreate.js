@@ -7,9 +7,8 @@ const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
-const { emojis, griffith_messages, kanye_messages, reagan_messages, nick_messages, ksi_messages, mussolini_messages, tate_messages } = require('../messageDatabase.js');
+const { getMessageById, getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
-const { getHelloFollowup } = require('../messageDatabase.js');
 
 const lastHelloGlobal = { time: 0 };
 const lastHelloUser = {};
@@ -66,7 +65,7 @@ module.exports = {
                 lastHelloGlobal.time = now;
                 lastHelloUser[message.author.id] = now;
                 await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
-                const followup = getHelloFollowup(message.author.id);
+                const followup = await getHelloFollowup(message.author.id);
                 if (followup) await message.channel.send(followup);
             }
         } catch (error) {
@@ -78,15 +77,15 @@ module.exports = {
             { keyword: 'bye', response: 'GN all i am Griffith' },
             { keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
             { keyword: 'venezuela', response: 'I am from alabama' },
-            { keyword: 'fish27.reset()', response: 'hello friends', response2: emojis[0] },
-            { keyword: 'kanye', response: kanye_messages[Math.floor(Math.random() * kanye_messages.length)] },
+            { keyword: 'fish27.reset()', response: 'hello friends', response2: await getMessageById(1) },
+            { keyword: 'kanye', response: await getRandomMessage('kanye') },
             { keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
-            { keyword: 'griffith', response: griffith_messages[Math.floor(Math.random() * griffith_messages.length)] },
-            { keyword: 'reagan', response: reagan_messages[Math.floor(Math.random() * reagan_messages.length)] },
-            { keyword: 'nick fuentes', response: nick_messages[Math.floor(Math.random() * nick_messages.length)] },
-            { keyword: 'ksi', response: ksi_messages[Math.floor(Math.random() * ksi_messages.length)] },
-            { keyword: 'mussolini', response: mussolini_messages[Math.floor(Math.random() * mussolini_messages.length)] },
-            { keyword: ' tate', response: tate_messages[Math.floor(Math.random() * tate_messages.length)] },
+            { keyword: 'griffith', response: await getRandomMessage('griffith') },
+            { keyword: 'reagan', response: await getRandomMessage('reagan') },
+            { keyword: 'nick fuentes', response: await getRandomMessage('nick') },
+            { keyword: 'ksi', response: await getRandomMessage('ksi') },
+            { keyword: 'mussolini', response: await getRandomMessage('mussolini') },
+            { keyword: ' tate', response: await getRandomMessage('tate') },
             { keyword: 'admin', response: 'demoted' },
             { keyword: 'https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212', response: 'Me after lobotomy' },
             { keyword: 'oh true', response: 'https://tenor.com/view/oh-true-true-fire-writing-true-fire-true-writing-fire-gif-17199454423395239363' },
@@ -123,8 +122,8 @@ module.exports = {
                     if (response2) message.channel.send(response2);
 
                     if (keyword === 'hello') {
-                        const followup = getHelloFollowup(message.author.id);
-                        message.channel.send(followup);
+                        const followup = await getHelloFollowup(message.author.id);
+                        if (followup) message.channel.send(followup);
                     }
                 }
 
@@ -205,7 +204,7 @@ module.exports = {
                     console.log(`AI response: ${reply}`);
                 }
 
-                const attachments = aiAttachment(reply);
+                const attachments = await aiAttachment(reply);
                 if (reply) {
                     if (attachments) {
                         await message.reply({ content: reply, files: attachments });
