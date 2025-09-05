@@ -20,7 +20,7 @@ async function getMessages(category) {
             };
         }
         if (row.file_path) {
-            grouped[row.id].attachments.push(row.file_path);
+            grouped[row.id].files.push(row.file_path);
         }
     });
 
@@ -54,15 +54,15 @@ async function getRandomMessage(category = null) {
 
     query += ` ORDER BY RANDOM() LIMIT 1;`;
     const { rows } = await db.query(query, params);
-    if (rows.length === 0) return { content: null, attachments: [] };
+    if (rows.length === 0) return { content: null, files: [] };
 
     const message = {
         content: rows[0].content ? rows[0].content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage()) : null,
-        attachments: []
+        files: []
     };
 
     rows.forEach(row => {
-        if (row.file_path) message.attachments.push(row.file_path);
+        if (row.file_path) message.files.push(row.file_path);
     });
 
     return message;
