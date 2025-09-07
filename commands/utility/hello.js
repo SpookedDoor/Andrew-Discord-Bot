@@ -23,7 +23,7 @@ module.exports = {
 				const god = rows.find(r => r.is_god);
 				const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
 				let displayName = rows[0] ? rows[0].display_name : user.displayName;
-				if (user.id === '956743571980038174') displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
+				if (user.id === process.env.OWNER2_ID) displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
 				displayName = interaction.options.getBoolean('mention') ? `<@${user.id}>` : displayName
 				return await interaction.reply(`${greeting} ${displayName} ${title}`);
 			}
@@ -32,7 +32,7 @@ module.exports = {
 				const god = rows.find(r => r.is_god);
 				const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
 				let displayName = rows[0] ? rows[0].display_name : user.displayName;
-				if (user.id === '956743571980038174') displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
+				if (user.id === process.env.OWNER2_ID) displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
 				displayName = interaction.options.getBoolean('mention') ? `<@${user.id}>` : displayName
 				return await interaction.reply(`${greeting} ${displayName} ${title}`);
 			}

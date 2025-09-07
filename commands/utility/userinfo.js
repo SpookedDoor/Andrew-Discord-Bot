@@ -16,7 +16,7 @@ module.exports = {
                 .setRequired(false)
         ),
 	async execute(interaction) {
-        const allowedIds = ['1181721653634420767', '956743571980038174'];
+        const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
         if (!allowedIds.includes(interaction.user.id)) {
             await interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
             return;

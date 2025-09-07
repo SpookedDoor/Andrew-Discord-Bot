@@ -37,7 +37,7 @@ module.exports = {
                 )
             ),
 	async execute(interaction) {
-        const allowedIDs = ['1181721653634420767', '956743571980038174'];
+        const allowedIDs = [process.env.OWNER_ID, process.env.OWNER2_ID];
         if (allowedIDs.includes(interaction.user.id)) {} else { await interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral }); return; };
 
         const status = interaction.options.getString('status');
