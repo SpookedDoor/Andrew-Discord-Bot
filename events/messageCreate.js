@@ -9,6 +9,7 @@ const { findUserIdentity } = require('../userIdentities.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getMessageById, getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
+const db = require('../db.js');
 
 const lastHelloGlobal = { time: 0 };
 const lastHelloUser = {};
@@ -17,15 +18,6 @@ const messageTimestamps = [];
 const MESSAGE_ACTIVITY_WINDOW = 5 * 60 * 1000; // 5 minutes
 const HELLO_COOLDOWN = 10 * 60 * 1000; // 10 minutes per user
 const GLOBAL_HELLO_COOLDOWN = 5 * 60 * 1000; // 5 minutes global
-
-const gods = [
-    { user: 'thedragonary', display: 'dragonary' },
-    { user: 'spookeddoor', display: 'spookeddoor' },
-    { user: 'hellbeyv2', display: 'hellbey' },
-    { user: 'sillyh.', display: 'trinke' },
-    { user: 'nonamebadass', display: 'poncho' },
-	{ user: 'marv_mari', display: 'brit' },
-];
 
 module.exports = {
     name: Events.MessageCreate,
@@ -54,17 +46,17 @@ module.exports = {
             console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
         }
 
-        const god = gods.find(g =>
-            message.author.username.toLowerCase().includes(g.user.toLowerCase()) ||
-            (message.member && message.member.displayName.toLowerCase().includes(g.display.toLowerCase()))
-        );
+        const { rows } = await db.query('SELECT id, username, display_name, is_god FROM users WHERE id = $1', [message.author.id]);
+        const god = rows.find(r => r.is_god);
         const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+        let displayName = rows[0] ? rows[0].display_name : message.author.displayName;
+        if (message.author.id === process.env.OWNER2_ID) displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
 
         try {
             if (Math.random() < helloChance) {
                 lastHelloGlobal.time = now;
                 lastHelloUser[message.author.id] = now;
-                await message.channel.send(`Hello ${god ? god.display : message.author.displayName} ${title}`);
+                await message.channel.send(`Hello ${displayName} ${title}`);
                 const followup = await getHelloFollowup(message.author.id);
                 if (followup) await message.channel.send(followup);
             }
@@ -73,7 +65,7 @@ module.exports = {
         }
 
         const responses = [
-            { keyword: 'hello', match: msg => {const trimmed = msg.trim().toLowerCase();if (trimmed === 'hello') {const now = Date.now();const lastGlobal = lastHelloGlobal.time || 0;const lastUser = lastHelloUser[message.author.id] || 0;if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN || now - lastUser < HELLO_COOLDOWN) return false;lastHelloGlobal.time = now;lastHelloUser[message.author.id] = now;}return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${god ? god.display : message.author.displayName} ${title}`},
+            { keyword: 'hello', match: msg => {const trimmed = msg.trim().toLowerCase();if (trimmed === 'hello') {const now = Date.now();const lastGlobal = lastHelloGlobal.time || 0;const lastUser = lastHelloUser[message.author.id] || 0;if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN || now - lastUser < HELLO_COOLDOWN) return false;lastHelloGlobal.time = now;lastHelloUser[message.author.id] = now;}return trimmed === 'hello' || trimmed === 'hello andrew';},response: `Hello ${displayName} ${title}`},
             { keyword: 'bye', response: 'GN all i am Griffith' },
             { keyword: 'cheese', response: 'https://tenor.com/view/ye-kanye-kanye-vultures-vultures-listening-party-vultures-lp-gif-14111380029791063141', response2: 'This aint cheddar this quiche' },
             { keyword: 'venezuela', response: 'I am from alabama' },
