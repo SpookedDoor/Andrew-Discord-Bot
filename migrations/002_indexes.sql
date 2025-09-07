@@ -8,6 +8,10 @@ CREATE INDEX IF NOT EXISTS idx_attachment_triggers_category ON attachment_trigge
 CREATE INDEX IF NOT EXISTS idx_attachment_files_category ON attachment_files(category);
 
 -- Uniqueness constraints
+ALTER TABLE messages
+  DROP CONSTRAINT IF EXISTS uq_messages,
+  ADD CONSTRAINT uq_messages UNIQUE (category_id, content);
+
 ALTER TABLE message_attachments
   DROP CONSTRAINT IF EXISTS uq_message_attachments,
   ADD CONSTRAINT uq_message_attachments UNIQUE (message_id, file_path);
