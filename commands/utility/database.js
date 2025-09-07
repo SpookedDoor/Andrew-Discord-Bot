@@ -122,6 +122,9 @@ module.exports = {
                 const categories = await db.query(`SELECT id FROM message_categories WHERE name = $1`, [category]);
                 if (categories.rows.length === 0) return interaction.reply({ content: `Category "${category}" does not exist. Please create it first with SQL.`, flags: MessageFlags.Ephemeral });
 
+                const { rows: existingMessages } = await db.query(`SELECT id FROM messages WHERE category_id = $1 AND content = $2`, [categories.rows[0].id, message]);
+                if (existingMessages.length > 0) return interaction.reply({ content: `Message "${message}" already exists in category "${category}".`, flags: MessageFlags.Ephemeral });
+
                 const categoryId = categories.rows[0].id;
                 const insertMessage = await db.query(`INSERT INTO messages (category_id, content) VALUES ($1, $2) RETURNING id`, [categoryId, message]);
                 const messageId = insertMessage.rows[0].id;

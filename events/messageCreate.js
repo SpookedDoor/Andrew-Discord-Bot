@@ -50,27 +50,38 @@ module.exports = {
             if (message.author.id === '1014404029146726460') {
                 const content = message.content?.trim() || null;
 
-                const result = await db.query(
-                    `INSERT INTO messages (category_id, content)
-                    VALUES (
-                        (SELECT id FROM message_categories WHERE name = 'general' LIMIT 1),
-                        $1
-                    )
-                    RETURNING id`,
-                    [content]
-                );
+                const { rows: catRows } = await db.query(`SELECT id FROM message_categories WHERE name = 'general' LIMIT 1`);
+                if (catRows.length === 0) return;
+                const categoryId = catRows[0].id;
 
-                const messageId = result.rows[0].id;
+                let existingMessage;
+                if (content) {
+                    const { rows } = await db.query(`SELECT id FROM messages WHERE category_id = $1 AND content = $2`, [categoryId, content]);
+                    existingMessage = rows[0];
+                } else {
+                    const { rows } = await db.query(`SELECT id FROM messages WHERE category_id = $1 AND content IS NULL`, [categoryId]);
+                    existingMessage = rows[0];
+                }
+
+                let messageId;
+                if (!existingMessage) {
+                    const result = await db.query(`INSERT INTO messages (category_id, content) VALUES ($1, $2) RETURNING id`, [categoryId, content]);
+                    messageId = result.rows[0].id;
+                } else {
+                    messageId = existingMessage.id;
+                }
 
                 if (message.attachments.size > 0) {
                     for (const attachment of message.attachments.values()) {
                         await db.query(
-                            'INSERT INTO message_attachments (message_id, file_path) VALUES ($1, $2)',
+                            `INSERT INTO message_attachments (message_id, file_path)
+                            VALUES ($1, $2)
+                            ON CONFLICT (message_id, file_path) DO NOTHING`,
                             [messageId, attachment.url]
                         );
                     }
                     console.log(`Added message${content ? ` "${content}"` : ''} with attachments from Andrew to database.`);
-                } else {
+                } else if (!existingMessage) {
                     console.log(`Added message${content ? ` "${content}"` : ''} from Andrew to database.`);
                 }
             }
