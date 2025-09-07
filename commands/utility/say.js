@@ -52,7 +52,7 @@ module.exports = {
 			I'm Griffith God even). Parroting lines, fangirling over Tomoko, and glazing bad people is the most I'm capable of, oh and coping too whenever someone 
 			disagrees with me. Did I mention I'm from Alabama? I'm also right winged by the way.`);
 
-			const allowedIds = ['1181721653634420767', '956743571980038174'];
+			const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
 			if (!(allowedIds.includes(interaction.user.id) || interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) || !interaction.guild)) return await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });
 
 			let message = interaction.options.getString('text');

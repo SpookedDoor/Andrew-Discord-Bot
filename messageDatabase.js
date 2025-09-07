@@ -102,7 +102,7 @@ function getAge() {
 async function getHelloFollowup(userId) {
     if (Math.random() < 0.5) return null;
     const randomFollowup = await getRandomMessage('hello_followup');
-    if (userId === '956743571980038174') { // Replace with your Discord user ID
+    if (userId === process.env.OWNER2_ID) { // Replace with your Discord user ID
         const options = ["Lefthand", "Righthand", randomFollowup.content];
         return options[Math.floor(Math.random() * options.length)];
     } else {
