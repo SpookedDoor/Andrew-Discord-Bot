@@ -20,13 +20,18 @@ module.exports = {
 				)
 		),
 	async execute(interaction) {
-		const goat = interaction.options.getString('goat');
-		const message = await getRandomMessage(goat);
+		try {
+			const goat = interaction.options.getString('goat');
+			const message = await getRandomMessage(goat);
 
-		if (!message || (!message.content && message.files.length === 0)) {
-			return interaction.reply("No messages found for that goat.");
+			if (!message || (!message.content && message.files.length === 0)) {
+				return interaction.reply("No messages found for that goat.");
+			}
+
+			await interaction.reply(message);
+		} catch (error) {
+			console.error('Error executing glaze command:', error);
+			await interaction.reply('There was an error while executing this command.');
 		}
-
-		await interaction.reply({ content: message.content || "", files: message.files });
 	},
 };
