@@ -1,12 +1,7 @@
 const { Events, ActivityType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const { getRandomMessage } = require('../messageDatabase.js');
+const { getMessages, getRandomMessage } = require('../messageDatabase.js');
 const db = require('../db.js');
-
-const categories = [
-    'general', 'batch', 'batch2', 'batch3', 'batch4', 'batch5', 'batch6', 'batch7', 
-	'batch8', 'batch9', 'batch10', 'batch11', 'batch12', 'batch13', 'batch14'
-];
 
 module.exports = {
     name: Events.ClientReady,
@@ -61,17 +56,21 @@ module.exports = {
 				if (!channel) channel = guild.channels.cache.find(ch => ch.type === 0);
 
 				try {
-					const category = categories[Math.floor(Math.random() * categories.length)];
-					const msg = await getRandomMessage(category);
+					const batchCategories = await db.query("SELECT name FROM message_categories WHERE name LIKE 'batch%'");
+					const batchCategoryNames = batchCategories.rows.map(r => r.name);
+					const category = Math.random() < 0.8 ? 'general' : 'batch';
 
-					if (msg.files.length > 0) {
-						console.log(`Random message with attachment from ${category} sent to guild: ${guild.name}`);
+					if (category === 'general') {
+						const msg = await getRandomMessage(category);
+						if (msg.files.length > 0) console.log(`Random message with attachment from ${category} sent to guild: ${guild.name}`);
+						else console.log(`Random message from ${category} sent to guild: ${guild.name}`);
+						await channel.send(msg);
+					} else if (category === 'batch') {
+						const category = batchCategoryNames[Math.floor(Math.random() * batchCategoryNames.length)];
+						const msgs = await getMessages(category);
+						for (const m of msgs) await channel.send(m);
+						console.log(`Batch of ${msgs.length} messages from ${category} sent to guild: ${guild.name}`);
 					}
-					else {
-						console.log(`Random message from ${category} sent to guild: ${guild.name}`);
-					}
-					
-					await channel.send(msg);
 				} catch (err) {
 					console.error(`Error sending message to guild: ${guild.name}`, err);
 				}
