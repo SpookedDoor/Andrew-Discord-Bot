@@ -56,20 +56,45 @@ module.exports = {
 				if (!channel) channel = guild.channels.cache.find(ch => ch.type === 0);
 
 				try {
-					const batchCategories = await db.query("SELECT name FROM message_categories WHERE name LIKE 'batch%'");
-					const batchCategoryNames = batchCategories.rows.map(r => r.name);
-					const category = Math.random() < 0.8 ? 'general' : 'batch';
+					const categories = [
+						{ name: "general", weight: 0.7 },
+						{ name: "batch", weight: 0.1 },
+						{ name: "other", weight: 0.2 }
+					];
 
+					function pickCategory() {
+						const rand = Math.random();
+						let sum = 0;
+
+						for (const cat of categories) {
+							sum += cat.weight;
+							if (rand < sum) return cat.name;
+						}
+					}
+
+					const category = pickCategory();
 					if (category === 'general') {
 						const msg = await getRandomMessage(category);
-						if (msg.files.length > 0) console.log(`Random message with attachment from ${category} sent to guild: ${guild.name}`);
-						else console.log(`Random message from ${category} sent to guild: ${guild.name}`);
+						if (msg.files.length > 0) console.log(`\nRandom message "${msg.content}" with attachment "${msg.files[0]}" from category "${category}" sent to guild: ${guild.name}`);
+						else console.log(`\nRandom message "${msg.content}" from category "${category}" sent to guild: ${guild.name}`);
 						await channel.send(msg);
 					} else if (category === 'batch') {
-						const category = batchCategoryNames[Math.floor(Math.random() * batchCategoryNames.length)];
-						const msgs = await getMessages(category);
+						const { rows } = await db.query("SELECT name FROM message_categories WHERE name LIKE 'batch%' ORDER BY RANDOM() LIMIT 1;");
+						const msgs = await getMessages(rows[0].name);
 						for (const m of msgs) await channel.send(m);
-						console.log(`Batch of ${msgs.length} messages from ${category} sent to guild: ${guild.name}`);
+						console.log(`\nBatch of ${msgs.length} messages from category "${rows[0].name}" sent to guild: ${guild.name}`);
+					} else if (category === 'other') {
+						const { rows } = await db.query(`
+							SELECT name FROM message_categories
+							WHERE name NOT LIKE 'batch%'
+							AND name NOT IN ('general', 'emojis', 'do_not_send', 'wakeytime', 'sleepytime', 'happy_fucker', 'upset_fucker', 'hello_followup')
+							ORDER BY RANDOM()
+							LIMIT 1;
+						`);
+						const msg = await getRandomMessage(rows[0].name);
+						if (msg.files.length > 0) console.log(`\nRandom message "${msg.content}" with attachment "${msg.files[0]}" from category "${rows[0].name}" sent to guild: ${guild.name}`);
+						else console.log(`\nRandom message "${msg.content}" from category "${rows[0].name}" sent to guild: ${guild.name}`);
+						await channel.send(msg);
 					}
 				} catch (err) {
 					console.error(`Error sending message to guild: ${guild.name}`, err);
