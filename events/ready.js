@@ -1,7 +1,7 @@
 const { Events, ActivityType } = require("discord.js");
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const db = require('../db.js');
 const { getRandomMessage } = require('../messageDatabase.js');
+const db = require('../db.js');
 
 const categories = [
     'general', 'batch', 'batch2', 'batch3', 'batch4', 'batch5', 'batch6', 'batch7', 
@@ -64,14 +64,14 @@ module.exports = {
 					const category = categories[Math.floor(Math.random() * categories.length)];
 					const msg = await getRandomMessage(category);
 
-					if (msg.attachments.length > 0) {
-						for (const attachment of msg.attachments) await channel.send({ content: msg.content, files: [attachment] });
+					if (msg.files.length > 0) {
 						console.log(`Random message with attachment from ${category} sent to guild: ${guild.name}`);
 					}
-					else if (msg) {
-						if (msg.content) await channel.send(msg.content);
+					else {
 						console.log(`Random message from ${category} sent to guild: ${guild.name}`);
 					}
+					
+					await channel.send(msg);
 				} catch (err) {
 					console.error(`Error sending message to guild: ${guild.name}`, err);
 				}
