@@ -105,7 +105,7 @@ module.exports = {
 		};
 
         const scheduleRandomMessage = () => {
-			const randomMinutes = Math.floor(Math.random() * (360 - 180 + 1)) + 180;
+			const randomMinutes = Math.floor(Math.random() * (720 - 360 + 1)) + 360;
 			const randomDelay = randomMinutes * 60 * 1000;
 			const nextMessageTimestamp = Date.now() + randomDelay;
 			module.exports.getNextMessageTimestamp = () => nextMessageTimestamp;

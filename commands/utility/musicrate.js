@@ -87,7 +87,7 @@ module.exports = {
                 console.log("No internet tools used.");
             }
 
-            finalPrompt += "\nGive a score out of 10.";
+            finalPrompt += "\nIf the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Give a detailed review. Give a score out of 10.";
 
             const aiResponse = await openai.chat.completions.create({
                 model: gptModel,
