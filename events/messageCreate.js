@@ -135,6 +135,7 @@ module.exports = {
                 { keyword: "i'm fried", response: "We know your brain cells are fried, real Andrew" },
                 { keyword: 'envy', response: "You envy me\nThe glorious griffith guzzler" },
                 { keyword: 'she eat my kids like jared', response: "You are literally an inbred, you will never have kids. Thank God because the last thing we need is more retards like you, real Andrew" },
+                { keyword: 'https://tenor.com/view/fnaf-freddy-fazbear-five-nights-at-freddy%27s-freddy-tweaking-freddy-gif-5311184244436515615', response: 'Literally me\nWhen someone says watamote Is bad\nTomoko should be in crash racing\nAlso Mario kart\nAlso Sonic kart\nBest Collab ever\nAlso madness combat kart someday\nSomewere in nevada 3 2 1 Gooo' },
             ];
 
             const lowerCaseMessage = message.content.toLowerCase();
