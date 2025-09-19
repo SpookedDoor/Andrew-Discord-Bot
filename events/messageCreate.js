@@ -179,7 +179,7 @@ module.exports = {
                     if (message.reference) {
                         try {
                             const repliedMessage = await message.fetchReference();
-                            if (repliedMessage.attachments.size > 0) {
+                            if (repliedMessage.attachments.size > 0 && repliedMessage.author.id !== '1357616229694705796') {
                                 imageUrl = repliedMessage.attachments.first().url;
                             }
                             if (repliedMessage.content) {
