@@ -129,12 +129,12 @@ module.exports = {
                 { keyword: 'wtf', response: { files: [new AttachmentBuilder(path.join(__dirname, '../media/WTF.png'))] } },
                 { keyword: 'the nitrous', response: "You are a fucking faggot retard, real Andrew" },
                 { keyword: 'leftard', response: "mmfghh i'm a gay cuckservative and i love black cocks" },
-                { keyword: 'dirty magazines', response: "I'm gonna force a massive pile of dirt down your throat, you'd like it anyways, considering how much garbage you consume, real Andrew" },
+                { keyword: 'dirty magazines', response: "I'm gonna force a massive pile of dirt down your throat, you'd like it anyways, considering how many **dirt**y magazines you consume, real Andrew" },
                 { keyword: 'i am fried', response: "We know your brain cells are fried, real Andrew" },
                 { keyword: 'im fried', response: "We know your brain cells are fried, real Andrew" },
-                { keyword: "i'm fried", response: "We're going to fry you and serve you to Kanye. How would you feel being eaten by your \"goat\", real Andrew?" },
-                { keyword: 'the envy', response: "Do you really think anyone would be envious of your braindead inbred ass? Being this delusional has gotta be an award." },
-                { keyword: 'she eat my kids like jared', response: "I'm Jared and I'm gonna gobble you up, real Andrew. And I'll puke because inbreds taste like shit, or maybe just you, since all that ever comes out of your mouth is shit, I wouldn't be surprised if your entire body was made entirely of shit." },
+                { keyword: "i'm fried", response: "We know your brain cells are fried, real Andrew" },
+                { keyword: 'envy', response: "You envy me\nThe glorious griffith guzzler" },
+                { keyword: 'she eat my kids like jared', response: "You are literally an inbred, you will never have kids. Thank God because the last thing we need is more retards like you, real Andrew" },
             ];
 
             const lowerCaseMessage = message.content.toLowerCase();
