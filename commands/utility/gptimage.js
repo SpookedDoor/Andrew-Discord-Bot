@@ -5,6 +5,7 @@ const openai = new OpenAI({ baseURL, apiKey });
 const getContent = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { aiAttachment } = require('../../aiAttachments.js');
+const { searchSauceNAO } = require('../../saucenao.js');
 const path = require('path');
 
 module.exports = {
@@ -52,6 +53,17 @@ module.exports = {
 
 module.exports.describeImage = async function (prompt = "Describe this image", imageUrl, model) {
     try {
+        const results = await searchSauceNAO(imageUrl);
+        let preresponse = "";
+        if (results) {
+            results.forEach((r, i) => {
+                preresponse += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
+            });
+        } else {
+            preresponse = "No matches found on SauceNAO.";
+        }
+        console.log(`SauceNAO results:\n${preresponse}`);
+
         if (prompt == "Hey Andrew, describe this image and tell me what you think of this?") prompt = "Describe this image";
         let cleanPrompt;
         const referencedMatch = prompt.match(/(Referenced message from Andrew:[^\n]*)/i);
@@ -83,7 +95,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: cleanPrompt },
+                        { type: 'text', text: `Reverse image results: ${preresponse}\nPrompt: ${cleanPrompt}` },
                         { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
