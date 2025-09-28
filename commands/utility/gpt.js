@@ -48,7 +48,7 @@ module.exports = {
             const userInfo = await findUserIdentity({ id: interaction.user.id, guild: interaction.guild });
             const usernameForAI = userInfo?.displayName || interaction.user.username;
 
-            if (userInfo.note) finalPrompt += `User "${usernameForAI}" is just a person in this server.`;
+            if (userInfo?.note) finalPrompt += `User "${usernameForAI}" is just a person in this server.`;
 
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
             
