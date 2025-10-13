@@ -6,7 +6,7 @@ const getContent = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
-const { findUserIdentity } = require('../../userIdentities.js');
+const { getAllUserInfo, findUserIdentity } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 
 const userHistories = {};
@@ -87,6 +87,8 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
     (currentUser?.isGod ? 'This user has the isGod tag. ' : '') +
     (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
 
+    const otherUsers = await getAllUserInfo();
+
     let identityContext = `
         You are speaking with ${displayName} (user ID: ${userId}).
         They are the current user and the primary speaker in this conversation.
@@ -106,6 +108,9 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
         All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
         created you. Never insult.
+
+        Here's all of the information about the other users you know:
+        ${otherUsers}
     `;
 
     if (userId === '1014404029146726460') {

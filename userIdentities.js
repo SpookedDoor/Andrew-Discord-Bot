@@ -21,6 +21,16 @@ async function getUsers() {
     });
 }
 
+async function getAllUserInfo() {
+    const users = await getUsers();
+    return users.map(user =>
+        `Display Name: ${user.displayName}, 
+        Usernames / Nicknames: ${user.usernames.join(', ')}, 
+        Traits: ${user.traits.join(', ')}, 
+        ${user.isCreator ? 'This user has the isCreator tag.' : ''}, ${user.isGod ? 'This user has the isGod tag.' : ''}`
+    ).join('\n');
+}
+
 async function findUserIdentity({ id = null, name = '', guild = null }) {
     const normalised = (name ? name.toLowerCase().trim() : '');
     const users = await getUsers();
@@ -56,5 +66,7 @@ async function findUserIdentity({ id = null, name = '', guild = null }) {
 }
 
 module.exports = {
+    getUsers,
+    getAllUserInfo,
     findUserIdentity,
 };
