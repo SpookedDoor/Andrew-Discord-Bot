@@ -14,7 +14,11 @@ module.exports = {
             { name: 'Kanye West', type: ActivityType.Listening },
             { name: 'Thick of It', type: ActivityType.Listening },
 			{ name: 'cousins', type: ActivityType.Listening },
-            { name: 'with kids', type: ActivityType.Playing }
+            { name: 'with kids', type: ActivityType.Playing },
+			{ name: 'Niggas aint gonna sleep until see watamote season two', type: ActivityType.Custom },
+			{ name: 'Tomoko should be in Mario Galaxy 3', type: ActivityType.Custom },
+			{ name: 'Tomoko should be in crash racing', type: ActivityType.Custom },
+			{ name: 'I am Shadow bonnie from fnaf', type: ActivityType.Custom }
         ];
 
         let currentActivityIndex = 0;
