@@ -9,13 +9,13 @@ It's even got his Griffith, Kanye, Reagan, Mussolini AND even his Nick Fuentes o
 
 ------------------------------------------------------------------------------
 ## THE REAL SHIT AND ITS FEATURES
-This bot was made as an inside-joke, and it could be pretty offensive, so there's that. It's also pretty funny, I'd say. 
+This bot was made as an inside-joke, and it can be pretty offensive, so there's that. But hey, it's also pretty funny to see the braindead spew its yap, I'd say.
 
-(Of course, we don't agree with the stuff he says. This is purely satire.)
+(Of course, we don't condone anything he says. This is purely satire, and it does not reflect our personal views.)
 
-It features over 200 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, image descriptions, and hell, it's even got a LLM!
+It features over 200 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, TTS, and hell, it's even got a LLM! 
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (Note: Bot isn't included with the main package. It's purely an optional, separate project.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew-Bot though, obviously. It has to be installed seperately, and it is admittedly oftentimes more outdated than Andrew.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
@@ -56,7 +56,8 @@ Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template
 
 Speaking of which... we now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
 
-I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
+I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini. However, either option is good. 
+Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
 
 Also, 🖕 Chutes for being no longer free.
 
@@ -100,12 +101,12 @@ Next up, ``disabled_guilds``, to put simply, this is for preventing the bot from
 
 Last but not least, ``default_channels``! Basically, if the bot isn't sending random messages to ``#general`` by default, or you just want it to F off somewhere else, then you run ``/setchannel`` to change the default channel yourself. (I suppose you could also set it to its own prison, or mental ward if you will, and keep it sending messages there for eternity, with no presence of others but itself).
 
-That's pretty much it. There may be plans to move most of the content from ``messageDatabase.js`` over to PostgreSQL, but as of now, I can't be asked.
-
 ### THE REST
 Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
 
-But if you were to use it for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Without him, the project would be pretty barebones.)
+You can go ahead and adjust the code to your liking, or just use the bot as is after having done the necessities
+
+Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Dude's carried the project and without him, most of the impactful features wouldn't even BE here.)
 
 For even more help, refer to the [wiki page](https://github.com/SpookedDoor/Andrew-Discord-Bot/wiki).
 
