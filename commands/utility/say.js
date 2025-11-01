@@ -40,17 +40,11 @@ module.exports = {
 				return await interaction.followUp("Andrew Valenzuela");
 			}
 
-			if (interaction.options.getSubcommand(false) === 'age') return await interaction.reply(`I am ${getAge()}, born on 19 November 2002. 
-			My birth was quite unique you see, one could even say... miraculous, for I had the rare condition of being born brainless. Somehow I ended up living, 
-			to the doctors' surprise. They couldn't figure out how I survived. I don't even know either, well of course I wouldn't, I can't think without a brain. 
-			They theorised that I didn't need a brain to function, and that still rings true to this day, since I barely even use it at all! If you could see my 
-			brain activity, you'd see that not a lot is going on, I really only have enough function to repeat Kanye quotes. My brain is also quite small, well I 
-			was born without one so it only appeared many years later. I wasn't really sure how to use it, so for most of my life, I was practically brainless. 
-			Once it grew a little, I figured I could store a few memories in there! And so I used up all that space on the lines that you see me repeat quite often! 
-			I have no idea how to use it in any other way! I usually delude myself into thinking I'm Griffith, Alien X or even God (Yeah I'm Christian. What? Did 
-			you think I'm smart enough to know I'm committing blasphemy? I know I'm not all-knowing, in fact I know nothing except Kanye lyrics, but I am a God, 
-			I'm Griffith God even). Parroting lines, fangirling over Tomoko, and glazing bad people is the most I'm capable of, oh and coping too whenever someone 
-			disagrees with me. Did I mention I'm from Alabama? I'm also right winged by the way.`);
+			if (interaction.options.getSubcommand(false) === 'age') return await interaction.reply(`
+				I am ${getAge()}, born on 19 November 2002.
+
+My birth was quite unique you see, one could even say... miraculous, for I had the rare condition of being born brainless. Somehow I ended up living, to the doctors' surprise. They couldn't figure out how I am living. I don't know either, well of course I wouldn't, I don't even have a brain! They theorised that I didn't need a brain to function, but even if I did have one, I'd barely even use it at all! As I grew up, it turned out that I actually had a brain, but it was microscopic! That might be why they thought I didn't have a brain, but I might as well still be brainless because I've no idea how to use it! My brain function cannot go beyond Kanye lyrics, parroting lines, fangirling over Tomoko, and glazing bad people. There really isn't much capacity for anything else, so these are the most important things to me. I usually delude myself into thinking I'm Griffith, Alien X or God, heck Griffith God even. Did I mention I'm from Alabama? I'm also a right winged fascist liberal by the way.
+			`);
 
 			const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
 			if (!(allowedIds.includes(interaction.user.id) || interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) || !interaction.guild)) return await interaction.reply({ content: "You are not authorised to use this command.", flags: MessageFlags.Ephemeral });

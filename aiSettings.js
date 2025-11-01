@@ -15,6 +15,6 @@ const apiKey = process.env.NVIDIA_API_KEY;
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main
 // Example: If you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj
 const gptModel = "moonshotai/kimi-k2-instruct";
-const gptimageModel = "mistralai/mistral-medium-3-instruct";
+const gptimageModel = "google/gemma-3-27b-it";
 
 module.exports = { baseURL, apiKey, gptModel, gptimageModel };
