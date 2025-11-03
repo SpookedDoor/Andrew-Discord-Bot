@@ -1,5 +1,4 @@
-const { Events, MessageFlags, AttachmentBuilder } = require('discord.js');
-const path = require('node:path');
+const { Events, MessageFlags } = require('discord.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { askIfToolIsNeeded } = require('../searchTools.js');
@@ -7,7 +6,7 @@ const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { findUserIdentity } = require('../userIdentities.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
-const { getMessageById, getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
+const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
 const db = require('../db.js');
 
@@ -43,9 +42,7 @@ module.exports = {
             if (now - lastUser < HELLO_COOLDOWN) helloChance /= 2;
 
             console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
-            if (message.attachments.size > 0) {
-                console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
-            }
+            if (message.attachments.size > 0) console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
 
             if (message.author.id === '1014404029146726460') {
                 const content = message.content?.trim() || null;
@@ -106,8 +103,8 @@ module.exports = {
 
             const responses = [
                 { keyword: 'venezuela', response: 'I am from alabama' },
-                { keyword: 'griffith', response: getRandomMessage('griffith') },
-                { keyword: 'kanye', response: getRandomMessage('kanye') },
+                { keyword: 'griffith', response: await getRandomMessage('griffith') },
+                { keyword: 'kanye', response: await getRandomMessage('kanye') },
                 { keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
                 { keyword: 'admin', response: 'demoted' },
                 { keyword: 'https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212', response: 'Me after lobotomy' },
@@ -124,29 +121,11 @@ module.exports = {
             ];
 
             const lowerCaseMessage = message.content.toLowerCase();
-            const matchedKeywords = responses.filter(({ keyword, match }) =>
-                match ? match(lowerCaseMessage) : lowerCaseMessage.includes(keyword)
-            );
+            const matchedKeywords = responses.filter(({ keyword, match }) => match ? match(lowerCaseMessage) : lowerCaseMessage.includes(keyword));
             matchedKeywords.sort((a, b) => lowerCaseMessage.indexOf(a.keyword) - lowerCaseMessage.indexOf(b.keyword));
 
             try {
-                if (matchedKeywords.length > 0) {
-                    const trimmedContent = message.content.trim().toLowerCase();
-                    const isSimpleHello = matchedKeywords.some(({ keyword }) => keyword === 'hello') &&
-                        (trimmedContent === 'hello' || trimmedContent === 'hello andrew');
-
-                    for (const { keyword, response, response2 } of matchedKeywords) {
-                        message.channel.send(response);
-                        if (response2) message.channel.send(response2);
-
-                        if (keyword === 'hello') {
-                            const followup = await getHelloFollowup(message.author.id);
-                            if (followup) message.channel.send(followup);
-                        }
-                    }
-
-                    if (isSimpleHello) return;
-                }
+                if (matchedKeywords.length > 0) for (const { response } of matchedKeywords) message.channel.send(response);
 
                 const botWasMentioned = message.mentions.has(message.client.user);
                 const triggerWords = ['andrew', 'androo'];
