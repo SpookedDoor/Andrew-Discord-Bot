@@ -62,3 +62,10 @@ CREATE TABLE IF NOT EXISTS attachment_files (
     category TEXT NOT NULL,             -- matches attachment_triggers.category
     file_path TEXT UNIQUE NOT NULL      -- './media/griffith.png'
 );
+
+-- Keyword responses
+CREATE TABLE IF NOT EXISTS keywords (
+    id SERIAL,
+    keyword TEXT NOT NULL,
+    response TEXT NOT NULL
+);

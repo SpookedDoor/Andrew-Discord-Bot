@@ -101,31 +101,33 @@ module.exports = {
                 console.error(error);
             }
 
-            const responses = [
-                { keyword: 'venezuela', response: 'I am from alabama' },
-                { keyword: 'griffith', response: await getRandomMessage('griffith') },
-                { keyword: 'kanye', response: await getRandomMessage('kanye') },
-                { keyword: 'vultures', response: 'I got no rapper friends i hang whit the vultures' },
-                { keyword: 'admin', response: 'demoted' },
-                { keyword: 'https://tenor.com/view/the-simpsons-bart-shock-electric-chair-gif-12706212', response: 'Me after lobotomy' },
-                { keyword: 'oh true', response: 'https://tenor.com/view/oh-true-true-fire-writing-true-fire-true-writing-fire-gif-17199454423395239363' },
-                { keyword: 'evil', response: "I am evil" },
-                { keyword: 'the nitrous', response: "You are a fucking faggot retard, real Andrew" },
-                { keyword: 'leftard', response: "mmfghh i'm a gay cuckservative and i love black cocks" },
-                { keyword: 'dirty magazines', response: "I'm gonna force a massive pile of dirt down your throat, real Andrew" },
-                { keyword: 'i am fried', response: "We know your brain cells are fried, real Andrew" },
-                { keyword: 'im fried', response: "We know your brain cells are fried, real Andrew" },
-                { keyword: "i'm fried", response: "We know your brain cells are fried, real Andrew" },
-                { keyword: 'envy', response: "You envy me\nThe glorious griffith guzzler" },
-                { keyword: 'she eat my kids like jared', response: "You are literally an inbred, you will never have kids. Thank God because the last thing we need is more retards like you, real Andrew" },
-            ];
-
-            const lowerCaseMessage = message.content.toLowerCase();
-            const matchedKeywords = responses.filter(({ keyword, match }) => match ? match(lowerCaseMessage) : lowerCaseMessage.includes(keyword));
-            matchedKeywords.sort((a, b) => lowerCaseMessage.indexOf(a.keyword) - lowerCaseMessage.indexOf(b.keyword));
+            const { rows: keywords } = await db.query('SELECT keyword, response FROM keywords');
+            const lowerCaseMessage = (message.content || '').toLowerCase();
+            const matchedKeywords = keywords.filter(r => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()));
 
             try {
-                if (matchedKeywords.length > 0) for (const { response } of matchedKeywords) message.channel.send(response);
+                if (matchedKeywords.length > 0) {
+                    const seen = new Set();
+                    for (const k of matchedKeywords) {
+                        const keyword = String(k.keyword).toLowerCase();
+                        if (seen.has(keyword)) continue;
+                        seen.add(keyword);
+
+                        if (keyword === 'griffith') {
+                            const msg = await getRandomMessage('griffith');
+                            await message.channel.send(msg);
+                            continue;
+                        }
+                        
+                        if (keyword === 'kanye') {
+                            const msg = await getRandomMessage('kanye');
+                            await message.channel.send(msg);
+                            continue;
+                        }
+
+                        await message.channel.send(k.response);
+                    }
+                }
 
                 const botWasMentioned = message.mentions.has(message.client.user);
                 const triggerWords = ['andrew', 'androo'];
