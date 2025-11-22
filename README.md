@@ -13,9 +13,9 @@ This bot was made as an inside-joke, and it can be pretty offensive, so there's 
 
 (Of course, we don't condone anything he says. This is purely satire, and it does not reflect our personal views.)
 
-It features over 200 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, TTS, and hell, it's even got a LLM! 
+It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, TTS, and hell, it's even got a LLM! 
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew-Bot though, obviously. It has to be installed seperately, and it is admittedly oftentimes more outdated than Andrew.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed seperately, and it is admittedly more outdated than Andrew.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
@@ -42,7 +42,9 @@ GOOGLE_API_KEY=YOURKEYHERE
 GOOGLE_CSE_ID=YOURIDHERE
 GEMINI_API_KEY=YOURKEYHERE
 MISTRAL_API_KEY=YOURKEYHERE
+NVIDIA_API_KEY=YOURKEYHERE
 ELEVENLABS_API_KEY=YOURKEYHERE
+SAUCENAO_API_KEY=YOURKEYHERE
 LASTFM_API_KEY=YOURKEYHERE
 LASTFM_AUTH_SERVER=https://
 DATABASE_URL=postgresql://
@@ -52,16 +54,14 @@ The bot uses Brave for normal web searches and Google for its image searches, if
 
 If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
 
-Unsurprisingly, you MUST also remove ``template`` from ``userIdentities.template.js`` (otherwise you will get errors) and then you can add your own users to it if you want.
-
 Speaking of which... we now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
 
-I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini. However, either option is good. 
+I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini and provides a wide range of models. However, either option is good. 
 Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
 
 Also, 🖕 Chutes for being no longer free.
 
-Currently, the bot is now using Gemini by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
+Currently, the bot is now using Nvidia by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
 
 ## RUNNING WITH LOCAL AI
 Install a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Follow KoboldCPP's guide on getting everything set up. The most important part is obtaining an [AI model](https://huggingface.co/models?library=gguf&sort=trending). Make sure that you download a GGUF file and at least something that your PC can handle with ease (that means you can't just simply download Deepseek. If you want to use that, please use a service that provides it, like Chutes).
@@ -78,33 +78,15 @@ And make sure all model variables in ``aiSettings.js`` are set to ``"koboldcpp"`
 Simple!
 
 ## CONNECTING TO A DATABASE
-We use PostgreSQL for Andrew's database, here's the schema:
-```sql
-CREATE TABLE lastfm_links (
-    discord_user_id VARCHAR(32) PRIMARY KEY,
-    lastfm_username VARCHAR(64) NOT NULL
-);
+We use PostgreSQL for Andrew's database. You can find the schema in ``migrations/001_migration.sql``. You can host the database yourself or use a service like [Neon](https://neon.com) which is completely free for small projects and it's what we use.
 
-CREATE TABLE disabled_guilds (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-);
+With ``lastfm_links``, this table isn't actually referenced anywhere in Andrew bot's code. Instead, you should refer to Dragonary's [Lastfm-Auth-Server-Discord](https://github.com/TheDragonary/Lastfm-Auth-Server-Discord). This is for linking Last.fm accounts with Discord users, and that repo will show you how it's done, as long as you read the README of course. Once you get the auth server all set up, all you have to do is stick the URL into Andrew bot's ``.env`` file and that's it.
 
-CREATE TABLE default_channels (
-    guild_id TEXT PRIMARY KEY,
-    channel_id TEXT NOT NULL
-);
-```
-Starting off with ``lastfm_links``, now this table isn't actually referenced anywhere in Andrew bot's code. Instead, you should refer to Dragonary's [Lastfm-Auth-Server-Discord](https://github.com/TheDragonary/Lastfm-Auth-Server-Discord). This is for linking Last.fm accounts with Discord users, and that repo will show you how it's done, as long as you read the README of course. Once you get the auth server all set up, all you have to do is stick the URL into Andrew bot's ``.env`` file and that's it.
-
-Next up, ``disabled_guilds``, to put simply, this is for preventing the bot from sending any random messages in a certain server. This can be controlled by server admins using ``/random message disabled:true`` to obviously disable random messages, especially if they get too annoying (which is kinda a common occurance with Andrew bot, however we do aim to minimise annoyance by making the interval random between 3 - 6 hours, but of course if the server is dead in itself anyways, well you know what I mean).
-
-Last but not least, ``default_channels``! Basically, if the bot isn't sending random messages to ``#general`` by default, or you just want it to F off somewhere else, then you run ``/setchannel`` to change the default channel yourself. (I suppose you could also set it to its own prison, or mental ward if you will, and keep it sending messages there for eternity, with no presence of others but itself).
-
-### THE REST
+------------------------------------------------------------------------------
+## THE REST
 Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
 
-You can go ahead and adjust the code to your liking, or just use the bot as is after having done the necessities
+You can go ahead and adjust the code to your liking, or just use the bot as-is after having done the necessities.
 
 Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Dude's carried the project and without him, most of the impactful features wouldn't even BE here.)
 
