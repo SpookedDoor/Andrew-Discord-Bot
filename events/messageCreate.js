@@ -194,6 +194,7 @@ module.exports = {
                     if (!reply) {
                         console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
                         reply = await generateChatCompletion(
+                            message.guild.id,
                             message.author.id,
                             finalPrompt,
                             model,

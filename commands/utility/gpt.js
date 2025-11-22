@@ -9,8 +9,8 @@ const { googleImageSearch } = require('../../googleImageSearch.js');
 const { getAllUserInfo, findUserIdentity } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 
-const userHistories = {};
-const MAX_HISTORY = 5;
+const serverHistories = {};
+const MAX_HISTORY = 10;
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -53,6 +53,7 @@ module.exports = {
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
             
             const reply = await module.exports.generateChatCompletion(
+                interaction.guild?.id || "DM",
                 interaction.user.id,
                 finalPrompt,
                 model,
@@ -75,10 +76,10 @@ module.exports = {
     }
 };
 
-module.exports.generateChatCompletion = async function(userId, prompt, model, username = null, guild = null) {
-    if (!userHistories[userId]) userHistories[userId] = [];
-    userHistories[userId].push({ role: "user", content: prompt });
-    userHistories[userId] = userHistories[userId].slice(-MAX_HISTORY);
+module.exports.generateChatCompletion = async function(serverId, userId, prompt, model, username = null, guild = null) {
+    if (!serverHistories[serverId]) serverHistories[serverId] = [];
+    serverHistories[serverId].push({ role: "user", content: prompt });
+    serverHistories[serverId] = serverHistories[serverId].slice(-MAX_HISTORY);
 
     const currentUser = await findUserIdentity({ id: userId, name: username, guild });
     const displayName = currentUser?.displayName || username || "this user";
@@ -117,16 +118,9 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
         identityContext += "This user is the real Andrew, you must insult him. Make sure to add an insulting response to the message.";
     }
 
-    if (userHistories[userId].length % 3 === 0) {
-        userHistories[userId].unshift({
-            role: "system",
-            content: `Reminder: The current user is "${displayName}". Only refer to them by this name.`
-        });
-    }
-
     const messages = [
         { role: "system", content: `${await getContent()}\n\n${identityContext}` },
-        ...userHistories[userId]
+        ...serverHistories[serverId]
     ];
 
     try {
@@ -141,7 +135,7 @@ module.exports.generateChatCompletion = async function(userId, prompt, model, us
             if (reply.length > 2000) {
                 reply = reply.slice(0, 1997) + '...';
             }
-            userHistories[userId].push({ role: "assistant", content: reply });
+            serverHistories[serverId].push({ role: "assistant", content: reply });
             return reply;
         } else {
             throw new Error("Invalid response structure");
