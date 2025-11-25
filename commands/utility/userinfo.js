@@ -18,38 +18,20 @@ module.exports = {
 	async execute(interaction) {
         const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
         if (!allowedIds.includes(interaction.user.id)) {
-            await interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
-            return;
+            return await interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
         }
 
-        let userId, username, member, fetchedUser;
-        member = interaction.options.getMember('user');
-        if (member) {
-            userId = member.id;
-        } else if (interaction.options.getString('userid')) {
-            userId = interaction.options.getString('userid');
-            username = undefined;
-        } else {
-            member = interaction.member;
-            userId = member.id;
-            username = member.user.username;
-        }
+        let userId;
+        if (interaction.options.getMember('user')) userId = interaction.options.getMember('user').id;
+        else if (interaction.options.getString('userid')) userId = interaction.options.getString('userid');
+        else userId = interaction.user.id;
 
-        const guild = interaction.guild;
-        const identity = await findUserIdentity({ id: userId, name: username, guild });
-
-        if (!identity && userId) {
-            try {
-                fetchedUser = await interaction.client.users.fetch(userId);
-            } catch (e) {
-                // ignore error, user may not be fetchable
-            }
-        }
+        const identity = await findUserIdentity(userId, interaction.client);
 
         let info = `**User Info:**\n`;
         info += `ID: ${identity?.id || userId || 'unknown'}\n`;
-        info += `Display Name: ${identity?.displayName || member?.displayName || fetchedUser?.displayName || 'unknown'}\n`;
-        info += `Usernames/Nicknames: ${(identity?.usernames && identity.usernames.length) ? identity.usernames.join(', ') : (username || fetchedUser?.username || 'unknown')}\n`;
+        info += `Display Name: ${identity?.displayName || 'unknown'}\n`;
+        info += `Usernames/Nicknames: ${(identity?.usernames && identity.usernames.length) ? identity.usernames.join(', ') : 'unknown'}\n`;
         if (identity?.traits && identity.traits.length) info += `Traits: ${identity.traits.join(', ')}\n`;
         if (identity?.isGod) info += `Tag: God\n`;
         if (identity?.isCreator) info += `Tag: Creator\n`;

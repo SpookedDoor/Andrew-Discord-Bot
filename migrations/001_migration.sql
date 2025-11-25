@@ -65,7 +65,17 @@ CREATE TABLE IF NOT EXISTS attachment_files (
 
 -- Keyword responses
 CREATE TABLE IF NOT EXISTS keywords (
-    id SERIAL,
+    id SERIAL PRIMARY KEY,
     keyword TEXT NOT NULL,
     response TEXT NOT NULL
 );
+
+-- Server history
+CREATE TABLE IF NOT EXISTS server_history (
+    id SERIAL PRIMARY KEY,
+    server_id TEXT NOT NULL,
+    username TEXT NOT NULL,
+    content TEXT NOT NULL,
+    role TEXT NOT NULL,   -- 'user' or 'assistant'
+    created_at TIMESTAMP DEFAULT NOW()
+)

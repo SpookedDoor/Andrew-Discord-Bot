@@ -4,7 +4,6 @@ const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
-const { findUserIdentity } = require('../userIdentities.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
@@ -188,30 +187,23 @@ module.exports = {
                         }
                     }
 
-                    const userInfo = await findUserIdentity({ id: message.author.id, name: message.author.displayname, guild: message.guild });
-                    const usernameForAI = userInfo?.displayName || message.author.username;
-
                     if (!reply) {
                         console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
                         reply = await generateChatCompletion(
                             message.guild.id,
                             message.author.id,
+                            prompt,
                             finalPrompt,
                             model,
-                            usernameForAI,
-                            message.guild
+                            message.author.username,
+                            message.client
                         );
                         console.log(`AI response: ${reply}`);
                     }
 
                     const attachments = await aiAttachment(reply);
-                    if (reply) {
-                        if (attachments) {
-                            await message.reply({ content: reply, files: attachments });
-                        } else {
-                            await message.reply(reply);
-                        }
-                    }
+                    if (attachments) await message.reply({ content: reply, files: attachments });
+                    else await message.reply(reply);
                 }
             } catch (error) {
                 console.error(error);

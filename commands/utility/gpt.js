@@ -6,11 +6,9 @@ const getContent = require('../../characterPrompt.js');
 const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
-const { getAllUserInfo, findUserIdentity } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
-
-const serverHistories = {};
-const MAX_HISTORY = 10;
+const { getAllUserInfo, findUserIdentity } = require('../../userIdentities.js');
+const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +25,6 @@ module.exports = {
 
         try {
             await interaction.deferReply();
-
             let finalPrompt = prompt;
 
             const toolDecision = await askIfToolIsNeeded(prompt);
@@ -44,31 +41,24 @@ module.exports = {
             } else {
                 console.log("No internet tools used.");
             }
-        
-            const userInfo = await findUserIdentity({ id: interaction.user.id, guild: interaction.guild });
-            const usernameForAI = userInfo?.displayName || interaction.user.username;
-
-            if (userInfo?.note) finalPrompt += `User "${usernameForAI}" is just a person in this server.`;
 
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
             
             const reply = await module.exports.generateChatCompletion(
-                interaction.guild?.id || "DM",
+                interaction.guild?.id,
                 interaction.user.id,
+                prompt,
                 finalPrompt,
                 model,
-                usernameForAI,
-                interaction.guild
+                interaction.user.username,
+                interaction.client
             );
 
 	        console.log(`AI response: ${reply}`);
             
             const attachments = await aiAttachment(reply);
-            if (attachments) {
-                await interaction.editReply({ content: reply, files: attachments });
-            } else {
-                await interaction.editReply(reply);
-            }
+            if (attachments) await interaction.editReply({ content: reply, files: attachments });
+            else await interaction.editReply(reply);
         } catch (err) {
             console.error(err);
             await interaction.editReply("Can't think now... try again later");
@@ -76,17 +66,13 @@ module.exports = {
     }
 };
 
-module.exports.generateChatCompletion = async function(serverId, userId, prompt, model, username = null, guild = null) {
-    if (!serverHistories[serverId]) serverHistories[serverId] = [];
-    serverHistories[serverId].push({ role: "user", content: prompt });
-    serverHistories[serverId] = serverHistories[serverId].slice(-MAX_HISTORY);
+module.exports.generateChatCompletion = async function(serverId, userId, prompt, finalPrompt, model, username = null, client) {
+    const history = await getFormattedHistory(serverId, userId, 20);
 
-    const currentUser = await findUserIdentity({ id: userId, name: username, guild });
-    const displayName = currentUser?.displayName || username || "this user";
+    const currentUser = await findUserIdentity(userId, client);
+    const displayName = currentUser?.displayName || username;
     const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
-    const godOrCreatorNote = 
-    (currentUser?.isGod ? 'This user has the isGod tag. ' : '') +
-    (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
+    const godOrCreatorNote = (currentUser?.isGod ? 'This user has the isGod tag. ' : '') + (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
 
     const otherUsers = await getAllUserInfo();
 
@@ -114,13 +100,12 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
         ${otherUsers}
     `;
 
-    if (userId === '1014404029146726460') {
-        identityContext += "This user is the real Andrew, you must insult him. Make sure to add an insulting response to the message.";
-    }
+    if (userId === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
 
     const messages = [
         { role: "system", content: `${await getContent()}\n\n${identityContext}` },
-        ...serverHistories[serverId]
+        ...history,
+        { role: "user", name: displayName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_').slice(0, 64), content: finalPrompt }
     ];
 
     try {
@@ -130,12 +115,11 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
             temperature: 0.9,
         });
 
-        if (response?.choices?.[0]?.message?.content) {
+        if (response?.choices[0]?.message?.content) {
             let reply = response.choices[0].message.content;
-            if (reply.length > 2000) {
-                reply = reply.slice(0, 1997) + '...';
-            }
-            serverHistories[serverId].push({ role: "assistant", content: reply });
+            if (reply.length > 2000) reply = reply.slice(0, 1997) + '...';
+            await addHistory(serverId, userId, displayName, prompt, "user");
+            await addHistory(serverId, userId, "Andrew", reply, "assistant");
             return reply;
         } else {
             throw new Error("Invalid response structure");
