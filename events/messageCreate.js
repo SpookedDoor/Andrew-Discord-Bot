@@ -33,9 +33,9 @@ module.exports = {
             const lastUser = lastHelloUser[message.author.id] || 0;
 
             let helloChance = 0.01; // 1% base
-            if (activityLevel > 10) helloChance = 0.01; // very active, lower chance - 1%
-            else if (activityLevel > 5) helloChance = 0.025; // active, balanced chance - 2.5%
-            else if (activityLevel < 3) helloChance = 0.05; // inactive, higher chance - 5%
+            if (activityLevel >= 10) helloChance = 0.01; // very active, lower chance - 1%
+            else if (activityLevel >= 5) helloChance = 0.02; // active, balanced chance - 2%
+            else if (activityLevel < 5) helloChance = 0.03; // inactive, higher chance - 3%
 
             if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN) helloChance /= 2;
             if (now - lastUser < HELLO_COOLDOWN) helloChance /= 2;
