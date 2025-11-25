@@ -1,10 +1,25 @@
 const db = require('./db.js');
 
+async function getUser(id) {
+    const { rows } = await db.query(`SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users WHERE id = $1`, [id]);
+    const row = rows[0];
+    if (!row) return null;
+
+    const nicknames = row.nicknames ? row.nicknames.split(',').map(n => n.trim()) : [];
+    const usernames = [row.username, ...nicknames].filter(Boolean);
+
+    return {
+        id: row.id,
+        usernames,
+        displayName: row.display_name,
+        traits: row.traits ? row.traits.split(',').map(t => t.trim()) : [],
+        isCreator: row.is_creator,
+        isGod: row.is_god
+    };
+}
+
 async function getUsers() {
-    const { rows } = await db.query(`
-        SELECT id, username, display_name, nicknames, traits, is_creator, is_god
-        FROM users;
-    `);
+    const { rows } = await db.query(`SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users`);
 
     return rows.map(row => {
         const nicknames = row.nicknames ? row.nicknames.split(',').map(n => n.trim()) : [];
@@ -31,42 +46,26 @@ async function getAllUserInfo() {
     ).join('\n');
 }
 
-async function findUserIdentity({ id = null, name = '', guild = null }) {
-    const normalised = (name ? name.toLowerCase().trim() : '');
-    const users = await getUsers();
-
-    let user = users.find(user =>
-        (id && user.id === id) ||
-        user.usernames.some(u => u.toLowerCase() === normalised)
-    );
-
+async function findUserIdentity(id = null, client) {
+    const user = await getUser(id);
     if (user) return user;
 
-    if (guild) {
-        if (!guild.members.cache.size) {
-            await guild.members.fetch();
-        }
+    if (!user && id) {
+        try {
+            const user = await client.users.fetch(id, { force: true });
 
-        const member = guild.members.cache.find(
-            m =>
-                m.user.username.toLowerCase() === normalised ||
-                m.displayName.toLowerCase() === normalised
-        );
-
-        if (member) {
-            return {
-                displayName: member.displayName,
-                usernames: [member.user.username],
-                traits: [],
-                note: `This is a person in the server.`,
-                id: member.id
-            };
-        }
+            if (user) {
+                return {
+                    id: user.id,
+                    displayName: user.displayName ?? user.username,
+                    usernames: [user.username]
+                };
+            }
+        } catch (err) {}
     }
 }
 
 module.exports = {
-    getUsers,
     getAllUserInfo,
     findUserIdentity,
 };
