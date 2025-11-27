@@ -7,6 +7,7 @@ const { googleImageSearch } = require('../googleImageSearch.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
+const { addHistory } = require('../dbHistoryUtils.js');
 const db = require('../db.js');
 
 const lastHelloGlobal = { time: 0 };
@@ -181,6 +182,8 @@ module.exports = {
                             model = gptimageModel;
                             console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
                             reply = await generateImagePrompt(finalPrompt, imageUrl);
+                            await addHistory(message.guild.id, message.author.id, message.author.displayName, prompt, "user");
+                            await addHistory(message.guild.id, message.author.id, "Andrew", reply, "assistant");
                         } catch (err) {
                             console.error("Image analysis failed:", err);
                             return message.reply("There was an issue analysing the image. Please try again later.");
