@@ -5,9 +5,10 @@ const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
-const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
+const { getMessages, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
 const { addHistory } = require('../dbHistoryUtils.js');
+const { generateShortAIResponse } = require('../aiUtils.js');
 const db = require('../db.js');
 
 const lastHelloGlobal = { time: 0 };
@@ -106,27 +107,28 @@ module.exports = {
             const matchedKeywords = keywords.filter(r => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()));
 
             try {
+                let categoryMessages = "";
                 if (matchedKeywords.length > 0) {
+                    await message.channel.sendTyping();
                     const seen = new Set();
                     for (const k of matchedKeywords) {
                         const keyword = String(k.keyword).toLowerCase();
                         if (seen.has(keyword)) continue;
                         seen.add(keyword);
 
-                        if (keyword === 'griffith') {
-                            const msg = await getRandomMessage('griffith');
-                            await message.channel.send(msg);
-                            continue;
+                        if (k.response.length === 0) {
+                            if (keyword === 'griffith') categoryMessages += (await getMessages('griffith')).map(msg => msg.content).join('\n');
+                            if (keyword === 'kanye') categoryMessages += (await getMessages('kanye')).map(msg => msg.content).join('\n');
+                            if (keyword === 'fuentes') categoryMessages += (await getMessages('fuentes')).map(msg => msg.content).join('\n');
+                        } else {
+                            await message.channel.send(k.response);
                         }
-                        
-                        if (keyword === 'kanye') {
-                            const msg = await getRandomMessage('kanye');
-                            await message.channel.send(msg);
-                            continue;
-                        }
-
-                        await message.channel.send(k.response);
                     }
+                }
+
+                if (categoryMessages.length > 0) {
+                    const response = await generateShortAIResponse(categoryMessages, message.content);
+                    await message.channel.send(response);
                 }
 
                 const botWasMentioned = message.mentions.has(message.client.user);
