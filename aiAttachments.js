@@ -2,7 +2,7 @@ const { AttachmentBuilder } = require('discord.js');
 const path = require('node:path');
 const db = require('./db.js');
 
-async function aiAttachment(responseText, probability = 0.5) {
+async function aiAttachment(responseText, probability = 0.25) {
     const lowerText = responseText.toLowerCase();
     const attachments = [];
 
