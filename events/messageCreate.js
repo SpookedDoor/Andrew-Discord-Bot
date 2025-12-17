@@ -11,36 +11,12 @@ const { addHistory } = require('../dbHistoryUtils.js');
 const { generateShortAIResponse } = require('../aiUtils.js');
 const db = require('../db.js');
 
-const lastHelloGlobal = { time: 0 };
-const lastHelloUser = {};
-
-const messageTimestamps = [];
-const MESSAGE_ACTIVITY_WINDOW = 5 * 60 * 1000; // 5 minutes
-const HELLO_COOLDOWN = 10 * 60 * 1000; // 10 minutes per user
-const GLOBAL_HELLO_COOLDOWN = 5 * 60 * 1000; // 5 minutes global
-
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         try {
             if (message.author.bot || message.system) return;
             if (message.flags.has(MessageFlags.HasSnapshot)) return;
-
-            const now = Date.now();
-            messageTimestamps.push(now);
-            while (messageTimestamps.length && now - messageTimestamps[0] > MESSAGE_ACTIVITY_WINDOW) messageTimestamps.shift();
-
-            const activityLevel = messageTimestamps.length; // messages in last 5 min
-            const lastGlobal = lastHelloGlobal.time || 0;
-            const lastUser = lastHelloUser[message.author.id] || 0;
-
-            let helloChance = 0.01; // 1% base
-            if (activityLevel >= 10) helloChance = 0.01; // very active, lower chance - 1%
-            else if (activityLevel >= 5) helloChance = 0.02; // active, balanced chance - 2%
-            else if (activityLevel < 5) helloChance = 0.03; // inactive, higher chance - 3%
-
-            if (now - lastGlobal < GLOBAL_HELLO_COOLDOWN) helloChance /= 2;
-            if (now - lastUser < HELLO_COOLDOWN) helloChance /= 2;
 
             console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
             if (message.attachments.size > 0) console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
@@ -91,9 +67,7 @@ module.exports = {
             if (message.author.id === process.env.OWNER2_ID) displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
 
             try {
-                if (Math.random() < helloChance) {
-                    lastHelloGlobal.time = now;
-                    lastHelloUser[message.author.id] = now;
+                if (Math.random() < 0.01) {
                     await message.channel.send(`Hello ${displayName} ${title}`);
                     const followup = await getHelloFollowup(message.author.id);
                     if (followup) await message.channel.send(followup);
@@ -107,34 +81,36 @@ module.exports = {
             const matchedKeywords = keywords.filter(r => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()));
 
             try {
-                let categoryMessages = "";
-                if (matchedKeywords.length > 0) {
-                    await message.channel.sendTyping();
-                    const seen = new Set();
-                    for (const k of matchedKeywords) {
-                        const keyword = String(k.keyword).toLowerCase();
-                        if (seen.has(keyword)) continue;
-                        seen.add(keyword);
-
-                        if (k.response.length === 0) {
-                            if (keyword === 'griffith') categoryMessages += (await getMessages('griffith')).map(msg => msg.content).join('\n');
-                            if (keyword === 'kanye') categoryMessages += (await getMessages('kanye')).map(msg => msg.content).join('\n');
-                            if (keyword === 'fuentes') categoryMessages += (await getMessages('fuentes')).map(msg => msg.content).join('\n');
-                        } else {
-                            await message.channel.send(k.response);
-                        }
-                    }
-                }
-
-                if (categoryMessages.length > 0) {
-                    const response = await generateShortAIResponse(categoryMessages, message.content);
-                    await message.channel.send(response);
-                }
-
                 const botWasMentioned = message.mentions.has(message.client.user);
                 const triggerWords = ['andrew', 'androo'];
                 const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
                 const isReplyToBot = message.reference && (await message.fetchReference())?.author?.id === message.client.user.id;
+
+                if (!(botWasMentioned || triggeredByKeyword || isReplyToBot)) {
+                    let categoryMessages = "";
+                    if (matchedKeywords.length > 0) {
+                        await message.channel.sendTyping();
+                        const seen = new Set();
+                        for (const k of matchedKeywords) {
+                            const keyword = String(k.keyword).toLowerCase();
+                            if (seen.has(keyword)) continue;
+                            seen.add(keyword);
+
+                            if (k.response.length === 0) {
+                                if (keyword === 'griffith') categoryMessages += (await getMessages('griffith')).map(msg => msg.content).join('\n');
+                                if (keyword === 'kanye') categoryMessages += (await getMessages('kanye')).map(msg => msg.content).join('\n');
+                                if (keyword === 'fuentes') categoryMessages += (await getMessages('fuentes')).map(msg => msg.content).join('\n');
+                            } else {
+                                await message.channel.send(k.response);
+                            }
+                        }
+                    }
+
+                    if (categoryMessages.length > 0) {
+                        const response = await generateShortAIResponse(categoryMessages, message.content);
+                        await message.channel.send(response);
+                    }
+                }
 
                 if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
                     await message.channel.sendTyping();
