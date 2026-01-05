@@ -77,9 +77,7 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
     const otherUsers = await getAllUserInfo();
 
     let identityContext = `
-        You are speaking with ${displayName} (user ID: ${userId}).
-        They are the current user and the primary speaker in this conversation.
-        Always assume that this person is the one asking questions or making statements, unless clearly stated otherwise.
+        The current user is ${displayName}.
 
         User Identity Details:
         - Display Name: ${displayName}
@@ -88,9 +86,7 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
         ${godOrCreatorNote}
 
         IMPORTANT:
-        If you see any of this user's names or nicknames in a prompt, assume it refers to themselves unless they explicitly refer to themselves in third person.
-        Refer to all people exclusively as "${displayName}" in all replies. Never use any of their usernames or nicknames unless quoting directly. 
-        Never say "you like to be called" or "you prefer to be called" or similar.
+        Refer to the user only as "${displayName}". Never use any of their usernames or nicknames.
 
         Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
         All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
