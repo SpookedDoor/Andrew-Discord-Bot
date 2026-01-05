@@ -80,7 +80,7 @@ module.exports = {
     },
         async execute(interaction) {
         const tags = interaction.options.getString('tags');
-        const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&tags=${encodeURIComponent(tags)}&limit=100&json=1&api_key=${process.env.RULE34_API_KEY}&user_id=${process.env.RULE34_USER_ID}`;
+        const url = `https://api.rule34.xxx/index.php?page=dapi&s=post&q=index&tags=${encodeURIComponent(tags + " sort:score")}&limit=1000&json=1&api_key=${process.env.RULE34_API_KEY}&user_id=${process.env.RULE34_USER_ID}`;
         
         try {
             const response = await axios.get(url);
