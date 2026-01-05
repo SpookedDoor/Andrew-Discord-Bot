@@ -5,7 +5,7 @@ const MIN_SCORE = 100;
 const BLACKLISTED_TAGS = [
     "ai_generated",
     "anal_spreader",
-    "asphyxtion",
+    "bestiality",
     "castration",
     "cbt",
     "cheating",
