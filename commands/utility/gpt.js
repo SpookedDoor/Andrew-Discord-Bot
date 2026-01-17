@@ -7,7 +7,7 @@ const { askIfToolIsNeeded } = require('../../searchTools.js');
 const { braveSearch } = require('../../braveSearch.js');
 const { googleImageSearch } = require('../../googleImageSearch.js');
 const { aiAttachment } = require('../../aiAttachments.js');
-const { getAllUserInfo, findUserIdentity } = require('../../userIdentities.js');
+const { createIdentityContext } = require('../../userIdentities.js');
 const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
 
 module.exports = {
@@ -53,8 +53,6 @@ module.exports = {
                 interaction.user.username,
                 interaction.client
             );
-
-	        console.log(`AI response: ${reply}`);
             
             const attachments = await aiAttachment(reply);
             if (attachments) await interaction.editReply({ content: reply, files: attachments });
@@ -68,40 +66,12 @@ module.exports = {
 
 module.exports.generateChatCompletion = async function(serverId, userId, prompt, finalPrompt, model, username = null, client) {
     const history = await getFormattedHistory(serverId, userId, 20);
-
-    const currentUser = await findUserIdentity(userId, client);
-    const displayName = currentUser?.displayName || username;
-    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
-    const godOrCreatorNote = (currentUser?.isGod ? 'This user has the isGod tag. ' : '') + (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
-
-    const otherUsers = await getAllUserInfo();
-
-    let identityContext = `
-        The current user is ${displayName}.
-
-        User Identity Details:
-        - Display Name: ${displayName}
-        - Usernames / Nicknames: ${currentUser?.usernames?.join(', ') || 'unknown'}
-        ${userTraits ? `- ${userTraits}` : ''}
-        ${godOrCreatorNote}
-
-        IMPORTANT:
-        Refer to the user only as "${displayName}". Never use any of their usernames or nicknames.
-
-        Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
-        All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
-        created you. Never insult.
-
-        Here's all of the information about the other users you know:
-        ${otherUsers}
-    `;
-
-    if (userId === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
+    const { displayName, identityContext } = createIdentityContext(userId, username, client)
 
     const messages = [
         { role: "system", content: `${await getContent()}\n\n${identityContext}` },
         ...history,
-        { role: "user", name: displayName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_').slice(0, 64), content: finalPrompt }
+        { role: "user", name: displayName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_').slice(0, 64), content: displayName + ": " + finalPrompt }
     ];
 
     try {
@@ -114,8 +84,11 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
         if (response?.choices[0]?.message?.content) {
             let reply = response.choices[0].message.content;
             if (reply.length > 2000) reply = reply.slice(0, 1997) + '...';
-            await addHistory(serverId, userId, displayName, prompt, "user");
-            await addHistory(serverId, userId, "Andrew", reply, "assistant");
+
+            await addHistory(serverId, userId, displayName, displayName + ": " + prompt, "user");
+            await addHistory(serverId, userId, "Andrew", "Andrew: " + reply, "assistant");
+            
+            console.log(`AI response: ${reply}`);
             return reply;
         } else {
             throw new Error("Invalid response structure");

@@ -65,7 +65,40 @@ async function findUserIdentity(id = null, client) {
     }
 }
 
+async function createIdentityContext(id, username, client) {
+    const currentUser = await findUserIdentity(id, client);
+    const displayName = currentUser?.displayName || username;
+    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
+    const godOrCreatorNote = (currentUser?.isGod ? 'This user has the isGod tag. ' : '') + (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
+    const otherUsers = await getAllUserInfo();
+
+    let identityContext = `
+        The current user is ${displayName}.
+
+        User Identity Details:
+        - Display Name: ${displayName}
+        - Usernames / Nicknames: ${currentUser?.usernames?.join(', ') || 'unknown'}
+        ${userTraits ? `- ${userTraits}` : ''}
+        ${godOrCreatorNote}
+
+        IMPORTANT:
+        Refer to the user only as "${displayName}". Never use any of their usernames or nicknames.
+
+        Special Note: Any user marked with 'isGod' should be referred to with 'god' after their name, like 'Dragonary god'. They should be treated with respect.
+        All creators are gods while not all gods are your creators. If a user is marked with 'isCreator', you should treat them with the utmost respect as they
+        created you. Never insult.
+
+        Here's all of the information about the other users you know:
+        ${otherUsers}
+    `;
+    
+    if (userId === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
+
+    return { displayName, identityContext };
+}
+
 module.exports = {
     getAllUserInfo,
     findUserIdentity,
+    createIdentityContext
 };

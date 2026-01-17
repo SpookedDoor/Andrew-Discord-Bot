@@ -6,9 +6,8 @@ const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getMessages, getHelloFollowup } = require('../messageDatabase.js');
-const { aiAttachment } = require('../aiAttachments.js');
-const { addHistory } = require('../dbHistoryUtils.js');
 const { generateShortAIResponse } = require('../aiUtils.js');
+const { aiAttachment } = require('../aiAttachments.js');
 const db = require('../db.js');
 
 module.exports = {
@@ -160,8 +159,6 @@ module.exports = {
                             model = gptimageModel;
                             console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
                             reply = await generateImagePrompt(finalPrompt, imageUrl);
-                            await addHistory(message.guild.id, message.author.id, message.author.displayName, prompt, "user");
-                            await addHistory(message.guild.id, message.author.id, "Andrew", reply, "assistant");
                         } catch (err) {
                             console.error("Image analysis failed:", err);
                             return message.reply("There was an issue analysing the image. Please try again later.");
@@ -179,7 +176,6 @@ module.exports = {
                             message.author.username,
                             message.client
                         );
-                        console.log(`AI response: ${reply}`);
                     }
 
                     const attachments = await aiAttachment(reply);
