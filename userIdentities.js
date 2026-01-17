@@ -92,7 +92,7 @@ async function createIdentityContext(id, username, client) {
         ${otherUsers}
     `;
     
-    if (userId === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
+    if (id === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
 
     return { displayName, identityContext };
 }

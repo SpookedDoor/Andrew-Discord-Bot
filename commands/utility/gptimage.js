@@ -32,7 +32,14 @@ module.exports = {
         await interaction.deferReply();
         try {
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-            const reply = await module.exports.generateImagePrompt(prompt, imageUrl);
+            const reply = await module.exports.generateImagePrompt(
+                interaction.guild?.id,
+                interaction.user.id,
+                prompt,
+                prompt,
+                imageUrl,
+                interaction.user.username
+            );
 
             const response = await fetch(imageUrl);
             const arrayBuffer = await response.arrayBuffer();
@@ -112,11 +119,10 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
 
 module.exports.generateImagePrompt = async function (serverId, userId, prompt, finalPrompt, imageUrl, username, client) {
     try {
+        const history = await getFormattedHistory(serverId, userId, 10);
+        const { displayName, identityContext } = await createIdentityContext(userId, username, client);
         const preresponse = await module.exports.describeImage(prompt, imageUrl, gptimageModel);
         console.log(`\nResponse from vision model: ${preresponse}\n`);
-
-        const { displayName, identityContext } = await createIdentityContext(userId, username, client);
-        const history = await getFormattedHistory(serverId, userId, 10);
 
         const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. Keep it short.
         Here's the description: ${preresponse}\nPrompt from ${displayName}: ${finalPrompt}`;

@@ -158,7 +158,14 @@ module.exports = {
                         try {
                             model = gptimageModel;
                             console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-                            reply = await generateImagePrompt(finalPrompt, imageUrl);
+                            reply = await generateImagePrompt(
+                                message.guild.id,
+                                message.author.id,
+                                prompt,
+                                finalPrompt,
+                                message.author.username,
+                                message.client
+                            );
                         } catch (err) {
                             console.error("Image analysis failed:", err);
                             return message.reply("There was an issue analysing the image. Please try again later.");
