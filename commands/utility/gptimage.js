@@ -38,7 +38,8 @@ module.exports = {
                 prompt,
                 prompt,
                 imageUrl,
-                interaction.user.username
+                interaction.user.username,
+                interaction.client
             );
 
             const response = await fetch(imageUrl);

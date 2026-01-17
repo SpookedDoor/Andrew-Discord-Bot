@@ -116,7 +116,9 @@ module.exports = {
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
                     let finalPrompt = prompt;
+                    let model = gptModel;
                     let imageUrl = null;
+                    let reply;
 
                     if (message.attachments.size > 0) imageUrl = message.attachments.first().url;
                     if (message.reference) {
@@ -133,9 +135,6 @@ module.exports = {
                             console.error("Failed to fetch referenced message:", err);
                         }
                     }
-
-                    let model = gptModel;
-                    let reply;
 
                     if (!imageUrl) {
                         const toolDecision = await askIfToolIsNeeded(finalPrompt);
@@ -163,6 +162,7 @@ module.exports = {
                                 message.author.id,
                                 prompt,
                                 finalPrompt,
+                                imageUrl,
                                 message.author.username,
                                 message.client
                             );
