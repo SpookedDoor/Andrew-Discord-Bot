@@ -66,7 +66,7 @@ module.exports = {
 
 module.exports.generateChatCompletion = async function(serverId, userId, prompt, finalPrompt, model, username = null, client) {
     const history = await getFormattedHistory(serverId, userId, 20);
-    const { displayName, identityContext } = createIdentityContext(userId, username, client)
+    const { displayName, identityContext } = await createIdentityContext(userId, username, client);
 
     const messages = [
         { role: "system", content: `${await getContent()}\n\n${identityContext}` },
