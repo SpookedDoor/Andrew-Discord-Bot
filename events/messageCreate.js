@@ -5,8 +5,7 @@ const { askIfToolIsNeeded } = require('../searchTools.js');
 const { braveSearch } = require('../braveSearch.js');
 const { googleImageSearch } = require('../googleImageSearch.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
-const { getMessages, getHelloFollowup } = require('../messageDatabase.js');
-const { generateShortAIResponse } = require('../aiUtils.js');
+const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
 const db = require('../db.js');
 
@@ -87,8 +86,8 @@ module.exports = {
 
                 if (!(botWasMentioned || triggeredByKeyword || isReplyToBot)) {
                     let categoryMessages = "";
+                    const attachments = [];
                     if (matchedKeywords.length > 0) {
-                        await message.channel.sendTyping();
                         const seen = new Set();
                         for (const k of matchedKeywords) {
                             const keyword = String(k.keyword).toLowerCase();
@@ -96,19 +95,23 @@ module.exports = {
                             seen.add(keyword);
 
                             if (k.response.length === 0) {
-                                if (keyword === 'griffith') categoryMessages += (await getMessages('griffith')).map(msg => msg.content).join('\n');
-                                if (keyword === 'kanye') categoryMessages += (await getMessages('kanye')).map(msg => msg.content).join('\n');
-                                if (keyword === 'fuentes') categoryMessages += (await getMessages('fuentes')).map(msg => msg.content).join('\n');
+                                msg = await getRandomMessage(keyword);
+                                if (msg.content === null) {
+                                    const attachment = await aiAttachment(keyword, 1);
+                                    attachments.push(...attachment);
+                                    continue;
+                                }
+                                categoryMessages += `${msg.content}\n`;
                             } else {
                                 await message.channel.send(k.response);
                             }
                         }
                     }
-
-                    if (categoryMessages.length > 0) {
-                        const response = await generateShortAIResponse(categoryMessages, message.content);
-                        await message.channel.send(response);
-                    }
+                    
+                    const payload = {};
+                    if (categoryMessages.length > 0) payload.content = categoryMessages;
+                    if (attachments.length > 0) payload.files = attachments;
+                    if (Object.keys(payload).length > 0) await message.channel.send(payload);
                 }
 
                 if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
