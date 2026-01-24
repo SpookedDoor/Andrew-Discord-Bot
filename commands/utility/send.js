@@ -34,10 +34,10 @@ module.exports = {
 		try {
 			const category = interaction.options.getString('category');
             if (category.includes('batch')) {
-                await interaction.deferReply();
+                let combined = "";
                 const messages = await getMessages(category);
-                for (const msg of messages) await interaction.channel.send(msg);
-                await interaction.editReply(`Sent a batch of ${messages.length} messages from category "${category}".`);
+                for (const msg of messages) combined += `${msg.content}\n`;
+                await interaction.reply(combined);
             } else {
                 const message = await getRandomMessage(category);
                 await interaction.reply(message);
