@@ -25,5 +25,8 @@
     "openai": "^6.18.0",
     "pg": "^8.18.0",
     "wav": "^1.0.2"
+  },
+  "devDependencies": {
+    "@gradio/client": "^2.0.4"
   }
 }
