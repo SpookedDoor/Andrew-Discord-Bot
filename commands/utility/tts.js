@@ -2,8 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Client } = require("@gradio/client");
 const fs = require("fs");
 const path = require("path");
-
-const GRADIO_URL = "http://127.0.0.1:8000/";
+const db = require("../../db");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,8 +21,11 @@ module.exports = {
         console.log(`User: ${interaction.user.username}`);
 
         try {
+            const { rows } = await db.query('SELECT url FROM tts_server WHERE id = 1');
+            const url = rows[0].url;
+
             try {
-                const healthCheck = await fetch(GRADIO_URL, { method: "GET", signal: AbortSignal.timeout(2000) });
+                const healthCheck = await fetch(url, { method: "GET", signal: AbortSignal.timeout(2000) });
                 if (!healthCheck.ok) throw new Error("Server responded but not healthy");
             } catch {
                 return interaction.editReply("TTS server is offline");
@@ -32,7 +34,7 @@ module.exports = {
             const file = fs.readFileSync(path.resolve(__dirname, "../../media/downsyndrome.mp3"));
             const refBlob = new Blob([file], { type: "audio/mpeg" });
 
-            const client = await Client.connect(GRADIO_URL);
+            const client = await Client.connect(url);
             const result = await client.predict("/run_voice_clone", { 
                 ref_aud: refBlob,
                 ref_txt: "",
