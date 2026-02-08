@@ -62,7 +62,7 @@ module.exports = {
             if (!response.ok) throw new Error(`Failed to fetch audio file: ${response.status} ${response.statusText}`);
             const buffer = Buffer.from(await response.arrayBuffer());
 
-            await interaction.editReply({ files: [{ attachment: buffer, name: "audio.wav" }] });
+            await interaction.editReply({ content: `Translation to English: ${reply}`, files: [{ attachment: buffer, name: "audio.wav" }] });
         } catch (error) {
             console.error(error);
             await interaction.editReply('Failed to generate audio');
