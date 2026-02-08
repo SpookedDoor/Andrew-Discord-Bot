@@ -43,8 +43,6 @@ module.exports = {
                 interaction.client
             );
 
-            console.log(`AI response: ${reply}`);
-
             const file = fs.readFileSync(path.resolve(__dirname, "../../media/downsyndrome.mp3"));
             const refBlob = new Blob([file], { type: "audio/mpeg" });
 
