@@ -18,18 +18,8 @@ async function getFormattedHistory(serverId, userId, limit) {
     const rows = await getHistory(serverId, userId, limit);
 
     return rows.map(row => {
-        let safeName;
-
-        if (row.username) {
-            safeName = row.username
-                .toLowerCase()
-                .replace(/[^a-z0-9_-]/gi, '_')
-                .slice(0, 64);
-        }
-
         return {
             role: row.role === "assistant" ? "assistant" : "user",
-            name: safeName,
             content: row.content
         };
     });

@@ -71,7 +71,7 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
     const messages = [
         { role: "system", content: `${await getContent()}\n\n${identityContext}` },
         ...history,
-        { role: "user", name: displayName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_').slice(0, 64), content: displayName + ": " + finalPrompt }
+        { role: "user", content: displayName + ": " + finalPrompt }
     ];
 
     try {
