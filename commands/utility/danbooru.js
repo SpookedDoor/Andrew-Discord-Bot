@@ -43,7 +43,9 @@ const BLACKLISTED_TAGS = [
     "urethral_insertion",
     "urethral_penetration",
     "vomit",
-    "vore_belly"
+    "vore_belly",
+    "loli",
+    "shota"
 ];
 
 module.exports = {

@@ -43,6 +43,8 @@ const BLACKLISTED_TAGS = [
     "urethral_penetration",
     "vomit",
     "vore_belly",
+    "loli",
+    "shota"
 ];
 
 const GELBOORU_BASE = "https://gelbooru.com/index.php";
