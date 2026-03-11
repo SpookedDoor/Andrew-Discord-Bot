@@ -104,7 +104,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: `Reverse image results: ${preresponse}\nPrompt: ${cleanPrompt}` },
+                        { type: 'text', text: `Reverse image results: ${preresponse}\nIgnore results with under 80% similarity\nPrompt: ${cleanPrompt}` },
                         { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
