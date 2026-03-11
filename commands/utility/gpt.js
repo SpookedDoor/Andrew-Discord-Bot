@@ -83,8 +83,11 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
 
         if (response?.choices[0]?.message?.content) {
             let reply = response.choices[0].message.content;
-            reply = reply.replace(/^[a-z0-9 _-]{1,20}\s*[:\-—]\s*/i, "");
-            reply = reply.replace(/^"(.*)"$/, "$1");
+
+            reply = reply.trim();
+            reply = reply.replace(/(^|\n)["']?Andrew\s*[:\-—]\s*/gi, "$1");
+            reply = reply.replace(/^["']|["']$/g, "");
+
             if (reply.length > 2000) reply = reply.slice(0, 1997) + '...';
 
             await addHistory(serverId, userId, displayName, displayName + ": " + prompt, "user");
