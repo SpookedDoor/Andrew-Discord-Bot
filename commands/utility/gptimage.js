@@ -66,7 +66,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
         let preresponse = "";
         if (results) {
             results.forEach((r, i) => {
-                preresponse += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
+                if (r.similarity >= 80) preresponse += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
             });
         } else {
             preresponse = "No matches found on SauceNAO.";
@@ -104,7 +104,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: `Reverse image results: ${preresponse}\nIgnore results with under 80% similarity\nPrompt: ${cleanPrompt}` },
+                        { type: 'text', text: `Reverse image results: ${preresponse}\nPrompt: ${cleanPrompt}` },
                         { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
