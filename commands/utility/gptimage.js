@@ -68,9 +68,8 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
             results.forEach((r, i) => {
                 if (r.similarity >= 80) preresponse += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
             });
-        } else {
-            preresponse = "No matches found on SauceNAO.";
-        }
+        } 
+        if (!preresponse) preresponse = "No matches found on SauceNAO.";
         console.log(`SauceNAO results:\n${preresponse}`);
 
         if (prompt == "Hey Andrew, describe this image and tell me what you think of this?") prompt = "Describe this image";
@@ -140,6 +139,11 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
 
         if (response?.choices[0]?.message?.content) {
             let reply = response.choices[0].message.content;
+
+            reply = reply.trim();
+            reply = reply.replace(/(^|\n)["']?Andrew\s*[:\-—]\s*/gi, "$1");
+            reply = reply.replace(/^["']|["']$/g, "");
+
             if (reply.length > 2000) reply = reply.slice(0, 1997) + '...';
 
             await addHistory(serverId, userId, displayName, `${displayName} sent an image: ${imageUrl}\n${prompt}`, "user");
