@@ -15,7 +15,7 @@ This bot was made as an inside-joke, and it can be pretty offensive, so there's 
 
 It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, TTS, and hell, it's even got a LLM! 
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed seperately, and it is admittedly more outdated than Andrew.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed seperately, and it is admittedly far more outdated than Andrew.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
@@ -88,7 +88,7 @@ Well, there you have it! The rest is pretty self-explanatory. You can look throu
 
 You can go ahead and adjust the code to your liking, or just use the bot as-is after having done the necessities.
 
-Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary (especially him. Dude's carried the project and without him, most of the impactful features wouldn't even BE here.)
+Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary, as he is the #1 contributor, and without him, most of the project wouldn't even BE here to begin with.
 
 For even more help, refer to the [wiki page](https://github.com/SpookedDoor/Andrew-Discord-Bot/wiki).
 
