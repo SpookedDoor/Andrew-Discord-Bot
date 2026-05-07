@@ -13,7 +13,7 @@ module.exports = {
 					{ name: 'Griffith', value: 'griffith' },
 					{ name: 'Kanye', value: 'kanye' },
 					{ name: 'Reagan', value: 'reagan' },
-					{ name: 'Nick Fuentes', value: 'nick' },
+					{ name: 'Nick Fuentes', value: 'fuentes' },
 					{ name: 'KSI', value: 'ksi' },
 					{ name: 'Mussolini', value: 'mussolini' },
 					{ name: 'Andrew Tate', value: 'tate' }
