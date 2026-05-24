@@ -60,18 +60,8 @@ module.exports = {
     }
 };
 
-module.exports.describeImage = async function (prompt = "Describe this image", imageUrl, model) {
+module.exports.describeImage = async function (prompt = "Describe this image", imageUrl, model, saucenaoResults) {
     try {
-        const results = await searchSauceNAO(imageUrl);
-        let preresponse = "";
-        if (results) {
-            results.forEach((r, i) => {
-                if (r.similarity >= 80) preresponse += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
-            });
-        } 
-        if (!preresponse) preresponse = "No matches found on SauceNAO.";
-        console.log(`SauceNAO results:\n${preresponse}`);
-
         if (prompt == "Hey Andrew, describe this image and tell me what you think of this?") prompt = "Describe this image";
         let cleanPrompt;
         const referencedMatch = prompt.match(/(Referenced message from Andrew:[^\n]*)/i);
@@ -103,7 +93,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
                 {
                     role: 'user',
                     content: [
-                        { type: 'text', text: `Reverse image results: ${preresponse}\nPrompt: ${cleanPrompt}` },
+                        { type: 'text', text: `Reverse image results: ${saucenaoResults}\nPrompt: ${cleanPrompt}` },
                         { type: 'image_url', image_url: { url: base64Url } }
                     ]
                 }
@@ -119,13 +109,23 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
 
 module.exports.generateImagePrompt = async function (serverId, userId, prompt, finalPrompt, imageUrl, username, client) {
     try {
+        const results = await searchSauceNAO(imageUrl);
+        let saucenaoResults = "";
+        if (results) {
+            results.forEach((r, i) => {
+                if (r.similarity >= 80) saucenaoResults += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
+            });
+        } 
+        if (!saucenaoResults) saucenaoResults = "No matches found on SauceNAO.";
+        console.log(`SauceNAO results:\n${saucenaoResults}`);
+
         const history = await getFormattedHistory(serverId, userId, 10);
         const { displayName, identityContext } = await createIdentityContext(userId, username, client);
-        const preresponse = await module.exports.describeImage(prompt, imageUrl, gptimageModel);
+        const preresponse = await module.exports.describeImage(prompt, imageUrl, gptimageModel, saucenaoResults);
         console.log(`\nResponse from vision model: ${preresponse}\n`);
 
         const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. Keep it short.
-        Here's the description: ${preresponse}\nPrompt from ${displayName}: ${finalPrompt}`;
+        Reverse image results: ${saucenaoResults}\nDescription: ${preresponse}\nPrompt from ${displayName}: ${finalPrompt}`;
 
         const response = await openai.chat.completions.create({
             model: gptModel,
