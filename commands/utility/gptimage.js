@@ -132,7 +132,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
             messages: [
                 { role: 'system', content: `${await getContent()}\n\n${identityContext}` },
                 ...history,
-                { role: 'user', name: displayName.toLowerCase().replace(/[^a-z0-9_-]/gi, '_').slice(0, 64), content: fullPrompt }
+                { role: 'user', content: displayName + ": " + fullPrompt }
             ],
             temperature: 0.9
         });
