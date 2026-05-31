@@ -22,11 +22,11 @@
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
     "node-fetch": "^3.3.2",
-    "openai": "^6.39.0",
+    "openai": "^6.39.1",
     "pg": "^8.21.0",
     "wav": "^1.0.2"
   },
   "devDependencies": {
-    "@gradio/client": "^2.2.0"
+    "@gradio/client": "^2.2.1"
   }
 }

@@ -15,7 +15,7 @@ const apiKey = process.env.NVIDIA_API_KEY;
 // If using koboldcpp, change ALL of these to "koboldcpp"
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main
 // Example: If you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj
-const gptModel = "mistralai/mistral-medium-3.5-128b";
+const gptModel = "deepseek-ai/deepseek-v4-flash";
 const gptimageModel = "google/gemma-3n-e4b-it";
 
 module.exports = { baseURL, apiKey, gptModel, gptimageModel };
