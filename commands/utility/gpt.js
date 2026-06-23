@@ -79,6 +79,7 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
             model,
             messages,
             temperature: 0.9,
+            reasoning_effort: "minimal",
         });
 
         if (response?.choices[0]?.message?.content) {

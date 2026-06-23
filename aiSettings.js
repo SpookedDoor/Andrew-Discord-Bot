@@ -3,19 +3,19 @@
 // https://openrouter.ai/api/v1
 // http://localhost:5001/v1 - koboldcpp
 // http://localhost:11434/v1 - ollama
-// https://generativelanguage.googleapis.com/v1beta/
+// https://generativelanguage.googleapis.com/v1beta/openai/
 // https://integrate.api.nvidia.com/v1
-const baseURL = "https://integrate.api.nvidia.com/v1";
+const baseURL = "https://generativelanguage.googleapis.com/v1beta/openai/";
 
 // If using a different online AI service, change this to your API key stored in ".env"
 // Examples: process.env.GEMINI_API_KEY, process.env.MISTRAL_API_KEY
 // If using local AI, change this to "0", although it doesn't really matter and you can leave it as-is
-const apiKey = process.env.NVIDIA_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY;
 
 // If using koboldcpp, change ALL of these to "koboldcpp"
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main
 // Example: If you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj
-const gptModel = "deepseek-ai/deepseek-v4-flash";
-const gptimageModel = "google/gemma-3n-e4b-it";
+const gptModel = "gemma-4-26b-a4b-it";
+const gptimageModel = "gemma-4-26b-a4b-it";
 
 module.exports = { baseURL, apiKey, gptModel, gptimageModel };
