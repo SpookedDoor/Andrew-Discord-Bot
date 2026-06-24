@@ -16,7 +16,50 @@ async function getNowPlaying(username) {
     return track;
 }
 
-// Helper to get Last.fm username from remote auth server
+async function getTrackInfo(artist, track) {
+    const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&format=json&limit=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.track) return null;
+    return data.track;
+}
+
+function getTags(trackData) {
+    const tags = trackData?.toptags?.tag;
+    if (!tags) return "";
+    const tagArray = Array.isArray(tags) ? tags : [tags];
+    return tagArray.map(t => t.name).filter(Boolean).join(", ");
+}
+
+function getWiki(trackData) {
+    const content = trackData?.wiki?.content;
+    if (!content) return "";
+    return content;
+}
+
+function cleanArtist(artist) {
+    return artist.split(";")[0].trim();
+}
+
+async function getRelevantInfo(artist, track) {
+    const trackData = await getTrackInfo(cleanArtist(artist), track);
+    if (!trackData) return null;
+
+    const listeners = Number(trackData.listeners || 0);
+    const playcount = Number(trackData.playcount || 0);
+
+    const tags = getTags(trackData);
+    const wiki = getWiki(trackData);
+
+    return [
+        "Track Info:",
+        `Listeners: ${listeners}`,
+        `Total Playcount: ${playcount}`,
+        tags ? `Tags: ${tags}` : null,
+        wiki ? `Wiki: ${wiki}` : null
+    ].filter(Boolean).join("\n");
+}
+
 async function getLinkedLastfmUsername(userId) {
     try {
         const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
@@ -81,10 +124,16 @@ module.exports = {
                 }
 
                 const trackInfo = `${track.artist['#text']} - ${track.name}`;
+                const extraInfo = await getRelevantInfo(track.artist['#text'], track.name);
                 const prompt = `Rate this song: ${trackInfo}`;
-                let finalPrompt = prompt;
-
-                finalPrompt += "\nIf the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Give a detailed review. Give a score out of 10.";
+                console.log(trackInfo);
+                console.log(extraInfo);
+                
+                const finalPrompt = [
+                    prompt,
+                    "If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. Give a detailed review. Give a score out of 10.",
+                    extraInfo,
+                ].filter(Boolean).join("\n");
 
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
@@ -113,14 +162,20 @@ module.exports = {
             const activity = presence.activities.find((a) => a.type === ActivityType.Listening || (a.type === ActivityType.Custom && /listening|music|song/i.test(a.state || a.name)));
             if (!activity) return interaction.reply({ content: "This user is not listening to anything.", flags: MessageFlags.Ephemeral });
 
-            const trackInfo = `${activity.state} - ${activity.details}`
+            const trackInfo = `${activity.state} - ${activity.details}`;
+            const extraInfo = await getRelevantInfo(activity.state, activity.details);
             const prompt = `Rate this song: ${trackInfo}`;
-            let finalPrompt = prompt;
+            console.log(trackInfo);
+            console.log(extraInfo);
 
             try {
                 await interaction.deferReply();
 
-                finalPrompt += "\nIf the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Give a detailed review. Give a score out of 10.";
+                const finalPrompt = [
+                    prompt,
+                    "If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. Give a detailed review. Give a score out of 10.",
+                    extraInfo,
+                ].filter(Boolean).join("\n");
 
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
