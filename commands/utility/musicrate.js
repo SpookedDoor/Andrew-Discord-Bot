@@ -144,7 +144,8 @@ module.exports = {
                     temperature: 0.9
                 });
 
-                const aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
+                let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
+                if (aiRating.length > 2000) aiRating = aiRating.slice(0, 1000) + '...';
                 console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
                 await interaction.editReply(`${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`);
@@ -186,7 +187,8 @@ module.exports = {
                     temperature: 0.9
                 });
 
-                const aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
+                let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
+                if (aiRating.length > 2000) aiRating = aiRating.slice(0, 1000) + '...';
                 console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
                 await interaction.editReply(`Now playing: **${trackInfo}**\nAI rating: ${aiRating}`)
