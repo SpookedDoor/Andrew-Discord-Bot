@@ -31,10 +31,10 @@ function getTags(trackData) {
     return tagArray.map(t => t.name).filter(Boolean).join(", ");
 }
 
-function getWiki(trackData) {
-    const content = trackData?.wiki?.content;
-    if (!content) return "";
-    return content;
+function getSummary(trackData) {
+    const summary = trackData?.wiki?.summary;
+    if (!summary) return "";
+    return summary;
 }
 
 function cleanArtist(artist) {
@@ -49,14 +49,14 @@ async function getRelevantInfo(artist, track) {
     const playcount = Number(trackData.playcount || 0);
 
     const tags = getTags(trackData);
-    const wiki = getWiki(trackData);
+    const summary = getSummary(trackData);
 
     return [
         "Track Info:",
         `Listeners: ${listeners}`,
         `Total Playcount: ${playcount}`,
         tags ? `Tags: ${tags}` : null,
-        wiki ? `Wiki: ${wiki}` : null
+        summary ? `Summary: ${summary}` : null
     ].filter(Boolean).join("\n");
 }
 
