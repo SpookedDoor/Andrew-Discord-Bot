@@ -1,9 +1,6 @@
 const { Events, MessageFlags } = require('discord.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
-const { askIfToolIsNeeded } = require('../searchTools.js');
-const { braveSearch } = require('../braveSearch.js');
-const { googleImageSearch } = require('../googleImageSearch.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
@@ -136,23 +133,6 @@ module.exports = {
                             }
                         } catch (err) {
                             console.error("Failed to fetch referenced message:", err);
-                        }
-                    }
-
-                    if (!imageUrl) {
-                        const toolDecision = await askIfToolIsNeeded(finalPrompt);
-                        if (toolDecision.startsWith("WEB_SEARCH:")) {
-                            const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                            const searchResults = await braveSearch(query);
-                            finalPrompt = `User asked: "${prompt}"\n\nRelevant web results:\n${searchResults}`;
-                            console.log(`🔍 Web search used with query: "${query}"\n${searchResults}`);
-                        } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
-                            const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                            const imageResults = await googleImageSearch(query);
-                            finalPrompt = `User asked: "${prompt}"\n\nRelevant image links:\n${imageResults}`;
-                            console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
-                        } else {
-                            console.log(`No internet tools used.`);
                         }
                     }
 

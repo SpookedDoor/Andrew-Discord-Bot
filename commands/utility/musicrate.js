@@ -3,8 +3,6 @@ const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
 const getContent = require('../../characterPrompt.js');
-const { askIfToolIsNeeded } = require('../../searchTools.js');
-const { braveSearch } = require('../../braveSearch.js');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
@@ -86,16 +84,6 @@ module.exports = {
                 const prompt = `Rate this song: ${trackInfo}`;
                 let finalPrompt = prompt;
 
-                const toolDecision = await askIfToolIsNeeded(prompt);
-                if (toolDecision.startsWith("WEB_SEARCH:")) {
-                    const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                    const webResults = await braveSearch(query);
-                    finalPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
-                    console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
-                } else {
-                    console.log("No internet tools used.");
-                }
-
                 finalPrompt += "\nIf the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Give a detailed review. Give a score out of 10.";
 
                 const aiResponse = await openai.chat.completions.create({
@@ -131,16 +119,6 @@ module.exports = {
 
             try {
                 await interaction.deferReply();
-
-                const toolDecision = await askIfToolIsNeeded(prompt);
-                if (toolDecision.startsWith("WEB_SEARCH:")) {
-                    const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                    const webResults = await braveSearch(query);
-                    finalPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
-                    console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
-                } else {
-                    console.log("No internet tools used.");
-                }
 
                 finalPrompt += "\nIf the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Give a detailed review. Give a score out of 10.";
 

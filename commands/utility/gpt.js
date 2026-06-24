@@ -3,9 +3,6 @@ const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
 const getContent = require('../../characterPrompt.js');
-const { askIfToolIsNeeded } = require('../../searchTools.js');
-const { braveSearch } = require('../../braveSearch.js');
-const { googleImageSearch } = require('../../googleImageSearch.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 const { createIdentityContext } = require('../../userIdentities.js');
 const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
@@ -25,22 +22,6 @@ module.exports = {
 
         try {
             await interaction.deferReply();
-            let finalPrompt = prompt;
-
-            const toolDecision = await askIfToolIsNeeded(prompt);
-            if (toolDecision.startsWith("WEB_SEARCH:")) {
-                const query = toolDecision.replace("WEB_SEARCH:", "").trim();
-                const webResults = await braveSearch(query);
-                finalPrompt = `${prompt}\n\nRelevant web results:\n${webResults}`;
-                console.log(`🔍 Web search used with query: "${query}"\n${webResults}`);
-            } else if (toolDecision.startsWith("IMAGE_SEARCH:")) {
-                const query = toolDecision.replace("IMAGE_SEARCH:", "").trim();
-                const imageResults = await googleImageSearch(query);
-                finalPrompt = `${prompt}\n\nRelevant image results:\n${imageResults}`;
-                console.log(`🖼️ Image search used with query: "${query}"\n${imageResults}`);
-            } else {
-                console.log("No internet tools used.");
-            }
 
             console.log(`Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`);
             
@@ -48,7 +29,7 @@ module.exports = {
                 interaction.guild?.id,
                 interaction.user.id,
                 prompt,
-                finalPrompt,
+                prompt,
                 model,
                 interaction.user.username,
                 interaction.client
