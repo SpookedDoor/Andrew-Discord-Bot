@@ -1,7 +1,7 @@
 const { getMessages, getSampledMessages, getAge } = require("./messageDatabase.js");
 
 async function buildMemoryDump() {
-    const sampledMessages = await getSampledMessages({ samplePerCategory: 20 });
+    const sampledMessages = await getSampledMessages({ samplePerCategory: 50 });
     const memoryDump = sampledMessages.join("\n");
 
     const joyousFellow = (await getMessages("happy_fucker")).map((m) => m.content).join("\n");

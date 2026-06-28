@@ -128,7 +128,10 @@ module.exports = {
                                 imageUrl = repliedMessage.attachments.first().url;
                             }
                             if (repliedMessage.content) {
-                                finalPrompt = `Referenced message from ${repliedMessage.author.username}: ${repliedMessage.content}\nPrompt: ${prompt}`;
+                                finalPrompt =
+                                    `The user is replying to this message:\n` +
+                                    `"${repliedMessage.content}"\n\n` +
+                                    `Their reply: ${prompt}`;
                                 console.log(`Replying with context from previous message. ${finalPrompt}`);
                             }
                         } catch (err) {
