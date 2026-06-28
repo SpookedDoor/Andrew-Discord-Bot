@@ -1,20 +1,11 @@
-const { getMessages, getAllMessages, getAge } = require('./messageDatabase.js');
+const { getMessages, getSampledMessages, getAge } = require("./messageDatabase.js");
 
 async function buildMemoryDump() {
-    const allMessages = await getAllMessages();
+    const sampledMessages = await getSampledMessages({ samplePerCategory: 20 });
+    const memoryDump = sampledMessages.join("\n");
 
-    const combinedMessages = Object.values(allMessages)
-        .flat()
-        .map(msg => msg.content)
-        .filter(Boolean);
-
-    const memoryDump = combinedMessages.join('\n');
-
-    const joyousFellowMessages = await getMessages('happy_fucker');
-    const joyousFellow = joyousFellowMessages.map(msg => msg.content).join('\n');
-
-    const insaneCopeMessages = await getMessages('upset_fucker');
-    const insaneCope = insaneCopeMessages.map(msg => msg.content).join('\n');
+    const joyousFellow = (await getMessages("happy_fucker")).map((m) => m.content).join("\n");
+    const insaneCope = (await getMessages("upset_fucker")).map((m) => m.content).join("\n");
 
     return { memoryDump, joyousFellow, insaneCope };
 }

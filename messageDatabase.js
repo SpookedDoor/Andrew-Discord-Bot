@@ -110,11 +110,52 @@ async function getHelloFollowup(userId) {
     }
 }
 
+function sampleArray(arr, n) {
+    const copy = [...arr];
+    const result = [];
+    const size = Math.min(n, copy.length);
+    for (let i = 0; i < size; i++) {
+        const idx = Math.floor(Math.random() * copy.length);
+        result.push(copy.splice(idx, 1)[0]);
+    }
+    return result;
+}
+
+async function getSampledMessages({
+    samplePerCategory = 20,
+    excludeCategories = new Set(['happy_fucker', 'upset_fucker'])
+} = {}) {
+    const grouped = {};
+    const sampled = [];
+
+    const { rows } = await db.query(`
+        SELECT mc.name AS category, m.content
+        FROM messages m
+        JOIN message_categories mc ON m.category_id = mc.id
+        WHERE m.content IS NOT NULL
+        ORDER BY mc.id, m.id;
+    `);
+
+    for (const row of rows) {
+        if (excludeCategories.has(row.category)) continue;
+        if (!grouped[row.category]) grouped[row.category] = [];
+        grouped[row.category].push(row.content.replace(/\\n/g, "\n"));
+    }
+
+    for (const category of Object.keys(grouped)) {
+        const sample = sampleArray(grouped[category], samplePerCategory);
+        sampled.push(...sample);
+    }
+
+    return sampled;
+}
+
 module.exports = {
     getMessages,
     getMessageById,
     getRandomMessage,
     getAllMessages,
     getAge,
-    getHelloFollowup
+    getHelloFollowup,
+    getSampledMessages
 };
