@@ -134,7 +134,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
                 ...history,
                 { role: 'user', content: displayName + ": " + fullPrompt }
             ],
-            temperature: 0.9
+            temperature: 0.8
         });
 
         if (response?.choices[0]?.message?.content) {

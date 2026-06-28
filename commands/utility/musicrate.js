@@ -141,7 +141,7 @@ module.exports = {
                         { role: 'system', content: await getContent() },
                         { role: 'user', content: finalPrompt }
                     ],
-                    temperature: 0.9
+                    temperature: 0.8
                 });
 
                 let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
@@ -184,7 +184,7 @@ module.exports = {
                         { role: 'system', content: await getContent() },
                         { role: 'user', content: finalPrompt }
                     ],
-                    temperature: 0.9
+                    temperature: 0.8
                 });
 
                 let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
