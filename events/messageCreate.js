@@ -174,7 +174,7 @@ module.exports = {
                 }
             } catch (error) {
                 console.error(error);
-                message.reply('An error occurred while sending the message.');
+                message.reply(error);
             }
         } catch (error) {
             console.error('Error in messageCreate event:', error);

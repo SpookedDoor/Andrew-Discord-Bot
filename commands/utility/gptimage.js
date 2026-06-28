@@ -55,7 +55,7 @@ module.exports = {
             await interaction.editReply({ content: reply, files });
         } catch (err) {
             console.error(err);
-            await interaction.editReply("There was a problem analysing the image.");
+            await interaction.editReply(err);
         }
     }
 };

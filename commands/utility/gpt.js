@@ -40,7 +40,7 @@ module.exports = {
             else await interaction.editReply(reply);
         } catch (err) {
             console.error(err);
-            await interaction.editReply("Can't think now... try again later");
+            await interaction.editReply(err);
         }    
     }
 };

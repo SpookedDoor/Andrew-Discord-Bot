@@ -151,7 +151,7 @@ module.exports = {
                 await interaction.editReply(`${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`);
             } catch (error) {
                 console.error(error);
-                await interaction.editReply("Failed to generate response.");
+                await interaction.editReply(error);
             }
         } else if (interaction.options.getSubcommand() === "status") {
             const user = interaction.options.getUser("user") || interaction.user;
@@ -194,7 +194,7 @@ module.exports = {
                 await interaction.editReply(`Now playing: **${trackInfo}**\nAI rating: ${aiRating}`)
             } catch (error) {
                 console.error(error);
-                await interaction.editReply("Failed to generate response.");
+                await interaction.editReply(error);
             }
         }
     },
