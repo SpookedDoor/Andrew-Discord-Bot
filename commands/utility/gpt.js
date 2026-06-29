@@ -50,7 +50,7 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
     const { displayName, identityContext } = await createIdentityContext(userId, username, client);
 
     const messages = [
-        { role: "system", content: `${await getContent()}\n\n${identityContext}` },
+        { role: "system", content: `${await getContent(finalPrompt)}\n\n${identityContext}` },
         ...history,
         { role: "user", content: displayName + ": " + finalPrompt }
     ];

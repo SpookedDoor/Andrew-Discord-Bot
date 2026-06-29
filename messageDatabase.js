@@ -121,33 +121,58 @@ function sampleArray(arr, n) {
     return result;
 }
 
-async function getSampledMessages({
-    samplePerCategory = 20,
-    excludeCategories = new Set(['happy_fucker', 'upset_fucker'])
-} = {}) {
+function scoreMessage(message, prompt) {
+    const stopWords = new Set([
+        "the", "a", "an", "is", "are",
+        "what", "how", "do", "does",
+        "i", "you", "and", "or", "of", "to"
+    ]);
+
+    const promptWords = new Set(
+        prompt
+            .toLowerCase()
+            .split(/\W+/)
+            .filter(w => w && !stopWords.has(w))
+    );
+
+    return message
+        .toLowerCase()
+        .split(/\W+/)
+        .filter(word => promptWords.has(word))
+        .length;
+}
+
+async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
     const grouped = {};
-    const sampled = [];
 
     const { rows } = await db.query(`
         SELECT mc.name AS category, m.content
         FROM messages m
         JOIN message_categories mc ON m.category_id = mc.id
         WHERE m.content IS NOT NULL
-        ORDER BY mc.id, m.id;
     `);
 
-    for (const row of rows) {
-        if (excludeCategories.has(row.category)) continue;
-        if (!grouped[row.category]) grouped[row.category] = [];
-        grouped[row.category].push(row.content.replace(/\\n/g, "\n"));
+    for (const { category, content } of rows) {
+        grouped[category] ??= [];
+        grouped[category].push(content.replace(/\\n/g, "\n"));
     }
 
-    for (const category of Object.keys(grouped)) {
-        const sample = sampleArray(grouped[category], samplePerCategory);
-        sampled.push(...sample);
-    }
+    return Object.values(grouped).flatMap(messages => {
+        const sorted = [...messages].sort(
+            (a, b) => scoreMessage(b, prompt) - scoreMessage(a, prompt)
+        );
 
-    return sampled;
+        const relevantCount = Math.floor(samplePerCategory * 0.7);
+        const relevant = sorted.slice(0, relevantCount);
+
+        const remaining = sorted.slice(relevantCount);
+        const random = sampleArray(
+            remaining,
+            samplePerCategory - relevant.length
+        );
+
+        return [...relevant, ...random];
+    });
 }
 
 module.exports = {
