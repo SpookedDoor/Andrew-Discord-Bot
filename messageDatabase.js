@@ -137,6 +137,7 @@ function sampleArray(arr, n) {
 
 async function getSampledMessages({ samplePerCategory = 20 }) {
     const grouped = {};
+    const result = [];
 
     const { rows } = await db.query(`
         SELECT mc.name AS category, m.content
@@ -147,12 +148,16 @@ async function getSampledMessages({ samplePerCategory = 20 }) {
 
     for (const { category, content } of rows) {
         const key = normaliseCategory(category);
-
         grouped[key] ??= [];
         grouped[key].push(content.replace(/\\n/g, "\n"));
     }
 
-    return Object.values(grouped).flatMap(messages => sampleArray(messages, samplePerCategory));
+    for (const [category, messages] of Object.entries(grouped)) {
+        const limit = category === "general" ? 100 : samplePerCategory;
+        result.push(...sampleArray(messages, limit));
+    }
+
+    return result;
 }
 
 module.exports = {
