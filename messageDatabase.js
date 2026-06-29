@@ -110,6 +110,20 @@ async function getHelloFollowup(userId) {
     }
 }
 
+const categoryGroups = {
+    batch: new Set([
+        "batch", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "batch10",
+        "batch11", "batch12", "batch13", "batch14", "batch15", "do_not_send"
+    ])
+};
+
+function normaliseCategory(category) {
+    for (const [groupName, set] of Object.entries(categoryGroups)) {
+        if (set.has(category)) return groupName;
+    }
+    return category;
+}
+
 function sampleArray(arr, n) {
     const copy = [...arr];
     const result = [];
@@ -132,8 +146,10 @@ async function getSampledMessages({ samplePerCategory = 20 }) {
     `);
 
     for (const { category, content } of rows) {
-        grouped[category] ??= [];
-        grouped[category].push(content.replace(/\\n/g, "\n"));
+        const key = normaliseCategory(category);
+
+        grouped[key] ??= [];
+        grouped[key].push(content.replace(/\\n/g, "\n"));
     }
 
     return Object.values(grouped).flatMap(messages => sampleArray(messages, samplePerCategory));
