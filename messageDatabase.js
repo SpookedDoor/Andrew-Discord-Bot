@@ -135,7 +135,96 @@ function sampleArray(arr, n) {
     return result;
 }
 
-async function getSampledMessages({ samplePerCategory = 20 }) {
+function scoreMessage(message, prompt) {
+    const stopWords = new Set(["the","a","an","is","are","what","how","do","does","i","you","and","or","of","to"]);
+
+    const promptWords = prompt
+        .toLowerCase()
+        .split(/\W+/)
+        .filter(w => w && !stopWords.has(w));
+
+    const messageWords = new Set(
+        message.toLowerCase().split(/\W+/)
+    );
+
+    let score = 0;
+
+    for (const word of promptWords) {
+        if (messageWords.has(word)) {
+            score++;
+        }
+    }
+
+    return score;
+}
+
+function repetitionPenalty(message) {
+    const words = message.toLowerCase().split(/\W+/).filter(Boolean);
+
+    const freq = new Map();
+    let maxRepeat = 0;
+
+    for (const w of words) {
+        const c = (freq.get(w) ?? 0) + 1;
+        freq.set(w, c);
+        maxRepeat = Math.max(maxRepeat, c);
+    }
+
+    if (words.length === 0) return 1;
+
+    const uniqueRatio = new Set(words).size / words.length;
+
+    if (uniqueRatio < 0.4) return 0.2;
+    if (maxRepeat > 6) return 0.4;
+    if (maxRepeat > 3) return 0.6;
+
+    return 1;
+}
+
+function lengthPenalty(message) {
+    const len = message.length;
+
+    if (len < 50) return 1;
+    if (len < 100) return 0.8;
+    if (len < 200) return 0.6;
+    if (len < 500) return 0.4;
+    if (len < 800) return 0.3;
+
+    return 0.2;
+}
+
+function isLikelyLyrics(text) {
+    const words = text.toLowerCase().split(/\W+/).filter(Boolean);
+    const uniqueRatio = new Set(words).size / words.length;
+    const lineCount = text.split("\n").length;
+    return lineCount > 6 && uniqueRatio < 0.55;
+}
+
+function pickRelevant(messages, prompt, limit) {
+    const scored = messages.map(message => {
+        const baseScore = scoreMessage(message, prompt);
+        const repetition = repetitionPenalty(message);
+        const length = lengthPenalty(message);
+        const score = baseScore + repetition * 4 + length * 2;
+
+        return {
+            message,
+            score
+        }
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+
+    const topCount = Math.floor(limit * 0.7);
+    const top = scored.slice(0, topCount).map(x => x.message);
+
+    const remaining = scored.slice(topCount).map(x => x.message);
+    const random = sampleArray(remaining, Math.max(0, limit - top.length));
+
+    return [...top, ...random];
+}
+
+async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
     const grouped = {};
     const result = [];
 
@@ -154,7 +243,12 @@ async function getSampledMessages({ samplePerCategory = 20 }) {
 
     for (const [category, messages] of Object.entries(grouped)) {
         const limit = category === "general" ? 100 : samplePerCategory;
-        result.push(...sampleArray(messages, limit));
+        if (category === "general") {
+            const relevant = pickRelevant(messages.filter(m => !isLikelyLyrics(m)), prompt, limit)
+            result.push(...relevant);
+        } else {
+            result.push(...sampleArray(messages, limit));
+        }
     }
 
     return result;

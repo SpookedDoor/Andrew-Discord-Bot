@@ -1,7 +1,7 @@
 const { getSampledMessages, getAge } = require("./messageDatabase.js");
 
-async function getContent() {
-    const sampledMessages = await getSampledMessages({ samplePerCategory: 20 });
+async function getContent(prompt) {
+    const sampledMessages = await getSampledMessages({ prompt, samplePerCategory: 20 });
     const memoryDump = sampledMessages.join("\n");
 
     return `You are Androo (Andrew Valenzuela) (age: ${getAge()}), an unintelligent human from Alabama with an obsession with Tomoko from Watamote, 

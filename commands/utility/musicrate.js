@@ -131,14 +131,15 @@ module.exports = {
                 
                 const finalPrompt = [
                     prompt,
-                    "If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. Give a detailed review. Give a score out of 10.",
+                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. 
+                    Don't mention playcount. You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
                     extraInfo,
                 ].filter(Boolean).join("\n");
 
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
                     messages: [
-                        { role: 'system', content: await getContent() },
+                        { role: 'system', content: await getContent(prompt) },
                         { role: 'user', content: finalPrompt }
                     ],
                     temperature: 0.8
@@ -174,14 +175,15 @@ module.exports = {
 
                 const finalPrompt = [
                     prompt,
-                    "If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. Give a detailed review. Give a score out of 10.",
+                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. 
+                    Don't mention playcount. You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
                     extraInfo,
                 ].filter(Boolean).join("\n");
 
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
                     messages: [
-                        { role: 'system', content: await getContent() },
+                        { role: 'system', content: await getContent(prompt) },
                         { role: 'user', content: finalPrompt }
                     ],
                     temperature: 0.8
