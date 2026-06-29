@@ -130,7 +130,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
         const response = await openai.chat.completions.create({
             model: gptModel,
             messages: [
-                { role: 'system', content: `${await getContent(fullPrompt)}\n\n${identityContext}` },
+                { role: 'system', content: `${await getContent()}\n\n${identityContext}` },
                 ...history,
                 { role: 'user', content: displayName + ": " + fullPrompt }
             ],

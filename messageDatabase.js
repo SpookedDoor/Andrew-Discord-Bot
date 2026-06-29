@@ -124,64 +124,6 @@ function normaliseCategory(category) {
     return category;
 }
 
-function scoreMessage(message, prompt) {
-    const stopWords = new Set(["the","a","an","is","are","what","how","do","does","i","you","and","or","of","to"]);
-
-    const promptWords = prompt
-        .toLowerCase()
-        .split(/\W+/)
-        .filter(w => w && !stopWords.has(w));
-
-    const messageWords = new Set(
-        message.toLowerCase().split(/\W+/)
-    );
-
-    let score = 0;
-
-    for (const word of promptWords) {
-        if (messageWords.has(word)) {
-            score += 1;
-        }
-    }
-
-    return score;
-}
-
-function repetitionPenalty(message) {
-    const words = message.toLowerCase().split(/\W+/).filter(Boolean);
-
-    const freq = new Map();
-    let maxRepeat = 0;
-
-    for (const w of words) {
-        const c = (freq.get(w) ?? 0) + 1;
-        freq.set(w, c);
-        maxRepeat = Math.max(maxRepeat, c);
-    }
-
-    if (words.length === 0) return 1;
-
-    const uniqueRatio = new Set(words).size / words.length;
-
-    if (uniqueRatio < 0.4) return 0.2;
-    if (maxRepeat > 6) return 0.4;
-    if (maxRepeat > 3) return 0.6;
-
-    return 1;
-}
-
-function lengthPenalty(message) {
-    const len = message.length;
-
-    if (len < 50) return 1;
-    if (len < 100) return 0.8;
-    if (len < 200) return 0.6;
-    if (len < 500) return 0.4;
-    if (len < 800) return 0.3;
-
-    return 0.2;
-}
-
 function sampleArray(arr, n) {
     const copy = [...arr];
     const result = [];
@@ -193,7 +135,7 @@ function sampleArray(arr, n) {
     return result;
 }
 
-async function getSampledMessages({ prompt, sampleSize = 50 }) {
+async function getSampledMessages({ samplePerCategory = 20 }) {
     const grouped = {};
 
     const { rows } = await db.query(`
@@ -210,36 +152,7 @@ async function getSampledMessages({ prompt, sampleSize = 50 }) {
         grouped[key].push(content.replace(/\\n/g, "\n"));
     }
 
-    const allMessages = [];
-
-    for (const [category, messages] of Object.entries(grouped)) {
-        for (const message of messages) {
-            allMessages.push({ message, category });
-        }
-    }
-
-    const scored = allMessages.map(({ message, category }) => {
-        const baseScore = scoreMessage(message, prompt);
-        const repetition = repetitionPenalty(message);
-        const length = lengthPenalty(message);
-
-        return {
-            message,
-            category,
-            score: baseScore * repetition * length
-        };
-    });
-
-    scored.sort((a, b) => b.score - a.score);
-    const relevantCount = Math.floor(sampleSize * 0.7);
-    const relevant = scored.slice(0, relevantCount);
-    const remaining = scored.slice(relevantCount);
-    const random = sampleArray(remaining, sampleSize - relevant.length);
-
-    return [
-        ...relevant.map(x => x.message),
-        ...random.map(x => x.message)
-    ];
+    return Object.values(grouped).flatMap(messages => sampleArray(messages, samplePerCategory));
 }
 
 module.exports = {
