@@ -121,28 +121,7 @@ function sampleArray(arr, n) {
     return result;
 }
 
-function scoreMessage(message, prompt) {
-    const stopWords = new Set([
-        "the", "a", "an", "is", "are",
-        "what", "how", "do", "does",
-        "i", "you", "and", "or", "of", "to"
-    ]);
-
-    const promptWords = new Set(
-        prompt
-            .toLowerCase()
-            .split(/\W+/)
-            .filter(w => w && !stopWords.has(w))
-    );
-
-    return message
-        .toLowerCase()
-        .split(/\W+/)
-        .filter(word => promptWords.has(word))
-        .length;
-}
-
-async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
+async function getSampledMessages({ samplePerCategory = 20 }) {
     const grouped = {};
 
     const { rows } = await db.query(`
@@ -157,22 +136,7 @@ async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
         grouped[category].push(content.replace(/\\n/g, "\n"));
     }
 
-    return Object.values(grouped).flatMap(messages => {
-        const sorted = [...messages].sort(
-            (a, b) => scoreMessage(b, prompt) - scoreMessage(a, prompt)
-        );
-
-        const relevantCount = Math.floor(samplePerCategory * 0.7);
-        const relevant = sorted.slice(0, relevantCount);
-
-        const remaining = sorted.slice(relevantCount);
-        const random = sampleArray(
-            remaining,
-            samplePerCategory - relevant.length
-        );
-
-        return [...relevant, ...random];
-    });
+    return Object.values(grouped).flatMap(messages => sampleArray(messages, samplePerCategory));
 }
 
 module.exports = {

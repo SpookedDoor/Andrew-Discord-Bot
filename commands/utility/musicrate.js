@@ -138,7 +138,7 @@ module.exports = {
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
                     messages: [
-                        { role: 'system', content: await getContent(prompt) },
+                        { role: 'system', content: await getContent() },
                         { role: 'user', content: finalPrompt }
                     ],
                     temperature: 0.8
@@ -181,7 +181,7 @@ module.exports = {
                 const aiResponse = await openai.chat.completions.create({
                     model: gptModel,
                     messages: [
-                        { role: 'system', content: await getContent(prompt) },
+                        { role: 'system', content: await getContent() },
                         { role: 'user', content: finalPrompt }
                     ],
                     temperature: 0.8
