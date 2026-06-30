@@ -63,13 +63,13 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
         });
 
         if (response?.choices[0]?.message?.content) {
-            let reply = response.choices[0].message.content;
-
-            reply = reply.trim();
-            reply = reply.replace(/(^|\n)["']?Andrew\s*[:\-—]\s*/gi, "$1");
-            reply = reply.replace(/^["']|["']$/g, "");
-
-            if (reply.length > 2000) reply = reply.slice(0, 1997) + '...';
+            const reply = (() => {
+                const text = response.choices[0].message.content
+                    .replace(/<thought>[\s\S]*?<\/thought>/g, "").trim()
+                    .replace(/(^|\n)["']?Andrew\s*[:\-—]\s*/gi, "$1")
+                    .replace(/^["']|["']$/g, "");
+                return text.length > 2000 ? text.slice(0, 1997) + "..." : text;
+            })();
 
             await addHistory(serverId, userId, displayName, displayName + ": " + prompt, "user");
             await addHistory(serverId, userId, "Andrew", "Andrew: " + reply, "assistant");
