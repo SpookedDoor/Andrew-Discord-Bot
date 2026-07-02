@@ -131,8 +131,8 @@ module.exports = {
                 
                 const finalPrompt = [
                     prompt,
-                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. 
-                    Don't mention playcount. You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
+                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
+                    You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
                     extraInfo,
                 ].filter(Boolean).join("\n");
 
@@ -175,8 +175,8 @@ module.exports = {
 
                 const finalPrompt = [
                     prompt,
-                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Do not use 'sonic fan' as an insult. 
-                    Don't mention playcount. You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
+                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
+                    You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
                     extraInfo,
                 ].filter(Boolean).join("\n");
 
