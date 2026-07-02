@@ -8,6 +8,7 @@ const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
 const { createIdentityContext } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 const { searchSauceNAO } = require('../../saucenao.js');
+const { cleanReply } = require('../../cleanReply.js');
 const path = require('path');
 
 module.exports = {
@@ -138,13 +139,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
         });
 
         if (response?.choices[0]?.message?.content) {
-            const reply = (() => {
-                const text = response.choices[0].message.content
-                    .replace(/<thought>[\s\S]*?<\/thought>/g, "").trim()
-                    .replace(/(^|\n)["']?Andrew\s*[:\-—]\s*/gi, "$1")
-                    .replace(/^["']|["']$/g, "");
-                return text.length > 2000 ? text.slice(0, 1997) + "..." : text;
-            })();
+            const reply = cleanReply(response.choices[0].message.content);
 
             await addHistory(serverId, userId, displayName, `${displayName} sent an image: ${imageUrl}\n${prompt}`, "user");
             await addHistory(serverId, userId, "Andrew", "Andrew: " + reply, "assistant");

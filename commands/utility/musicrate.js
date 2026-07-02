@@ -3,6 +3,7 @@ const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
 const OpenAI = require('openai');
 const openai = new OpenAI({ baseURL, apiKey });
 const getContent = require('../../characterPrompt.js');
+const { cleanReply } = require('../../cleanReply.js');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
@@ -145,8 +146,7 @@ module.exports = {
                     temperature: 0.8
                 });
 
-                let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
-                if (aiRating.length > 2000) aiRating = aiRating.slice(0, 1000) + '...';
+                const aiRating = cleanReply(aiResponse.choices[0]?.message?.content || "No rating");
                 console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
                 await interaction.editReply(`${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`);
@@ -189,8 +189,7 @@ module.exports = {
                     temperature: 0.8
                 });
 
-                let aiRating = aiResponse.choices[0]?.message?.content || 'No rating returned.';
-                if (aiRating.length > 2000) aiRating = aiRating.slice(0, 1000) + '...';
+                const aiRating = cleanReply(aiResponse.choices[0]?.message?.content || "No rating");
                 console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
 
                 await interaction.editReply(`Now playing: **${trackInfo}**\nAI rating: ${aiRating}`)
