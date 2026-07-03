@@ -7,6 +7,7 @@ const { aiAttachment } = require('../../aiAttachments.js');
 const { createIdentityContext } = require('../../userIdentities.js');
 const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
 const { cleanReply } = require('../../cleanReply.js');
+const { aiGif } = require('../../gifs.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -36,9 +37,19 @@ module.exports = {
                 interaction.client
             );
             
+            const gif = await aiGif(reply);
             const attachments = await aiAttachment(reply);
+
             if (attachments) await interaction.editReply({ content: reply, files: attachments });
             else await interaction.editReply(reply);
+
+            if (gif) {
+                if (interaction.guild) {
+                    await interaction.channel.send(gif);
+                } else {
+                    await interaction.followUp(gif);
+                }
+            }
         } catch (err) {
             console.error(err);
             await interaction.editReply(err);
