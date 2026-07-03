@@ -24,25 +24,29 @@ async function searchGifs(query = "", page = 1, perPage = 50, contentFilter = "o
 const triggers = new Map([
     ["tomoko", ["tomoko", "watamote"]],
     ["griffith", ["griffith"]],
-    ["kanye", ["kanye"]],
+    ["kanye", ["kanye west"]],
 ]);
 
 async function aiGif(responseText = "", probability = 0.5) {
     const lowerText = responseText.toLowerCase();
+    const matches = [];
 
     for (const [k, v] of triggers) {
-        if (Math.random() >= probability) continue;
-        if (lowerText.includes(k)) {
-            const query = v[Math.floor(Math.random() * v.length)];
-            const res = await searchGifs(query);
+        const index = lowerText.indexOf(k);
+        if (index !== -1) matches.push({ index, queries: v });
+    }
 
-            if (res.result === true) {
-                const gifs = res.data.data;
-                const gif = gifs[Math.floor(Math.random() * gifs.length)];
-                return gif.file.hd.gif.url;
-            } else {
-                return null;
-            }
+    matches.sort((a, b) => a.index - b.index);
+
+    for (const match of matches) {
+        if (Math.random() >= probability) continue;
+        const query = match.queries[Math.floor(Math.random() * match.queries.length)];
+        const res = await searchGifs(query);
+
+        if (res.result === true) {
+            const gifs = res.data.data;
+            const gif = gifs[Math.floor(Math.random() * gifs.length)];
+            return gif.file.hd.gif.url;
         }
     }
 
