@@ -4,6 +4,7 @@ const { generateImagePrompt } = require('../commands/utility/gptimage.js');
 const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
+const { aiGif } = require('../gifs.js');
 const db = require('../db.js');
 
 module.exports = {
@@ -171,9 +172,13 @@ module.exports = {
                         );
                     }
 
+                    const gif = await aiGif(reply);
                     const attachments = await aiAttachment(reply);
+                    
                     if (attachments) await message.reply({ content: reply, files: attachments });
                     else await message.reply(reply);
+
+                    if (gif) await message.channel.send(gif);
                 }
             } catch (error) {
                 console.error(error);
