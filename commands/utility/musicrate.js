@@ -5,19 +5,17 @@ const { cleanReply } = require('../../cleanReply.js');
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 
-async function getNowPlaying(username) {
-    const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(username)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
-    const res = await fetch(url);
+async function getTrack(username) {
+    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(username)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`);
     const data = await res.json();
-    if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) return null;
-    const track = data.recenttracks.track[0];
-    if (!track['@attr'] || !track['@attr'].nowplaying) return null;
-    return track;
+    const track = data?.recenttracks?.track?.[0];
+    if (!track) return null;
+    const nowPlaying = !!track['@attr']?.nowplaying;
+    return { track, nowPlaying };
 }
 
 async function getTrackInfo(artist, track) {
-    const url = `https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&format=json&limit=1`;
-    const res = await fetch(url);
+    const res = await fetch(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${LASTFM_API_KEY}&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&format=json&limit=1`);
     const data = await res.json();
     if (!data.track) return null;
     return data.track;
@@ -72,6 +70,35 @@ async function getLinkedLastfmUsername(userId) {
     }
 }
 
+async function rateSong(trackInfo, extraInfo) {
+    const prompt = `Rate this song: ${trackInfo}`;
+    
+    const finalPrompt = [
+        prompt,
+        `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
+        You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
+        extraInfo,
+    ].filter(Boolean).join("\n");
+
+    const response = await openai.chat.completions.create({
+        model: gptModel,
+        messages: [
+            { role: "system", content: await getContent(prompt) },
+            { role: "user", content: finalPrompt },
+        ],
+        temperature: 0.8,
+    });
+
+    const content = response?.choices?.[0]?.message?.content;
+
+    if (typeof content !== "string" || !content.trim()) {
+        console.error("Invalid AI response:", JSON.stringify(response, null, 2));
+        throw new Error("Empty or invalid AI response");
+    }
+
+    return cleanReply(content || "No rating");
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("musicrate")
@@ -89,64 +116,34 @@ module.exports = {
     async execute(interaction) {
         if (interaction.options.getSubcommand() === "lastfm") {
             const userId = interaction.user.id;
-            let lastfmUsername = await getLinkedLastfmUsername(userId);
+            const lastfmUsername = await getLinkedLastfmUsername(userId);
+
+            if (!lastfmUsername) {
+                const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
+                const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
+                const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
+                await interaction.reply({
+                    content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
+                    flags: MessageFlags.Ephemeral
+                });
+                return;
+            }
+
+            const result = await getTrack(lastfmUsername);
+            if (!result) {
+                await interaction.reply("No recent track found.");
+                return;
+            }
+
+            const { track, nowPlaying } = result;
+
+            const trackInfo = `${track.artist['#text']} - ${track.name}`;
+            const extraInfo = await getRelevantInfo(track.artist['#text'], track.name);
 
             try {
-                if (!lastfmUsername) {
-                    // Not linked: send OAuth link with callback and userId
-                    const authServer = process.env.LASTFM_AUTH_SERVER || 'http://localhost:3001';
-                    const callbackUrl = `${authServer}/lastfm/callback?userId=${userId}`;
-                    const authUrl = `https://www.last.fm/api/auth/?api_key=${LASTFM_API_KEY}&cb=${encodeURIComponent(callbackUrl)}`;
-                    await interaction.reply({
-                        content: `You need to link your Last.fm account first. [Connect your account](${authUrl}) and then try again.\nAfter authorising, your account will be linked automatically.`,
-                        flags: MessageFlags.Ephemeral
-                    });
-                    return;
-                }
-
                 await interaction.deferReply();
-
-                // Fetch now playing track
-                let track = await getNowPlaying(lastfmUsername);
-                let nowPlaying = true;
-                if (!track) {
-                    // If nothing is currently playing, get the most recent track
-                    const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${encodeURIComponent(lastfmUsername)}&api_key=${LASTFM_API_KEY}&format=json&limit=1`;
-                    const res = await fetch(url);
-                    const data = await res.json();
-                    if (!data.recenttracks || !data.recenttracks.track || !data.recenttracks.track[0]) {
-                        await interaction.editReply("No recent track found for your Last.fm account.");
-                        return;
-                    }
-                    track = data.recenttracks.track[0];
-                    nowPlaying = false;
-                }
-
-                const trackInfo = `${track.artist['#text']} - ${track.name}`;
-                const extraInfo = await getRelevantInfo(track.artist['#text'], track.name);
-                const prompt = `Rate this song: ${trackInfo}`;
-                console.log(trackInfo);
-                console.log(extraInfo);
-                
-                const finalPrompt = [
-                    prompt,
-                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
-                    You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
-                    extraInfo,
-                ].filter(Boolean).join("\n");
-
-                const aiResponse = await openai.chat.completions.create({
-                    model: gptModel,
-                    messages: [
-                        { role: 'system', content: await getContent(prompt) },
-                        { role: 'user', content: finalPrompt }
-                    ],
-                    temperature: 0.8
-                });
-
-                const aiRating = cleanReply(aiResponse.choices[0]?.message?.content || "No rating");
-                console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
-
+                const aiRating = await rateSong(trackInfo, extraInfo);
+                console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nResponse: ${aiRating}`);
                 await interaction.editReply(`${nowPlaying ? 'Now playing' : 'Most recent track'}: **${trackInfo}**\nAI rating: ${aiRating}`);
             } catch (error) {
                 console.error(error);
@@ -164,32 +161,11 @@ module.exports = {
 
             const trackInfo = `${activity.state} - ${activity.details}`;
             const extraInfo = await getRelevantInfo(activity.state, activity.details);
-            const prompt = `Rate this song: ${trackInfo}`;
-            console.log(trackInfo);
-            console.log(extraInfo);
 
             try {
                 await interaction.deferReply();
-
-                const finalPrompt = [
-                    prompt,
-                    `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
-                    You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
-                    extraInfo,
-                ].filter(Boolean).join("\n");
-
-                const aiResponse = await openai.chat.completions.create({
-                    model: gptModel,
-                    messages: [
-                        { role: 'system', content: await getContent(prompt) },
-                        { role: 'user', content: finalPrompt }
-                    ],
-                    temperature: 0.8
-                });
-
-                const aiRating = cleanReply(aiResponse.choices[0]?.message?.content || "No rating");
-                console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nPrompt: ${prompt}\nResponse: ${aiRating}`);
-
+                const aiRating = await rateSong(trackInfo, extraInfo);
+                console.log(`Model used: ${gptModel}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nResponse: ${aiRating}`);
                 await interaction.editReply(`Now playing: **${trackInfo}**\nAI rating: ${aiRating}`)
             } catch (error) {
                 console.error(error);
