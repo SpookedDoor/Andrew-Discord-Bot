@@ -142,22 +142,17 @@ module.exports = {
                     }
 
                     if (imageUrl) {
-                        try {
-                            model = gptimageModel;
-                            console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
-                            reply = await generateImagePrompt(
-                                message.guild.id,
-                                message.author.id,
-                                prompt,
-                                finalPrompt,
-                                imageUrl,
-                                message.author.username,
-                                message.client
-                            );
-                        } catch (err) {
-                            console.error("Image analysis failed:", err);
-                            return message.reply("There was an issue analysing the image. Please try again later.");
-                        }
+                        model = gptimageModel;
+                        console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
+                        reply = await generateImagePrompt(
+                            message.guild.id,
+                            message.author.id,
+                            prompt,
+                            finalPrompt,
+                            imageUrl,
+                            message.author.username,
+                            message.client
+                        );
                     }
 
                     if (!reply) {
@@ -175,15 +170,13 @@ module.exports = {
 
                     const gif = await aiGif(reply);
                     const attachments = await aiAttachment(reply);
-                    
-                    if (attachments) await message.reply({ content: reply, files: attachments });
-                    else await message.reply(reply);
 
+                    attachments ? await message.reply({ content: reply, files: attachments }) : await message.reply(reply);
                     if (gif) await message.channel.send(gif);
                 }
             } catch (error) {
                 console.error(error);
-                message.reply(error);
+                message.reply("Failed to generate AI response");
             }
         } catch (error) {
             console.error('Error in messageCreate event:', error);

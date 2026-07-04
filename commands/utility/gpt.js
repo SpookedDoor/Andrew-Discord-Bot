@@ -37,11 +37,12 @@ module.exports = {
             
             const gif = await aiGif(reply);
             const attachments = await aiAttachment(reply);
+
             attachments ? await interaction.editReply({ content: reply, files: attachments }) : await interaction.editReply(reply);
             if (gif) interaction.guild ? await interaction.channel.send(gif) : await interaction.followUp(gif);
         } catch (err) {
             console.error(err);
-            await interaction.editReply(err);
+            await interaction.editReply("Failed to generate AI response");
         }    
     }
 };
@@ -56,26 +57,24 @@ module.exports.generateChatCompletion = async function(serverId, userId, prompt,
         { role: "user", content: displayName + ": " + finalPrompt }
     ];
 
-    try {
-        const response = await openai.chat.completions.create({
-            model,
-            messages,
-            temperature: 0.8,
-        });
+    const response = await openai.chat.completions.create({
+        model,
+        messages,
+        temperature: 0.8,
+    });
 
-        if (response?.choices[0]?.message?.content) {
-            const reply = cleanReply(response.choices[0].message.content);
+    const content = response?.choices?.[0]?.message?.content;
 
-            await addHistory(serverId, userId, displayName, displayName + ": " + prompt, "user");
-            await addHistory(serverId, userId, "Andrew", "Andrew: " + reply, "assistant");
-            
-            console.log(`AI response: ${reply}`);
-            return reply;
-        } else {
-            throw new Error("Invalid response structure");
-        }
-    } catch (error) {
-        console.error("Error generating AI response:", error);
-        throw error;
+    if (typeof content !== "string" || !content.trim()) {
+        console.error("Invalid AI response:", JSON.stringify(response, null, 2));
+        throw new Error("Empty or invalid AI response");
     }
+
+    const reply = cleanReply(content);
+
+    await addHistory(serverId, userId, displayName, displayName + ": " + prompt, "user");
+    await addHistory(serverId, userId, "Andrew", "Andrew: " + reply, "assistant");
+    
+    console.log(`AI response: ${reply}`);
+    return reply;
 };
