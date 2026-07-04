@@ -23,8 +23,26 @@ async function searchGifs(query = "", page = 1, perPage = 50, contentFilter = "o
 
 const triggers = new Map([
     ["tomoko", ["tomoko", "watamote"]],
+    ["watamote", ["tomoko", "watamote"]],
     ["griffith", ["griffith"]],
     ["kanye", ["kanye west"]],
+    ["shuckle", ["shuckle"]],
+    ["shadow bonnie", ["shadow bonnie"]],
+    ["reagan", ["ronald reagan"]],
+    ["trump", ["donald trump"]],
+    ["mussolini", ["mussolini"]],
+    ["fuentes", ["nick fuentes"]],
+    ["miku", ["miku", "hatsune miku"]],
+    ["ksi", ["ksi", "thick of it", "lunchly", "prime drink"]],
+    ["cirno", ["cirno"]],
+    ["sonic.exe", ["sonic.exe", "sonic exe"]],
+    ["sonic exe", ["sonic.exe", "sonic exe"]],
+    ["metal sonic", ["metal sonic"]],
+    ["neco arc", ["neco arc"]],
+    ["fnaf", ["fnaf"]],
+    ["lain", ["lain"]],
+    ["andrew tate", ["andrew tate"]],
+    ["the boys", ["the boys"]],
 ]);
 
 async function aiGif(responseText = "", probability = 0.5) {
