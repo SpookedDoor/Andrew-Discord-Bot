@@ -18,4 +18,7 @@ const apiKey = process.env.GEMINI_API_KEY;
 const gptModel = "gemma-4-26b-a4b-it";
 const gptimageModel = "gemma-4-26b-a4b-it";
 
-module.exports = { baseURL, apiKey, gptModel, gptimageModel };
+const OpenAI = require('openai');
+const openai = new OpenAI({ baseURL, apiKey });
+
+module.exports = { openai, gptModel, gptimageModel };

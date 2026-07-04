@@ -1,7 +1,5 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
-const { baseURL, apiKey, gptModel, gptimageModel } = require('../../aiSettings.js');
-const OpenAI = require('openai');
-const openai = new OpenAI({ baseURL, apiKey });
+const { openai, gptModel, gptimageModel } = require('../../aiSettings.js');
 const getContent = require('../../characterPrompt.js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const { getFormattedHistory, addHistory } = require('../../dbHistoryUtils.js');
@@ -9,6 +7,7 @@ const { createIdentityContext } = require('../../userIdentities.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 const { searchSauceNAO } = require('../../saucenao.js');
 const { cleanReply } = require('../../cleanReply.js');
+const { aiGif } = require('../../gifs.js');
 const path = require('path');
 
 module.exports = {
@@ -50,10 +49,12 @@ module.exports = {
             if (!ext || !['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext)) ext = '.png';
             const originalImageAttachment = new AttachmentBuilder(buffer, { name: `image${ext}` });
 
+            const gif = await aiGif(reply);
             const aiAttachments = await aiAttachment(reply) || [];
             const files = [originalImageAttachment, ...aiAttachments];
 
             await interaction.editReply({ content: reply, files });
+            if (gif) interaction.guild ? await interaction.channel.send(gif) : await interaction.followUp(gif);
         } catch (err) {
             console.error(err);
             await interaction.editReply(err);

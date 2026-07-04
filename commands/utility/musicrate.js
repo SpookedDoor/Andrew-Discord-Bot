@@ -1,7 +1,5 @@
 const { SlashCommandBuilder, ActivityType, MessageFlags } = require("discord.js");
-const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
-const OpenAI = require('openai');
-const openai = new OpenAI({ baseURL, apiKey });
+const { openai, gptModel } = require('../../aiSettings.js');
 const getContent = require('../../characterPrompt.js');
 const { cleanReply } = require('../../cleanReply.js');
 

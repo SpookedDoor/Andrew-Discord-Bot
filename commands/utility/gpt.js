@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { baseURL, apiKey, gptModel } = require('../../aiSettings.js');
-const OpenAI = require('openai');
-const openai = new OpenAI({ baseURL, apiKey });
+const { openai, gptModel } = require('../../aiSettings.js');
 const getContent = require('../../characterPrompt.js');
 const { aiAttachment } = require('../../aiAttachments.js');
 const { createIdentityContext } = require('../../userIdentities.js');
@@ -39,17 +37,8 @@ module.exports = {
             
             const gif = await aiGif(reply);
             const attachments = await aiAttachment(reply);
-
-            if (attachments) await interaction.editReply({ content: reply, files: attachments });
-            else await interaction.editReply(reply);
-
-            if (gif) {
-                if (interaction.guild) {
-                    await interaction.channel.send(gif);
-                } else {
-                    await interaction.followUp(gif);
-                }
-            }
+            attachments ? await interaction.editReply({ content: reply, files: attachments }) : await interaction.editReply(reply);
+            if (gif) interaction.guild ? await interaction.channel.send(gif) : await interaction.followUp(gif);
         } catch (err) {
             console.error(err);
             await interaction.editReply(err);

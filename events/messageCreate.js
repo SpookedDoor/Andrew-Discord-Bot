@@ -1,7 +1,7 @@
 const { Events, MessageFlags } = require('discord.js');
+const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { generateChatCompletion } = require('../commands/utility/gpt.js');
 const { generateImagePrompt } = require('../commands/utility/gptimage.js');
-const { gptModel, gptimageModel } = require('../aiSettings.js');
 const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
 const { aiAttachment } = require('../aiAttachments.js');
 const { aiGif } = require('../gifs.js');
