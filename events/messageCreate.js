@@ -81,8 +81,9 @@ module.exports = {
                 const triggerWords = ['andrew', 'androo'];
                 const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
                 const isReplyToBot = message.reference && (await message.fetchReference())?.author?.id === message.client.user.id;
+                const triggeredByRealAndrew = message.author.id === "1014404029146726460" && lowerCaseMessage.includes("bot");
 
-                if (!(botWasMentioned || triggeredByKeyword || isReplyToBot)) {
+                if (!(botWasMentioned || triggeredByKeyword || isReplyToBot || triggeredByRealAndrew)) {
                     let categoryMessages = "";
                     const attachments = [];
                     if (matchedKeywords.length > 0) {
