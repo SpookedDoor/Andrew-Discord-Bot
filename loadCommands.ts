@@ -7,7 +7,7 @@ export default async function loadCommands(commandsPath: string) {
 
     for (const folder of commandFolders) {
         const folderPath = path.join(commandsPath, folder);
-        const commandFiles = fs.readdirSync(folderPath).filter((file) => file.endsWith(".js"));
+        const commandFiles = fs.readdirSync(folderPath);
 
         for (const file of commandFiles) {
             const filePath = path.join(folderPath, file);

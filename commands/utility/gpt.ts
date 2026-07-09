@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Client, SlashCommandBuilder, TextChannel } from "discord.js";
 import { aiAttachment } from "../../aiAttachments.js";
 import { gptModel, openai } from "../../aiSettings.js";
 import getContent from "../../characterPrompt.js";
@@ -8,13 +8,13 @@ import { aiGif } from "../../gifs.js";
 import { createIdentityContext } from "../../userIdentities.js";
 
 export async function generateChatCompletion(
-    serverId,
-    userId,
-    prompt,
-    finalPrompt,
-    model,
-    username = null,
-    client,
+    serverId: string | null,
+    userId: string,
+    prompt: string,
+    finalPrompt: string,
+    model: string,
+    username: string | null = null,
+    client: Client,
 ) {
     const history = await getFormattedHistory(serverId, userId, 10);
     const { displayName, identityContext } = await createIdentityContext(userId, username, client);
@@ -54,7 +54,7 @@ export default {
         .addStringOption((option) =>
             option.setName("prompt").setDescription("Say something to Androo").setRequired(true),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const prompt = interaction.options.getString("prompt");
         const model = gptModel;
 
@@ -62,14 +62,18 @@ export default {
             await interaction.deferReply();
 
             console.log(
-                `Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}`,
+                `Model used: ${model}, Location: ${
+                    interaction.guild && interaction.channel instanceof TextChannel
+                        ? `${interaction.guild.name} - ${interaction.channel.name}`
+                        : `${interaction.user.username} - DM`
+                }, Prompt: ${prompt}`,
             );
 
             const reply = await generateChatCompletion(
-                interaction.guild?.id,
+                interaction.guild?.id ?? null,
                 interaction.user.id,
-                prompt,
-                prompt,
+                prompt ?? "",
+                prompt ?? "",
                 model,
                 interaction.user.username,
                 interaction.client,
@@ -81,10 +85,16 @@ export default {
             attachments
                 ? await interaction.editReply({ content: reply, files: attachments })
                 : await interaction.editReply(reply);
-            if (gif)
-                interaction.guild
-                    ? await interaction.channel.send(gif)
-                    : await interaction.followUp(gif);
+
+            if (gif) {
+                if (interaction.guild) {
+                    if (interaction.channel?.isSendable()) {
+                        await interaction.channel.send(gif);
+                    }
+                } else {
+                    await interaction.followUp(gif);
+                }
+            }
         } catch (err) {
             console.error(err);
             await interaction.editReply("Failed to generate AI response");

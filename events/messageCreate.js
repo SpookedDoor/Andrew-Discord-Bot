@@ -1,7 +1,7 @@
 import { Events, MessageFlags } from "discord.js";
 import { aiAttachment } from "../aiAttachments.js";
 import { gptModel, gptimageModel } from "../aiSettings.js";
-import { generateChatCompletion } from "../commands/utility/gpt.js";
+import { generateChatCompletion } from "../commands/utility/gpt.ts";
 import { generateImagePrompt } from "../commands/utility/gptimage.js";
 import db from "../db.js";
 import { aiGif } from "../gifs.js";
