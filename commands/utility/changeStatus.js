@@ -1,50 +1,59 @@
-const { SlashCommandBuilder, MessageFlags, ActivityType } = require('discord.js');
+import { ActivityType, MessageFlags, SlashCommandBuilder } from "discord.js";
 
 const activityTypeNames = {
-    [ActivityType.Playing]: 'Playing ',
-    [ActivityType.Streaming]: 'Streaming ',
-    [ActivityType.Listening]: 'Listening to ',
-    [ActivityType.Watching]: 'Watching ',
-    [ActivityType.Custom]: '',
-    [ActivityType.Competing]: 'Competing in '
+    [ActivityType.Playing]: "Playing ",
+    [ActivityType.Streaming]: "Streaming ",
+    [ActivityType.Listening]: "Listening to ",
+    [ActivityType.Watching]: "Watching ",
+    [ActivityType.Custom]: "",
+    [ActivityType.Competing]: "Competing in ",
 };
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('change')
-		.setDescription("OWNER: Change Androo's status")
-            .addSubcommand(subcommand =>
-                subcommand
-                .setName('status')
+export default {
+    data: new SlashCommandBuilder()
+        .setName("change")
+        .setDescription("OWNER: Change Androo's status")
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName("status")
                 .setDescription("OWNER: Change Androo's status")
-                .addStringOption(option =>
-                    option.setName('status')
-                        .setDescription('Status')
-                        .setRequired(true)
+                .addStringOption((option) =>
+                    option.setName("status").setDescription("Status").setRequired(true),
                 )
-                .addStringOption(option =>
-                    option.setName('type')
-                        .setDescription('Type')
+                .addStringOption((option) =>
+                    option
+                        .setName("type")
+                        .setDescription("Type")
                         .addChoices(
-                            { name: 'Playing', value: ActivityType.Playing.toString() },
-                            { name: 'Streaming', value: ActivityType.Streaming.toString() },
-                            { name: 'Listening', value: ActivityType.Listening.toString() },
-                            { name: 'Watching', value: ActivityType.Watching.toString() },
-                            { name: 'Custom', value: ActivityType.Custom.toString() },
-                            { name: 'Competing', value: ActivityType.Competing.toString() }
+                            { name: "Playing", value: ActivityType.Playing.toString() },
+                            { name: "Streaming", value: ActivityType.Streaming.toString() },
+                            { name: "Listening", value: ActivityType.Listening.toString() },
+                            { name: "Watching", value: ActivityType.Watching.toString() },
+                            { name: "Custom", value: ActivityType.Custom.toString() },
+                            { name: "Competing", value: ActivityType.Competing.toString() },
                         )
-                        .setRequired(true)
-                )
-            ),
-	async execute(interaction) {
+                        .setRequired(true),
+                ),
+        ),
+    async execute(interaction) {
         const allowedIDs = [process.env.OWNER_ID, process.env.OWNER2_ID];
-        if (allowedIDs.includes(interaction.user.id)) {} else { await interaction.reply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral }); return; };
+        if (allowedIDs.includes(interaction.user.id)) {
+        } else {
+            await interaction.reply({
+                content: "You do not have permission to use this command.",
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
 
-        const status = interaction.options.getString('status');
-        const type = parseInt(interaction.options.getString('type'));
+        const status = interaction.options.getString("status");
+        const type = parseInt(interaction.options.getString("type"));
         const typeName = activityTypeNames[type];
 
         interaction.client.user.setPresence({ activities: [{ name: status, type: type }] });
-        await interaction.reply({ content: `Status changed to: ${typeName}${status}`, flags: MessageFlags.Ephemeral });
-	},
+        await interaction.reply({
+            content: `Status changed to: ${typeName}${status}`,
+            flags: MessageFlags.Ephemeral,
+        });
+    },
 };

@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, MessageFlags } = require("discord.js");
-const axios = require("axios");
+import axios from "axios";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 
 const MIN_SCORE = 100;
 const BLACKLISTED_TAGS = [
@@ -44,7 +44,7 @@ const BLACKLISTED_TAGS = [
     "vomit",
     "vore_belly",
     "loli",
-    "shota"
+    "shota",
 ];
 
 const GELBOORU_BASE = "https://gelbooru.com/index.php";
@@ -66,7 +66,7 @@ function pickRandomDistinct(arr, n) {
     return copy.slice(0, Math.min(n, copy.length));
 }
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName("gelbooru")
         .setDescription("Fetches random images from Gelbooru based on the given tags")
@@ -75,18 +75,19 @@ module.exports = {
                 .setName("tags")
                 .setDescription("Tags to search for (space-separated)")
                 .setRequired(true)
-                .setAutocomplete(true)
+                .setAutocomplete(true),
         )
-        .addStringOption(option =>
-            option.setName('rating')
-                .setDescription('Filter by rating')
+        .addStringOption((option) =>
+            option
+                .setName("rating")
+                .setDescription("Filter by rating")
                 .setRequired(false)
                 .addChoices(
-                    { name: 'General', value: 'g' },
-                    { name: 'Sensitive', value: 's' },
-                    { name: 'Questionable', value: 'q' },
-                    { name: 'Explicit', value: 'e' }
-                )
+                    { name: "General", value: "g" },
+                    { name: "Sensitive", value: "s" },
+                    { name: "Questionable", value: "q" },
+                    { name: "Explicit", value: "e" },
+                ),
         ),
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
@@ -127,17 +128,14 @@ module.exports = {
 
             return interaction.respond(suggestions);
         } catch (err) {
-            console.error(
-                "Gelbooru autocomplete error:",
-                err?.response?.data ?? err,
-            );
+            console.error("Gelbooru autocomplete error:", err?.response?.data ?? err);
             return interaction.respond([]);
         }
     },
 
     async execute(interaction) {
         const tagsInput = interaction.options.getString("tags")?.trim();
-        const rating = interaction.options.getString('rating');
+        const rating = interaction.options.getString("rating");
 
         if (!tagsInput) {
             return interaction.reply({
@@ -178,9 +176,7 @@ module.exports = {
                 const tagString = post.tags ?? "";
                 const tagsArray = tagString.split(" ").filter(Boolean);
 
-                const hasBlacklistedTag = tagsArray.some((tag) =>
-                    BLACKLISTED_TAGS.includes(tag),
-                );
+                const hasBlacklistedTag = tagsArray.some((tag) => BLACKLISTED_TAGS.includes(tag));
                 if (hasBlacklistedTag) return false;
 
                 const score = Number.parseInt(post.score ?? "0", 10);
@@ -200,9 +196,7 @@ module.exports = {
 
             const picked = pickRandomDistinct(posts, 5);
 
-            const urls = picked
-                .map((p) => p.file_url || p.source)
-                .filter(Boolean);
+            const urls = picked.map((p) => p.file_url || p.source).filter(Boolean);
 
             return interaction.reply({ content: urls.join("\n") });
         } catch (err) {

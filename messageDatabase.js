@@ -1,22 +1,25 @@
-const db = require('./db');
+import db from "./db.js";
 
-async function getMessages(category) {
-    const { rows } = await db.query(`
-        SELECT m.id, m.content, ma.file_path
+export async function getMessages(category) {
+    const { rows } = await db.query(
+        `SELECT m.id, m.content, ma.file_path
         FROM messages m
         LEFT JOIN message_attachments ma ON m.id = ma.message_id
         WHERE m.category_id = (
             SELECT id FROM message_categories WHERE name = $1
         )
-        ORDER BY m.id;
-    `, [category]);
+        ORDER BY m.id;`,
+        [category],
+    );
 
     const grouped = {};
-    rows.forEach(row => {
+    rows.forEach((row) => {
         if (!grouped[row.id]) {
             grouped[row.id] = {
-                content: row.content ? row.content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage()) : null,
-                files: []
+                content: row.content
+                    ? row.content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage())
+                    : null,
+                files: [],
             };
         }
         if (row.file_path) {
@@ -27,19 +30,20 @@ async function getMessages(category) {
     return Object.values(grouped);
 }
 
-async function getMessageById(id) {
-    const { rows } = await db.query(`
-        SELECT content
+export async function getMessageById(id) {
+    const { rows } = await db.query(
+        `SELECT content
         FROM messages
         WHERE id = $1
-        LIMIT 1;
-    `, [id]);
+        LIMIT 1;`,
+        [id],
+    );
 
     if (rows.length === 0) return null;
     return rows[0].content ? rows[0].content.replace(/\\n/g, "\n") : null;
 }
 
-async function getRandomMessage(category = null) {
+export async function getRandomMessage(category = null) {
     const params = [];
     let query = `
         SELECT m.id, m.content, ma.file_path
@@ -57,18 +61,20 @@ async function getRandomMessage(category = null) {
     if (rows.length === 0) return { content: null, files: [] };
 
     const message = {
-        content: rows[0].content ? rows[0].content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage()) : null,
-        files: []
+        content: rows[0].content
+            ? rows[0].content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage())
+            : null,
+        files: [],
     };
 
-    rows.forEach(row => {
+    rows.forEach((row) => {
         if (row.file_path) message.files.push(row.file_path);
     });
 
     return message;
 }
 
-async function getAllMessages() {
+export async function getAllMessages() {
     const { rows } = await db.query(`
         SELECT mc.name AS category, m.content
         FROM messages m
@@ -78,7 +84,7 @@ async function getAllMessages() {
     `);
 
     const result = {};
-    rows.forEach(row => {
+    rows.forEach((row) => {
         if (!result[row.category]) result[row.category] = [];
         result[row.category].push(row.content.replace(/\\n/g, "\n"));
     });
@@ -87,10 +93,16 @@ async function getAllMessages() {
 }
 
 function getTimedMessage() {
-    return new Date().getUTCHours() < 6 ? 'GN' : new Date().getUTCHours() < 12 ? 'morning' : new Date().getUTCHours() < 22 ? 'hello' : 'GN';
-};
+    return new Date().getUTCHours() < 6
+        ? "GN"
+        : new Date().getUTCHours() < 12
+          ? "morning"
+          : new Date().getUTCHours() < 22
+            ? "hello"
+            : "GN";
+}
 
-function getAge() {
+export function getAge() {
     const birthDate = new Date(2002, 10, 19); // 19 November 2002
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -99,10 +111,11 @@ function getAge() {
     return age;
 }
 
-async function getHelloFollowup(userId) {
+export async function getHelloFollowup(userId) {
     if (Math.random() < 0.5) return null;
-    const randomFollowup = await getRandomMessage('hello_followup');
-    if (userId === process.env.OWNER2_ID) { // Replace with your Discord user ID
+    const randomFollowup = await getRandomMessage("hello_followup");
+    if (userId === process.env.OWNER2_ID) {
+        // Replace with your Discord user ID
         const options = ["Lefthand", "Righthand", randomFollowup.content];
         return options[Math.floor(Math.random() * options.length)];
     } else {
@@ -112,9 +125,23 @@ async function getHelloFollowup(userId) {
 
 const categoryGroups = {
     batch: new Set([
-        "batch", "batch2", "batch3", "batch4", "batch5", "batch6", "batch7", "batch8", "batch9", "batch10",
-        "batch11", "batch12", "batch13", "batch14", "batch15", "do_not_send"
-    ])
+        "batch",
+        "batch2",
+        "batch3",
+        "batch4",
+        "batch5",
+        "batch6",
+        "batch7",
+        "batch8",
+        "batch9",
+        "batch10",
+        "batch11",
+        "batch12",
+        "batch13",
+        "batch14",
+        "batch15",
+        "do_not_send",
+    ]),
 };
 
 function normaliseCategory(category) {
@@ -136,16 +163,30 @@ function sampleArray(arr, n) {
 }
 
 function scoreMessage(message, prompt) {
-    const stopWords = new Set(["the","a","an","is","are","what","how","do","does","i","you","and","or","of","to"]);
+    const stopWords = new Set([
+        "the",
+        "a",
+        "an",
+        "is",
+        "are",
+        "what",
+        "how",
+        "do",
+        "does",
+        "i",
+        "you",
+        "and",
+        "or",
+        "of",
+        "to",
+    ]);
 
     const promptWords = prompt
         .toLowerCase()
         .split(/\W+/)
-        .filter(w => w && !stopWords.has(w));
+        .filter((w) => w && !stopWords.has(w));
 
-    const messageWords = new Set(
-        message.toLowerCase().split(/\W+/)
-    );
+    const messageWords = new Set(message.toLowerCase().split(/\W+/));
 
     let score = 0;
 
@@ -201,7 +242,7 @@ function isLikelyLyrics(text) {
 }
 
 function pickRelevant(messages, prompt, limit) {
-    const scored = messages.map(message => {
+    const scored = messages.map((message) => {
         const baseScore = scoreMessage(message, prompt);
         const repetition = repetitionPenalty(message);
         const length = lengthPenalty(message);
@@ -209,22 +250,22 @@ function pickRelevant(messages, prompt, limit) {
 
         return {
             message,
-            score
-        }
+            score,
+        };
     });
 
     scored.sort((a, b) => b.score - a.score);
 
     const topCount = Math.floor(limit * 0.7);
-    const top = scored.slice(0, topCount).map(x => x.message);
+    const top = scored.slice(0, topCount).map((x) => x.message);
 
-    const remaining = scored.slice(topCount).map(x => x.message);
+    const remaining = scored.slice(topCount).map((x) => x.message);
     const random = sampleArray(remaining, Math.max(0, limit - top.length));
 
     return [...top, ...random];
 }
 
-async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
+export async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
     const grouped = {};
     const result = [];
 
@@ -244,7 +285,11 @@ async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
     for (const [category, messages] of Object.entries(grouped)) {
         const limit = category === "general" ? 100 : samplePerCategory;
         if (category === "general") {
-            const relevant = pickRelevant(messages.filter(m => !isLikelyLyrics(m)), prompt, limit)
+            const relevant = pickRelevant(
+                messages.filter((m) => !isLikelyLyrics(m)),
+                prompt,
+                limit,
+            );
             result.push(...relevant);
         } else {
             result.push(...sampleArray(messages, limit));
@@ -253,13 +298,3 @@ async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
 
     return result;
 }
-
-module.exports = {
-    getMessages,
-    getMessageById,
-    getRandomMessage,
-    getAllMessages,
-    getAge,
-    getHelloFollowup,
-    getSampledMessages
-};

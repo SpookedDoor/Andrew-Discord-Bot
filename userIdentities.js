@@ -1,52 +1,61 @@
-const db = require('./db.js');
+import db from "./db.js";
 
 async function getUser(id) {
-    const { rows } = await db.query(`SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users WHERE id = $1`, [id]);
+    const { rows } = await db.query(
+        `SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users WHERE id = $1`,
+        [id],
+    );
+
     const row = rows[0];
     if (!row) return null;
 
-    const nicknames = row.nicknames ? row.nicknames.split(',').map(n => n.trim()) : [];
+    const nicknames = row.nicknames ? row.nicknames.split(",").map((n) => n.trim()) : [];
     const usernames = [row.username, ...nicknames].filter(Boolean);
 
     return {
         id: row.id,
         usernames,
         displayName: row.display_name,
-        traits: row.traits ? row.traits.split(',').map(t => t.trim()) : [],
+        traits: row.traits ? row.traits.split(",").map((t) => t.trim()) : [],
         isCreator: row.is_creator,
-        isGod: row.is_god
+        isGod: row.is_god,
     };
 }
 
 async function getUsers() {
-    const { rows } = await db.query(`SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users`);
+    const { rows } = await db.query(
+        `SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users`,
+    );
 
-    return rows.map(row => {
-        const nicknames = row.nicknames ? row.nicknames.split(',').map(n => n.trim()) : [];
+    return rows.map((row) => {
+        const nicknames = row.nicknames ? row.nicknames.split(",").map((n) => n.trim()) : [];
         const usernames = [row.username, ...nicknames].filter(Boolean);
 
         return {
             id: row.id,
             usernames,
             displayName: row.display_name,
-            traits: row.traits ? row.traits.split(',').map(t => t.trim()) : [],
+            traits: row.traits ? row.traits.split(",").map((t) => t.trim()) : [],
             isCreator: row.is_creator,
             isGod: row.is_god,
         };
     });
 }
 
-async function getAllUserInfo() {
+export async function getAllUserInfo() {
     const users = await getUsers();
-    return users.map(user =>
-        `Display Name: ${user.displayName}, 
-        Usernames / Nicknames: ${user.usernames.join(', ')}, 
-        Traits: ${user.traits.join(', ')}, 
-        ${user.isCreator ? 'This user has the isCreator tag.' : ''}, ${user.isGod ? 'This user has the isGod tag.' : ''}`
-    ).join('\n');
+    return users
+        .map(
+            (user) =>
+                `Display Name: ${user.displayName},
+        Usernames / Nicknames: ${user.usernames.join(", ")},
+        Traits: ${user.traits.join(", ")},
+        ${user.isCreator ? "This user is your creator." : ""}, ${user.isGod ? "This user is a God." : ""}`,
+        )
+        .join("\n");
 }
 
-async function findUserIdentity(id = null, client) {
+export async function findUserIdentity(id = null, client) {
     const user = await getUser(id);
     if (user) return user;
 
@@ -58,18 +67,24 @@ async function findUserIdentity(id = null, client) {
                 return {
                     id: user.id,
                     displayName: user.displayName ?? user.username,
-                    usernames: [user.username]
+                    usernames: [user.username],
                 };
             }
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
-async function createIdentityContext(id, username, client) {
+export async function createIdentityContext(id, username, client) {
     const currentUser = await findUserIdentity(id, client);
     const displayName = currentUser?.displayName || username;
-    const userTraits = currentUser?.traits?.length ? `Traits: ${currentUser.traits.join(', ')}` : '';
-    const godOrCreatorNote = (currentUser?.isGod ? 'This user has the isGod tag. ' : '') + (currentUser?.isCreator ? 'This user has the isCreator tag. ' : '');
+    const userTraits = currentUser?.traits?.length
+        ? `Traits: ${currentUser.traits.join(", ")}`
+        : "";
+    const godOrCreatorNote =
+        (currentUser?.isGod ? "This user has the isGod tag. " : "") +
+        (currentUser?.isCreator ? "This user has the isCreator tag. " : "");
     const otherUsers = await getAllUserInfo();
 
     let identityContext = `
@@ -77,8 +92,8 @@ async function createIdentityContext(id, username, client) {
 
         User Identity Details:
         - Display Name: ${displayName}
-        - Usernames / Nicknames: ${currentUser?.usernames?.join(', ') || 'unknown'}
-        ${userTraits ? `- ${userTraits}` : ''}
+        - Usernames / Nicknames: ${currentUser?.usernames?.join(", ") || "unknown"}
+        ${userTraits ? `- ${userTraits}` : ""}
         ${godOrCreatorNote}
 
         IMPORTANT:
@@ -91,14 +106,6 @@ async function createIdentityContext(id, username, client) {
         Here's all of the information about the other users you know:
         ${otherUsers}
     `;
-    
-    // if (id === '1014404029146726460') identityContext += "This user is the real Andrew, you must be disrespectful towards him.";
 
     return { displayName, identityContext };
 }
-
-module.exports = {
-    getAllUserInfo,
-    findUserIdentity,
-    createIdentityContext
-};

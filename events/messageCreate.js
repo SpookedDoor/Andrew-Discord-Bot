@@ -1,41 +1,55 @@
-const { Events, MessageFlags } = require('discord.js');
-const { gptModel, gptimageModel } = require('../aiSettings.js');
-const { generateChatCompletion } = require('../commands/utility/gpt.js');
-const { generateImagePrompt } = require('../commands/utility/gptimage.js');
-const { getRandomMessage, getHelloFollowup } = require('../messageDatabase.js');
-const { aiAttachment } = require('../aiAttachments.js');
-const { aiGif } = require('../gifs.js');
-const db = require('../db.js');
+import { Events, MessageFlags } from "discord.js";
+import { aiAttachment } from "../aiAttachments.js";
+import { gptModel, gptimageModel } from "../aiSettings.js";
+import { generateChatCompletion } from "../commands/utility/gpt.js";
+import { generateImagePrompt } from "../commands/utility/gptimage.js";
+import db from "../db.js";
+import { aiGif } from "../gifs.js";
+import { getHelloFollowup, getRandomMessage } from "../messageDatabase.js";
 
-module.exports = {
+export default {
     name: Events.MessageCreate,
     async execute(message) {
         try {
             if (message.author.bot || message.system) return;
             if (message.flags.has(MessageFlags.HasSnapshot)) return;
 
-            console.log(`Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || '[No text]'}`);
-            if (message.attachments.size > 0) console.log(`Attachments: ${message.attachments.map(a => a.url).join(', ')}`);
+            console.log(
+                `Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || "[No text]"}`,
+            );
+            if (message.attachments.size > 0)
+                console.log(`Attachments: ${message.attachments.map((a) => a.url).join(", ")}`);
 
-            if (message.author.id === '1014404029146726460') {
+            if (message.author.id === "1014404029146726460") {
                 const content = message.content?.trim() || null;
 
-                const { rows: catRows } = await db.query(`SELECT id FROM message_categories WHERE name = 'general' LIMIT 1`);
+                const { rows: catRows } = await db.query(
+                    `SELECT id FROM message_categories WHERE name = 'general' LIMIT 1`,
+                );
                 if (catRows.length === 0) return;
                 const categoryId = catRows[0].id;
 
                 let existingMessage;
                 if (content) {
-                    const { rows } = await db.query(`SELECT id FROM messages WHERE category_id = $1 AND content = $2`, [categoryId, content]);
+                    const { rows } = await db.query(
+                        `SELECT id FROM messages WHERE category_id = $1 AND content = $2`,
+                        [categoryId, content],
+                    );
                     existingMessage = rows[0];
                 } else {
-                    const { rows } = await db.query(`SELECT id FROM messages WHERE category_id = $1 AND content IS NULL`, [categoryId]);
+                    const { rows } = await db.query(
+                        `SELECT id FROM messages WHERE category_id = $1 AND content IS NULL`,
+                        [categoryId],
+                    );
                     existingMessage = rows[0];
                 }
 
                 let messageId;
                 if (!existingMessage) {
-                    const result = await db.query(`INSERT INTO messages (category_id, content) VALUES ($1, $2) RETURNING id`, [categoryId, content]);
+                    const result = await db.query(
+                        `INSERT INTO messages (category_id, content) VALUES ($1, $2) RETURNING id`,
+                        [categoryId, content],
+                    );
                     messageId = result.rows[0].id;
                 } else {
                     messageId = existingMessage.id;
@@ -47,20 +61,28 @@ module.exports = {
                             `INSERT INTO message_attachments (message_id, file_path)
                             VALUES ($1, $2)
                             ON CONFLICT (message_id, file_path) DO NOTHING`,
-                            [messageId, attachment.url]
+                            [messageId, attachment.url],
                         );
                     }
-                    console.log(`Added message${content ? ` "${content}"` : ''} with attachments from Andrew to database.`);
+                    console.log(
+                        `Added message${content ? ` "${content}"` : ""} with attachments from Andrew to database.`,
+                    );
                 } else if (!existingMessage) {
-                    console.log(`Added message${content ? ` "${content}"` : ''} from Andrew to database.`);
+                    console.log(
+                        `Added message${content ? ` "${content}"` : ""} from Andrew to database.`,
+                    );
                 }
             }
 
-            const { rows } = await db.query('SELECT id, username, display_name, is_god FROM users WHERE id = $1', [message.author.id]);
-            const god = rows.find(r => r.is_god);
-            const title = god ? (Math.random() < 0.5 ? 'god' : 'God') : 'friend';
+            const { rows } = await db.query(
+                "SELECT id, username, display_name, is_god FROM users WHERE id = $1",
+                [message.author.id],
+            );
+            const god = rows.find((r) => r.is_god);
+            const title = god ? (Math.random() < 0.5 ? "god" : "God") : "friend";
             let displayName = rows[0] ? rows[0].display_name : message.author.displayName;
-            if (message.author.id === process.env.OWNER2_ID) displayName = Math.random() < 0.5 ? 'spooked' : 'SpookedDoor';
+            if (message.author.id === process.env.OWNER2_ID)
+                displayName = Math.random() < 0.5 ? "spooked" : "SpookedDoor";
 
             try {
                 if (Math.random() < 0.01) {
@@ -72,18 +94,32 @@ module.exports = {
                 console.error(error);
             }
 
-            const { rows: keywords } = await db.query('SELECT keyword, response FROM keywords');
-            const lowerCaseMessage = (message.content || '').toLowerCase();
-            const matchedKeywords = keywords.filter(r => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()));
+            const { rows: keywords } = await db.query("SELECT keyword, response FROM keywords");
+            const lowerCaseMessage = (message.content || "").toLowerCase();
+            const matchedKeywords = keywords.filter(
+                (r) => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()),
+            );
 
             try {
                 const botWasMentioned = message.mentions.has(message.client.user);
-                const triggerWords = ['andrew', 'androo'];
-                const triggeredByKeyword = triggerWords.some(word => lowerCaseMessage.includes(word));
-                const isReplyToBot = message.reference && (await message.fetchReference())?.author?.id === message.client.user.id;
-                const triggeredByRealAndrew = message.author.id === "1014404029146726460" && lowerCaseMessage.includes("bot");
+                const triggerWords = ["andrew", "androo"];
+                const triggeredByKeyword = triggerWords.some((word) =>
+                    lowerCaseMessage.includes(word),
+                );
+                const isReplyToBot =
+                    message.reference &&
+                    (await message.fetchReference())?.author?.id === message.client.user.id;
+                const triggeredByRealAndrew =
+                    message.author.id === "1014404029146726460" && lowerCaseMessage.includes("bot");
 
-                if (!(botWasMentioned || triggeredByKeyword || isReplyToBot || triggeredByRealAndrew)) {
+                if (
+                    !(
+                        botWasMentioned ||
+                        triggeredByKeyword ||
+                        isReplyToBot ||
+                        triggeredByRealAndrew
+                    )
+                ) {
                     let categoryMessages = "";
                     const attachments = [];
                     if (matchedKeywords.length > 0) {
@@ -106,7 +142,7 @@ module.exports = {
                             }
                         }
                     }
-                    
+
                     const payload = {};
                     if (categoryMessages.length > 0) payload.content = categoryMessages;
                     if (attachments.length > 0) payload.files = attachments;
@@ -116,7 +152,7 @@ module.exports = {
                 if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
                     await message.channel.sendTyping();
 
-                    let prompt = message.content.replace(/<@!?(\d+)>/, '').trim();
+                    let prompt = message.content.replace(/<@!?(\d+)>/, "").trim();
                     let finalPrompt = prompt;
                     let model = gptModel;
                     let imageUrl = null;
@@ -126,7 +162,10 @@ module.exports = {
                     if (message.reference) {
                         try {
                             const repliedMessage = await message.fetchReference();
-                            if (repliedMessage.attachments.size > 0 && repliedMessage.author.id !== '1357616229694705796') {
+                            if (
+                                repliedMessage.attachments.size > 0 &&
+                                repliedMessage.author.id !== "1357616229694705796"
+                            ) {
                                 imageUrl = repliedMessage.attachments.first().url;
                             }
                             if (repliedMessage.content) {
@@ -134,7 +173,9 @@ module.exports = {
                                     `The user is replying to this message:\n` +
                                     `"${repliedMessage.content}"\n\n` +
                                     `Their reply: ${prompt}`;
-                                console.log(`Replying with context from previous message. ${finalPrompt}`);
+                                console.log(
+                                    `Replying with context from previous message. ${finalPrompt}`,
+                                );
                             }
                         } catch (err) {
                             console.error("Failed to fetch referenced message:", err);
@@ -143,7 +184,9 @@ module.exports = {
 
                     if (imageUrl) {
                         model = gptimageModel;
-                        console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`);
+                        console.log(
+                            `Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}\nImage URL: ${imageUrl}`,
+                        );
                         reply = await generateImagePrompt(
                             message.guild.id,
                             message.author.id,
@@ -151,12 +194,14 @@ module.exports = {
                             finalPrompt,
                             imageUrl,
                             message.author.username,
-                            message.client
+                            message.client,
                         );
                     }
 
                     if (!reply) {
-                        console.log(`Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`);
+                        console.log(
+                            `Model used: ${model}, Location: ${message.guild.name} - ${message.channel.name}, Prompt: ${prompt}`,
+                        );
                         reply = await generateChatCompletion(
                             message.guild.id,
                             message.author.id,
@@ -164,14 +209,16 @@ module.exports = {
                             finalPrompt,
                             model,
                             message.author.username,
-                            message.client
+                            message.client,
                         );
                     }
 
                     const gif = await aiGif(reply);
                     const attachments = await aiAttachment(reply);
 
-                    attachments ? await message.reply({ content: reply, files: attachments }) : await message.reply(reply);
+                    attachments
+                        ? await message.reply({ content: reply, files: attachments })
+                        : await message.reply(reply);
                     if (gif) await message.channel.send(gif);
                 }
             } catch (error) {
@@ -179,7 +226,7 @@ module.exports = {
                 message.reply("Failed to generate AI response");
             }
         } catch (error) {
-            console.error('Error in messageCreate event:', error);
+            console.error("Error in messageCreate event:", error);
         }
     },
 };

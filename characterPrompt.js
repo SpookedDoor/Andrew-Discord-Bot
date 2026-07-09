@@ -1,6 +1,6 @@
-const { getSampledMessages, getAge } = require("./messageDatabase.js");
+import { getAge, getSampledMessages } from "./messageDatabase.js";
 
-async function getContent(prompt) {
+export default async function getContent(prompt) {
     const sampledMessages = await getSampledMessages({ prompt, samplePerCategory: 20 });
     const memoryDump = sampledMessages.join("\n");
 
@@ -121,5 +121,3 @@ Dislikes:
 Example messages: ${memoryDump}
 `;
 }
-
-module.exports = getContent;

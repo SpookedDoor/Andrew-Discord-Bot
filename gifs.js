@@ -45,7 +45,7 @@ const triggers = new Map([
     ["the boys", ["the boys"]],
 ]);
 
-async function aiGif(responseText = "", probability = 0.5) {
+export async function aiGif(responseText = "", probability = 0.5) {
     const lowerText = responseText.toLowerCase();
     const matches = [];
 
@@ -70,5 +70,3 @@ async function aiGif(responseText = "", probability = 0.5) {
 
     return null;
 }
-
-module.exports = { aiGif };

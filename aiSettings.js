@@ -15,10 +15,8 @@ const apiKey = process.env.GEMINI_API_KEY;
 // If using koboldcpp, change ALL of these to "koboldcpp"
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main
 // Example: If you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj
-const gptModel = "gemma-4-26b-a4b-it";
-const gptimageModel = "gemma-4-26b-a4b-it";
+export const gptModel = "gemma-4-26b-a4b-it";
+export const gptimageModel = "gemma-4-26b-a4b-it";
 
-const OpenAI = require('openai');
-const openai = new OpenAI({ baseURL, apiKey });
-
-module.exports = { openai, gptModel, gptimageModel };
+import OpenAI from "openai";
+export const openai = new OpenAI({ baseURL, apiKey });

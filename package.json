@@ -2,7 +2,8 @@
   "name": "andrew-discord-bot",
   "version": "1.0.0",
   "description": "The funny Andrew_Fish27 bot. For now, it's very top secret! :trollface:",
-  "main": "index.js",
+  "main": "index.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,9 +22,12 @@
     "axios": "^1.18.1",
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
-    "node-fetch": "^3.3.2",
     "openai": "^6.45.0",
-    "pg": "^8.22.0",
-    "wav": "^1.0.2"
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
   }
 }

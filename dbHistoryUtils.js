@@ -1,12 +1,13 @@
-const db = require('./db');
+import db from "./db.js";
 
-async function getHistory(serverId, userId, limit) {
+export async function getHistory(serverId, userId, limit) {
     const id = serverId || userId;
-    let query = 'SELECT username, content, role FROM server_history WHERE server_id = $1 ORDER BY created_at ASC';
+    let query =
+        "SELECT username, content, role FROM server_history WHERE server_id = $1 ORDER BY created_at ASC";
     const params = [id];
 
     if (limit && limit > 0) {
-        query += ' LIMIT $2';
+        query += " LIMIT $2";
         params.push(limit);
     }
 
@@ -14,24 +15,21 @@ async function getHistory(serverId, userId, limit) {
     return rows;
 }
 
-async function getFormattedHistory(serverId, userId, limit) {
+export async function getFormattedHistory(serverId, userId, limit) {
     const rows = await getHistory(serverId, userId, limit);
 
-    return rows.map(row => {
+    return rows.map((row) => {
         return {
             role: row.role === "assistant" ? "assistant" : "user",
-            content: row.content
+            content: row.content,
         };
     });
 }
 
-async function addHistory(serverId, userId, username, content, role) {
+export async function addHistory(serverId, userId, username, content, role) {
     const id = serverId || userId;
-    await db.query('INSERT INTO server_history (server_id, username, content, role) VALUES ($1, $2, $3, $4)', [id, username, content, role]);
-}
-
-module.exports = {
-    getHistory,
-    getFormattedHistory,
-    addHistory
+    await db.query(
+        "INSERT INTO server_history (server_id, username, content, role) VALUES ($1, $2, $3, $4)",
+        [id, username, content, role],
+    );
 }

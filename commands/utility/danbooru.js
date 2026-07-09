@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const axios = require('axios');
+import axios from "axios";
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
 
 const MIN_SCORE = 100;
 const BLACKLISTED_TAGS = [
@@ -45,18 +45,20 @@ const BLACKLISTED_TAGS = [
     "vomit",
     "vore_belly",
     "loli",
-    "shota"
+    "shota",
 ];
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
-        .setName('danbooru')
-        .setDescription('Fetches random images from danbooru based on the given tags')
-        .addStringOption(option =>
-            option.setName('tags')
-                .setDescription('Tags to search for (space-separated)')
+        .setName("danbooru")
+        .setDescription("Fetches random images from danbooru based on the given tags")
+        .addStringOption((option) =>
+            option
+                .setName("tags")
+                .setDescription("Tags to search for (space-separated)")
                 .setRequired(true)
-                .setAutocomplete(true)),
+                .setAutocomplete(true),
+        ),
     async autocomplete(interaction) {
         const focusedValue = interaction.options.getFocused();
         if (!focusedValue) return interaction.respond([]);
@@ -65,43 +67,53 @@ module.exports = {
         const prefix = parts.join(" ");
 
         try {
-            const response = await axios.get(`https://danbooru.donmai.us/tags.json?search[name_matches]=${encodeURIComponent(lastTag)}*&search[order]=count`);
+            const response = await axios.get(
+                `https://danbooru.donmai.us/tags.json?search[name_matches]=${encodeURIComponent(lastTag)}*&search[order]=count`,
+            );
             let suggestions = response.data;
 
-            suggestions = suggestions.filter(s => !BLACKLISTED_TAGS.includes(s.name));
+            suggestions = suggestions.filter((s) => !BLACKLISTED_TAGS.includes(s.name));
 
             await interaction.respond(
-                suggestions.slice(0, 10).map(tag => ({
+                suggestions.slice(0, 10).map((tag) => ({
                     name: prefix ? `${prefix} ${tag.name}` : tag.name,
-                    value: prefix ? `${prefix} ${tag.name}` : tag.name
-                }))
+                    value: prefix ? `${prefix} ${tag.name}` : tag.name,
+                })),
             );
         } catch (err) {
             console.error("Autocomplete error:", err);
             return interaction.respond([]);
         }
     },
-        async execute(interaction) {
-        const tags = interaction.options.getString('tags');
+    async execute(interaction) {
+        const tags = interaction.options.getString("tags");
         const url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(tags + " order:score")}&limit=200`;
-        
+
         try {
             const response = await axios.get(url);
             let data = response.data;
 
-            if (!data || data.length === 0) return interaction.reply({ content: '❌ No images found for the given tags.', flags: MessageFlags.Ephemeral });
+            if (!data || data.length === 0)
+                return interaction.reply({
+                    content: "❌ No images found for the given tags.",
+                    flags: MessageFlags.Ephemeral,
+                });
 
-            data = data.filter(post => {
+            data = data.filter((post) => {
                 if (!post || !post.tag_string) return false;
 
                 const tagsArray = post.tag_string.split(" ");
-                const hasBlacklistedTag = tagsArray.some(tag => BLACKLISTED_TAGS.includes(tag));
+                const hasBlacklistedTag = tagsArray.some((tag) => BLACKLISTED_TAGS.includes(tag));
                 const passesScore = parseInt(post.score, 10) >= MIN_SCORE;
 
                 return !hasBlacklistedTag && passesScore;
             });
 
-            if (data.length === 0) return interaction.reply({ content: '❌ No suitable images found after filtering.', flags: MessageFlags.Ephemeral });
+            if (data.length === 0)
+                return interaction.reply({
+                    content: "❌ No suitable images found after filtering.",
+                    flags: MessageFlags.Ephemeral,
+                });
 
             let posts = [];
             for (let i = 0; i < 5 && data.length > 0; i++) {
@@ -109,11 +121,14 @@ module.exports = {
                 if (!posts.includes(post)) posts.push(post);
             }
 
-            const urls = posts.map(post => post.file_url);
-            return interaction.reply({ content: urls.join('\n') });
+            const urls = posts.map((post) => post.file_url);
+            return interaction.reply({ content: urls.join("\n") });
         } catch (err) {
             console.error("Danbooru fetch error:", err);
-            return interaction.reply({ content: '⚠️ Error fetching data from Danbooru.', flags: MessageFlags.Ephemeral });
+            return interaction.reply({
+                content: "⚠️ Error fetching data from Danbooru.",
+                flags: MessageFlags.Ephemeral,
+            });
         }
     },
 };
