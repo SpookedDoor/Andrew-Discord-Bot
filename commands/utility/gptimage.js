@@ -76,17 +76,13 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
         if (cleanPrompt === '' || cleanPrompt === ',') cleanPrompt = 'Describe this image';
     }
     console.log(`Prompt: ${cleanPrompt}`);
-
+    
     const responseImg = await fetch(imageUrl);
+    if (!responseImg.ok) throw new Error(`Failed to fetch image: ${responseImg.status}`);
+    const mimeType = responseImg.headers.get("content-type")?.split(";")[0] || "image/png";
     const arrayBuffer = await responseImg.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    const ext = path.extname(imageUrl).toLowerCase();
-    let mimeType = 'image/png';
-    if (ext === '.jpg' || ext === '.jpeg') mimeType = 'image/jpeg';
-    else if (ext === '.webp') mimeType = 'image/webp';
-    else if (ext === '.gif') mimeType = 'image/gif';
-    const base64 = buffer.toString('base64');
-    const base64Url = `data:${mimeType};base64,${base64}`;
+    const base64Url = `data:${mimeType};base64,${buffer.toString("base64")}`;
 
     const response = await openai.chat.completions.create({
         model,
@@ -94,7 +90,7 @@ module.exports.describeImage = async function (prompt = "Describe this image", i
             {
                 role: 'user',
                 content: [
-                    { type: 'text', text: `Reverse image results: ${saucenaoResults}\nPrompt: ${cleanPrompt}` },
+                    { type: 'text', text: `${saucenaoResults ? `Reverse image results: ${saucenaoResults}\n` : ""}Prompt: ${cleanPrompt}` },
                     { type: 'image_url', image_url: { url: base64Url } }
                 ]
             }
@@ -113,8 +109,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
             if (r.similarity >= 80) saucenaoResults += `Result #${i + 1} | Similarity: ${r.similarity}% | Title: ${r.title} | Author: ${r.author} | Characters: ${r.characters} | Source: ${r.source}\n`;
         });
     } 
-    if (!saucenaoResults) saucenaoResults = "No matches found on SauceNAO.";
-    console.log(`SauceNAO results:\n${saucenaoResults}`);
+    if (saucenaoResults) console.log(`SauceNAO results:\n${saucenaoResults}`);
 
     const history = await getFormattedHistory(serverId, userId, 10);
     const { displayName, identityContext } = await createIdentityContext(userId, username, client);
@@ -122,7 +117,7 @@ module.exports.generateImagePrompt = async function (serverId, userId, prompt, f
     console.log(`\nResponse from vision model: ${preresponse}\n`);
 
     const fullPrompt = `Another person has described this image for you, put it in your own words as Andrew. Keep it short.
-    Reverse image results: ${saucenaoResults}\nDescription: ${preresponse}\nPrompt from ${displayName}: ${finalPrompt}`;
+    ${saucenaoResults ? `Reverse image results: ${saucenaoResults}\n` : ""}Description: ${preresponse}\nPrompt from ${displayName}: ${finalPrompt}`;
 
     const response = await openai.chat.completions.create({
         model: gptModel,

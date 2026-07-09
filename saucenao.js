@@ -9,7 +9,6 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 async function searchSauceNAO(imageUrl, maxResults = 2) {
     try {
         const url = `https://saucenao.com/search.php?output_type=2&api_key=${process.env.SAUCENAO_API_KEY}&url=${encodeURIComponent(imageUrl)}`;
-        console.log(`Searching SauceNAO: ${url}`);
         const res = await fetch(url);
         const data = await res.json();
 
