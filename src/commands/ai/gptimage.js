@@ -1,13 +1,13 @@
 import { AttachmentBuilder, SlashCommandBuilder } from "discord.js";
 import path from "path";
 import { aiAttachment } from "../../aiAttachments.js";
-import { gptModel, gptimageModel, openai } from "../../aiSettings.js";
-import getContent from "../../characterPrompt.js";
-import { cleanReply } from "../../cleanReply.js";
+import { gptModel, gptimageModel, openai } from "../../ai/aiSettings.js";
+import getContent from "../../ai/characterPrompt.js";
+import { cleanReply } from "../../utils/cleanReply.js";
 import { addHistory, getFormattedHistory } from "../../dbHistoryUtils.js";
-import { aiGif } from "../../gifs.js";
-import { searchSauceNAO } from "../../saucenao.js";
-import { createIdentityContext } from "../../userIdentities.js";
+import { aiGif } from "../../services/gifs.js";
+import { searchSauceNAO } from "../../services/saucenao.js";
+import { createIdentityContext } from "../../utils/userIdentities.js";
 
 export async function describeImage(
     prompt = "Describe this image",

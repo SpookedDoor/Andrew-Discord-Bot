@@ -1,10 +1,32 @@
+type SauceNAOResults = {
+    similarity: number;
+    title: string;
+    author: string;
+    characters: string;
+    source: string;
+};
+
+type SauceNAOData = {
+    header: { similarity: number };
+    data: {
+        title: string;
+        material: string;
+        author_name: string;
+        creator: string;
+        member_name: string;
+        characters: string;
+        ext_urls: string[];
+        source: string;
+    };
+};
+
 /**
  * Searches an image on SauceNAO and returns the top N results
  * @param {string} imageUrl - The URL of the image to search
  * @param {number} maxResults - How many top results to return (default 2)
- * @returns {Promise<Array>} Array of top match info objects
+ * @returns {Promise<SauceNAOResults[]>} Array of top match info objects
  */
-export async function searchSauceNAO(imageUrl, maxResults = 2) {
+export async function searchSauceNAO(imageUrl: string, maxResults = 2): Promise<SauceNAOResults[]> {
     try {
         const url = `https://saucenao.com/search.php?output_type=2&api_key=${process.env.SAUCENAO_API_KEY}&url=${encodeURIComponent(imageUrl)}`;
         const res = await fetch(url);
@@ -12,7 +34,7 @@ export async function searchSauceNAO(imageUrl, maxResults = 2) {
 
         if (!data.results || data.results.length === 0) return [];
 
-        const results = data.results.slice(0, maxResults).map((result) => ({
+        const results = data.results.slice(0, maxResults).map((result: SauceNAOData) => ({
             similarity: result.header.similarity,
             title: result.data.title || result.data.material || "Unknown",
             author:

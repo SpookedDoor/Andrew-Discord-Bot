@@ -1,4 +1,4 @@
-import { getAge, getSampledMessages } from "./messageDatabase.js";
+import { getAge, getSampledMessages } from "../database/messageDatabase.js";
 
 export default async function getContent(prompt: string) {
     const sampledMessages = await getSampledMessages({ prompt, samplePerCategory: 20 });

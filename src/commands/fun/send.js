@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import db from "../../db.js";
-import { getMessages, getRandomMessage } from "../../messageDatabase.js";
+import { getMessages, getRandomMessage } from "../../utils/messageDatabase.js";
 
 export default {
     data: new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 import { MessageFlags, SlashCommandBuilder } from "discord.js";
-import { findUserIdentity } from "../../userIdentities.js";
+import { findUserIdentity } from "../../utils/userIdentities.js";
 
 export default {
     data: new SlashCommandBuilder()

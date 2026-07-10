@@ -1,7 +1,7 @@
 import { ActivityType, MessageFlags, SlashCommandBuilder } from "discord.js";
-import { gptModel, openai } from "../../aiSettings.js";
-import getContent from "../../characterPrompt.js";
-import { cleanReply } from "../../cleanReply.js";
+import { gptModel, openai } from "../../ai/aiSettings.js";
+import getContent from "../../ai/characterPrompt.js";
+import { cleanReply } from "../../utils/cleanReply.js";
 
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY;
 

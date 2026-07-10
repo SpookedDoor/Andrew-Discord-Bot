@@ -1,6 +1,6 @@
 import { AttachmentBuilder } from "discord.js";
 import path from "path";
-import db from "./db.js";
+import db from "../database/db.js";
 
 export async function aiAttachment(responseText: string, probability = 0.25) {
     const __dirname = import.meta.dirname;

@@ -1,11 +1,11 @@
 import { AttachmentBuilder, Events, Message, MessageFlags } from "discord.js";
-import { aiAttachment } from "../aiAttachments.js";
-import { gptModel, gptimageModel } from "../aiSettings.js";
-import { generateChatCompletion } from "../commands/utility/gpt.js";
-import { generateImagePrompt } from "../commands/utility/gptimage.js";
-import db from "../db.js";
-import { aiGif } from "../gifs.js";
-import { getHelloFollowup, getRandomMessage } from "../messageDatabase.js";
+import { gptModel, gptimageModel } from "../ai/aiSettings.js";
+import { generateChatCompletion } from "../commands/ai/gpt.js";
+import { generateImagePrompt } from "../commands/ai/gptimage.js";
+import db from "../database/db.js";
+import { getHelloFollowup, getRandomMessage } from "../database/messageDatabase.js";
+import { aiGif } from "../services/gifs.js";
+import { aiAttachment } from "../utils/attachments.js";
 
 export default {
     name: Events.MessageCreate,

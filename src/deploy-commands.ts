@@ -1,7 +1,7 @@
 import { REST, Routes, type RESTPutAPIApplicationCommandsResult } from "discord.js";
 import dotenv from "dotenv";
 import path from "path";
-import loadCommands from "./loadCommands.js";
+import loadCommands from "./utils/loadCommands.js";
 dotenv.config({ quiet: true });
 
 const __dirname = import.meta.dirname;

@@ -1,12 +1,12 @@
 import { ChatInputCommandInteraction, Client, SlashCommandBuilder, TextChannel } from "discord.js";
-import { aiAttachment } from "../../aiAttachments.js";
-import { gptModel, openai } from "../../aiSettings.js";
-import getContent from "../../characterPrompt.js";
-import { cleanReply } from "../../cleanReply.js";
-import { addHistory, getFormattedHistory } from "../../dbHistoryUtils.js";
-import { aiGif } from "../../gifs.js";
-import { createIdentityContext } from "../../userIdentities.js";
 import type OpenAI from "openai";
+import { gptModel, openai } from "../../ai/aiSettings.js";
+import getContent from "../../ai/characterPrompt.js";
+import { addHistory, getFormattedHistory } from "../../database/dbHistoryUtils.js";
+import { aiGif } from "../../services/gifs.js";
+import { aiAttachment } from "../../utils/attachments.js";
+import { cleanReply } from "../../utils/cleanReply.js";
+import { createIdentityContext } from "../../utils/userIdentities.js";
 
 export async function generateChatCompletion(
     serverId: string | null,
@@ -14,7 +14,7 @@ export async function generateChatCompletion(
     prompt: string,
     finalPrompt: string,
     model: string,
-    username: string | null = null,
+    username: string,
     client: Client,
 ) {
     const history = await getFormattedHistory(serverId, userId, 10);

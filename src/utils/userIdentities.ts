@@ -1,7 +1,27 @@
-import db from "./db.js";
+import type { Client } from "discord.js";
+import db from "../database/db.js";
 
-async function getUser(id) {
-    const { rows } = await db.query(
+type UserRow = {
+    id: string;
+    username: string;
+    display_name: string;
+    nicknames: string[];
+    traits: string[];
+    is_creator: boolean;
+    is_god: boolean;
+};
+
+type User = {
+    id: string;
+    usernames: string[];
+    displayName: string;
+    traits: string[];
+    isCreator: boolean;
+    isGod: boolean;
+};
+
+async function getUser(id: string): Promise<User | null> {
+    const { rows } = await db.query<UserRow>(
         `SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users WHERE id = $1`,
         [id],
     );
@@ -9,33 +29,27 @@ async function getUser(id) {
     const row = rows[0];
     if (!row) return null;
 
-    const nicknames = row.nicknames ? row.nicknames.split(",").map((n) => n.trim()) : [];
-    const usernames = [row.username, ...nicknames].filter(Boolean);
-
     return {
         id: row.id,
-        usernames,
+        usernames: [row.username, ...row.nicknames].filter(Boolean),
         displayName: row.display_name,
-        traits: row.traits ? row.traits.split(",").map((t) => t.trim()) : [],
+        traits: row.traits,
         isCreator: row.is_creator,
         isGod: row.is_god,
     };
 }
 
-async function getUsers() {
-    const { rows } = await db.query(
+async function getUsers(): Promise<User[]> {
+    const { rows } = await db.query<UserRow>(
         `SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users`,
     );
 
     return rows.map((row) => {
-        const nicknames = row.nicknames ? row.nicknames.split(",").map((n) => n.trim()) : [];
-        const usernames = [row.username, ...nicknames].filter(Boolean);
-
         return {
             id: row.id,
-            usernames,
+            usernames: [row.username, ...row.nicknames].filter(Boolean),
             displayName: row.display_name,
-            traits: row.traits ? row.traits.split(",").map((t) => t.trim()) : [],
+            traits: row.traits,
             isCreator: row.is_creator,
             isGod: row.is_god,
         };
@@ -55,36 +69,36 @@ export async function getAllUserInfo() {
         .join("\n");
 }
 
-export async function findUserIdentity(id = null, client) {
-    const user = await getUser(id);
-    if (user) return user;
+export async function findUserIdentity(id: string, client: Client) {
+    const existingUser = await getUser(id);
+    if (existingUser) return existingUser;
 
-    if (!user && id) {
-        try {
-            const user = await client.users.fetch(id, { force: true });
+    const user = await client.users.fetch(id, { force: true });
 
-            if (user) {
-                return {
-                    id: user.id,
-                    displayName: user.displayName ?? user.username,
-                    usernames: [user.username],
-                };
-            }
-        } catch (err) {
-            console.log(err);
-        }
+    if (user) {
+        return {
+            id: user.id,
+            displayName: user.displayName ?? user.username,
+            usernames: [user.username],
+        };
+    } else {
+        throw new Error("User not found");
     }
 }
 
-export async function createIdentityContext(id, username, client) {
+export async function createIdentityContext(id: string, username: string, client: Client) {
     const currentUser = await findUserIdentity(id, client);
     const displayName = currentUser?.displayName || username;
-    const userTraits = currentUser?.traits?.length
-        ? `Traits: ${currentUser.traits.join(", ")}`
-        : "";
-    const godOrCreatorNote =
-        (currentUser?.isGod ? "This user has the isGod tag. " : "") +
-        (currentUser?.isCreator ? "This user has the isCreator tag. " : "");
+    let userTraits = "";
+    let godOrCreatorNote = "";
+
+    if ("traits" in currentUser) {
+        userTraits = `Traits: ${currentUser.traits.join(", ")}`;
+        godOrCreatorNote =
+            (currentUser?.isGod ? "This user has the isGod tag. " : "") +
+            (currentUser?.isCreator ? "This user has the isCreator tag. " : "");
+    }
+
     const otherUsers = await getAllUserInfo();
 
     let identityContext = `
