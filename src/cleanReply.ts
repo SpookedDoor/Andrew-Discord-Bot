@@ -1,4 +1,4 @@
-export function cleanReply(reply) {
+export function cleanReply(reply: string) {
     const text = reply
         .replace(/<thought>[\s\S]*?<\/thought>/g, "")
         .trim()

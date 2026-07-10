@@ -1,7 +1,25 @@
 import db from "./db.js";
 
-export async function getMessages(category) {
-    const { rows } = await db.query(
+type MessageRow = {
+    id: number;
+    category_id: number;
+    category: string;
+    content: string;
+    file_path: string;
+    created_at: Date;
+}
+
+type Message = {
+    content: string | null;
+    files?: string[];
+}
+
+type MessageMap = Record<string, string[]>;
+type CategoryMap = Record<string, string[]>;
+type GroupMap = Record<string, Message>;
+
+export async function getMessages(category: string): Promise<Message[]> {
+    const { rows } = await db.query<MessageRow>(
         `SELECT m.id, m.content, ma.file_path
         FROM messages m
         LEFT JOIN message_attachments ma ON m.id = ma.message_id
@@ -12,7 +30,7 @@ export async function getMessages(category) {
         [category],
     );
 
-    const grouped = {};
+    const grouped: GroupMap = {};
     rows.forEach((row) => {
         if (!grouped[row.id]) {
             grouped[row.id] = {
@@ -23,15 +41,15 @@ export async function getMessages(category) {
             };
         }
         if (row.file_path) {
-            grouped[row.id].files.push(row.file_path);
+            grouped[row.id]?.files?.push(row.file_path);
         }
     });
 
     return Object.values(grouped);
 }
 
-export async function getMessageById(id) {
-    const { rows } = await db.query(
+export async function getMessageById(id: number): Promise<string | null> {
+    const { rows } = await db.query<{ content: string }>(
         `SELECT content
         FROM messages
         WHERE id = $1
@@ -40,11 +58,11 @@ export async function getMessageById(id) {
     );
 
     if (rows.length === 0) return null;
-    return rows[0].content ? rows[0].content.replace(/\\n/g, "\n") : null;
+    return rows[0]?.content ? rows[0]?.content.replace(/\\n/g, "\n") : null;
 }
 
-export async function getRandomMessage(category = null) {
-    const params = [];
+export async function getRandomMessage(category: string | null = null): Promise<Message> {
+    const params: string[] = [];
     let query = `
         SELECT m.id, m.content, ma.file_path
         FROM messages m
@@ -57,25 +75,25 @@ export async function getRandomMessage(category = null) {
     }
 
     query += ` ORDER BY RANDOM() LIMIT 1;`;
-    const { rows } = await db.query(query, params);
+    const { rows } = await db.query<MessageRow>(query, params);
     if (rows.length === 0) return { content: null, files: [] };
 
-    const message = {
-        content: rows[0].content
-            ? rows[0].content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage())
+    const message: Message = {
+        content: rows[0]?.content
+            ? rows[0]?.content.replace(/\\n/g, "\n").replace("{greeting}", getTimedMessage())
             : null,
         files: [],
     };
 
-    rows.forEach((row) => {
-        if (row.file_path) message.files.push(row.file_path);
+    rows.forEach((row: MessageRow) => {
+        if (row.file_path) message.files?.push(row.file_path);
     });
 
     return message;
 }
 
-export async function getAllMessages() {
-    const { rows } = await db.query(`
+export async function getAllMessages(): Promise<MessageMap> {
+    const { rows } = await db.query<MessageRow>(`
         SELECT mc.name AS category, m.content
         FROM messages m
         JOIN message_categories mc ON m.category_id = mc.id
@@ -83,10 +101,10 @@ export async function getAllMessages() {
         ORDER BY mc.id, m.id;
     `);
 
-    const result = {};
+    const result: MessageMap = {};
     rows.forEach((row) => {
         if (!result[row.category]) result[row.category] = [];
-        result[row.category].push(row.content.replace(/\\n/g, "\n"));
+        result[row.category]?.push(row.content.replace(/\\n/g, "\n"));
     });
 
     return result;
@@ -111,11 +129,10 @@ export function getAge() {
     return age;
 }
 
-export async function getHelloFollowup(userId) {
+export async function getHelloFollowup(userId: string) {
     if (Math.random() < 0.5) return null;
     const randomFollowup = await getRandomMessage("hello_followup");
     if (userId === process.env.OWNER2_ID) {
-        // Replace with your Discord user ID
         const options = ["Lefthand", "Righthand", randomFollowup.content];
         return options[Math.floor(Math.random() * options.length)];
     } else {
@@ -144,25 +161,25 @@ const categoryGroups = {
     ]),
 };
 
-function normaliseCategory(category) {
+function normaliseCategory(category: string) {
     for (const [groupName, set] of Object.entries(categoryGroups)) {
         if (set.has(category)) return groupName;
     }
     return category;
 }
 
-function sampleArray(arr, n) {
+function sampleArray(arr: string[], n: number): string[] {
     const copy = [...arr];
-    const result = [];
+    const result: string[] = [];
     const size = Math.min(n, copy.length);
     for (let i = 0; i < size; i++) {
         const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
+        result.push(copy.splice(idx, 1)[0] as string);
     }
     return result;
 }
 
-function scoreMessage(message, prompt) {
+function scoreMessage(message: string, prompt: string) {
     const stopWords = new Set([
         "the",
         "a",
@@ -199,7 +216,7 @@ function scoreMessage(message, prompt) {
     return score;
 }
 
-function repetitionPenalty(message) {
+function repetitionPenalty(message: string) {
     const words = message.toLowerCase().split(/\W+/).filter(Boolean);
 
     const freq = new Map();
@@ -222,7 +239,7 @@ function repetitionPenalty(message) {
     return 1;
 }
 
-function lengthPenalty(message) {
+function lengthPenalty(message: string) {
     const len = message.length;
 
     if (len < 50) return 1;
@@ -234,14 +251,14 @@ function lengthPenalty(message) {
     return 0.2;
 }
 
-function isLikelyLyrics(text) {
+function isLikelyLyrics(text: string) {
     const words = text.toLowerCase().split(/\W+/).filter(Boolean);
     const uniqueRatio = new Set(words).size / words.length;
     const lineCount = text.split("\n").length;
     return lineCount > 6 && uniqueRatio < 0.55;
 }
 
-function pickRelevant(messages, prompt, limit) {
+function pickRelevant(messages: string[], prompt: string, limit: number): string[] {
     const scored = messages.map((message) => {
         const baseScore = scoreMessage(message, prompt);
         const repetition = repetitionPenalty(message);
@@ -265,11 +282,17 @@ function pickRelevant(messages, prompt, limit) {
     return [...top, ...random];
 }
 
-export async function getSampledMessages({ prompt, samplePerCategory = 20 }) {
-    const grouped = {};
-    const result = [];
+export async function getSampledMessages({
+    prompt,
+    samplePerCategory = 20,
+}: {
+    prompt: string;
+    samplePerCategory: number;
+}) {
+    const grouped: CategoryMap = {};
+    const result: string[] = [];
 
-    const { rows } = await db.query(`
+    const { rows } = await db.query<MessageRow>(`
         SELECT mc.name AS category, m.content
         FROM messages m
         JOIN message_categories mc ON m.category_id = mc.id

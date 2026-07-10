@@ -13,9 +13,9 @@ This bot was made as an inside-joke, and it can be pretty offensive, so there's 
 
 (Of course, we don't condone anything he says. This is purely satire, and it does not reflect our personal views.)
 
-It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, TTS, and hell, it's even got a LLM! 
+It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, and hell, it's even got a LLM! 
 
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed seperately, and it is admittedly far more outdated than Andrew.)
+And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed separately, and it is admittedly far more outdated than Andrew.)
 
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
@@ -37,31 +37,25 @@ You WILL need to have a ``.env`` file and have it look like this:
 ```dotenv
 DISCORD_TOKEN=YOURTOKENHERE
 DISCORD_CLIENT_ID=YOURIDHERE
-BRAVE_API_KEY=YOURKEYHERE
-GOOGLE_API_KEY=YOURKEYHERE
-GOOGLE_CSE_ID=YOURIDHERE
 GEMINI_API_KEY=YOURKEYHERE
 MISTRAL_API_KEY=YOURKEYHERE
 NVIDIA_API_KEY=YOURKEYHERE
-ELEVENLABS_API_KEY=YOURKEYHERE
+KLIPY_API_KEY=YOURKEYHERE
 SAUCENAO_API_KEY=YOURKEYHERE
 LASTFM_API_KEY=YOURKEYHERE
 LASTFM_AUTH_SERVER=https://
 DATABASE_URL=postgresql://
 ```
 
-The bot uses Brave for normal web searches and Google for its image searches, if you don't want to use Google, then you'll have to edit ``gpt.js``, ``gptimage.js`` and ``messageCreate.js`` and change all instances of ``googleImageSearch`` to ``braveImageSearch``. If you don't want the bot to have web search capabilities, then you gotta delete the files related to that and also remove the associated code in those files. That would probably be a bit more of a hassle than just creating a Brave Search API account. The AI will still work without an API key provided for web searches, but you will see errors in the console, and the bot will be a bit dumber I suppose.
-
 If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
 
-Speaking of which... we now added ``aiSettings.js`` which makes it a lot easier to work with other AI services and switch models quickly!
+Speaking of which... ``aiSettings.js`` makes it a lot easier to work with other AI services and switch models quickly!
 
-I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini and provides a wide range of models. However, either option is good. 
-Openrouter is also free to use but it does have its limits, and OpenAI is by far the worst and most expensive option.
+I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini and provides a wide range of models. However, either option is good. OpenAI however is by far the worst and most expensive option.
 
 Also, 🖕 Chutes for being no longer free.
 
-Currently, the bot is now using Nvidia by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
+Currently, the bot is now using Gemini by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
 
 ## RUNNING WITH LOCAL AI
 Install a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Follow KoboldCPP's guide on getting everything set up. The most important part is obtaining an [AI model](https://huggingface.co/models?library=gguf&sort=trending). Make sure that you download a GGUF file and at least something that your PC can handle with ease (that means you can't just simply download Deepseek. If you want to use that, please use a service that provides it, like Chutes).

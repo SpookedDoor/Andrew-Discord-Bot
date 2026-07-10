@@ -1,7 +1,7 @@
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-const requestOptions = {
+const requestOptions: RequestInit = {
     method: "GET",
     headers: myHeaders,
     redirect: "follow",

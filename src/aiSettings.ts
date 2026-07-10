@@ -10,7 +10,7 @@ const baseURL = "https://generativelanguage.googleapis.com/v1beta/openai/";
 // If using a different online AI service, change this to your API key stored in ".env"
 // Examples: process.env.GEMINI_API_KEY, process.env.MISTRAL_API_KEY
 // If using local AI, change this to "0", although it doesn't really matter and you can leave it as-is
-const apiKey = process.env.GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY as string;
 
 // If using koboldcpp, change ALL of these to "koboldcpp"
 // For vision to work locally, download the correct mmproj from https://huggingface.co/koboldcpp/mmproj/tree/main

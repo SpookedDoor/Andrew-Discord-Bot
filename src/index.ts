@@ -2,7 +2,7 @@ import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import loadCommands from "./loadCommands.ts";
+import loadCommands from "./loadCommands.js";
 dotenv.config({ quiet: true });
 
 const client = new Client({

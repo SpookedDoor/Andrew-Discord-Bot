@@ -6,6 +6,7 @@ import { cleanReply } from "../../cleanReply.js";
 import { addHistory, getFormattedHistory } from "../../dbHistoryUtils.js";
 import { aiGif } from "../../gifs.js";
 import { createIdentityContext } from "../../userIdentities.js";
+import type OpenAI from "openai";
 
 export async function generateChatCompletion(
     serverId: string | null,
@@ -19,7 +20,7 @@ export async function generateChatCompletion(
     const history = await getFormattedHistory(serverId, userId, 10);
     const { displayName, identityContext } = await createIdentityContext(userId, username, client);
 
-    const messages = [
+    const messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
         { role: "system", content: `${await getContent(finalPrompt)}\n\n${identityContext}` },
         ...history,
         { role: "user", content: displayName + ": " + finalPrompt },

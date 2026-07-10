@@ -1,7 +1,7 @@
-import { Events, MessageFlags } from "discord.js";
+import { AttachmentBuilder, Events, Message, MessageFlags } from "discord.js";
 import { aiAttachment } from "../aiAttachments.js";
 import { gptModel, gptimageModel } from "../aiSettings.js";
-import { generateChatCompletion } from "../commands/utility/gpt.ts";
+import { generateChatCompletion } from "../commands/utility/gpt.js";
 import { generateImagePrompt } from "../commands/utility/gptimage.js";
 import db from "../db.js";
 import { aiGif } from "../gifs.js";
@@ -9,13 +9,14 @@ import { getHelloFollowup, getRandomMessage } from "../messageDatabase.js";
 
 export default {
     name: Events.MessageCreate,
-    async execute(message) {
+    async execute(message: Message) {
         try {
             if (message.author.bot || message.system) return;
             if (message.flags.has(MessageFlags.HasSnapshot)) return;
+            if (!message.inGuild()) return;
 
             console.log(
-                `Message from ${message.author.tag} in ${message.guild.name} - ${message.channel.name}: ${message.content || "[No text]"}`,
+                `Message from ${message.author.tag} in ${message.guild?.name} - ${message.channel.name}: ${message.content || "[No text]"}`,
             );
             if (message.attachments.size > 0)
                 console.log(`Attachments: ${message.attachments.map((a) => a.url).join(", ")}`);
@@ -100,28 +101,22 @@ export default {
                 (r) => r && r.keyword && lowerCaseMessage.includes(String(r.keyword).toLowerCase()),
             );
 
-            try {
-                const botWasMentioned = message.mentions.has(message.client.user);
-                const triggerWords = ["andrew", "androo"];
-                const triggeredByKeyword = triggerWords.some((word) =>
-                    lowerCaseMessage.includes(word),
-                );
-                const isReplyToBot =
-                    message.reference &&
-                    (await message.fetchReference())?.author?.id === message.client.user.id;
-                const triggeredByRealAndrew =
-                    message.author.id === "1014404029146726460" && lowerCaseMessage.includes("bot");
+            const botWasMentioned = message.mentions.has(message.client.user);
+            const triggerWords = ["andrew", "androo"];
+            const triggeredByKeyword = triggerWords.some((word) => lowerCaseMessage.includes(word));
+            const isReplyToBot =
+                message.reference &&
+                (await message.fetchReference())?.author?.id === message.client.user.id;
+            const triggeredByRealAndrew =
+                message.author.id === "1014404029146726460" && lowerCaseMessage.includes("bot");
+            const triggered =
+                botWasMentioned || triggeredByKeyword || isReplyToBot || triggeredByRealAndrew;
 
-                if (
-                    !(
-                        botWasMentioned ||
-                        triggeredByKeyword ||
-                        isReplyToBot ||
-                        triggeredByRealAndrew
-                    )
-                ) {
+            if (!triggered) {
+                try {
                     let categoryMessages = "";
                     const attachments = [];
+
                     if (matchedKeywords.length > 0) {
                         const seen = new Set();
                         for (const k of matchedKeywords) {
@@ -130,10 +125,10 @@ export default {
                             seen.add(keyword);
 
                             if (k.response.length === 0) {
-                                msg = await getRandomMessage(keyword);
+                                const msg = await getRandomMessage(keyword);
                                 if (msg.content === null) {
                                     const attachment = await aiAttachment(keyword, 1);
-                                    attachments.push(...attachment);
+                                    if (attachment) attachments.push(...attachment);
                                     continue;
                                 }
                                 categoryMessages += `${msg.content}\n`;
@@ -143,13 +138,21 @@ export default {
                         }
                     }
 
-                    const payload = {};
+                    type Payload = {
+                        content?: string;
+                        files?: AttachmentBuilder[];
+                    };
+
+                    const payload: Payload = {};
                     if (categoryMessages.length > 0) payload.content = categoryMessages;
                     if (attachments.length > 0) payload.files = attachments;
                     if (Object.keys(payload).length > 0) await message.channel.send(payload);
+                } catch (err) {
+                    console.error(err);
+                    message.reply("Failed to send message");
                 }
-
-                if (botWasMentioned || triggeredByKeyword || isReplyToBot) {
+            } else {
+                try {
                     await message.channel.sendTyping();
 
                     let prompt = message.content.replace(/<@!?(\d+)>/, "").trim();
@@ -158,7 +161,7 @@ export default {
                     let imageUrl = null;
                     let reply;
 
-                    if (message.attachments.size > 0) imageUrl = message.attachments.first().url;
+                    if (message.attachments.size > 0) imageUrl = message.attachments.first()?.url;
                     if (message.reference) {
                         try {
                             const repliedMessage = await message.fetchReference();
@@ -166,7 +169,7 @@ export default {
                                 repliedMessage.attachments.size > 0 &&
                                 repliedMessage.author.id !== "1357616229694705796"
                             ) {
-                                imageUrl = repliedMessage.attachments.first().url;
+                                imageUrl = repliedMessage.attachments.first()?.url;
                             }
                             if (repliedMessage.content) {
                                 finalPrompt =
@@ -220,10 +223,10 @@ export default {
                         ? await message.reply({ content: reply, files: attachments })
                         : await message.reply(reply);
                     if (gif) await message.channel.send(gif);
+                } catch (error) {
+                    console.error(error);
+                    message.reply("Failed to generate AI response");
                 }
-            } catch (error) {
-                console.error(error);
-                message.reply("Failed to generate AI response");
             }
         } catch (error) {
             console.error("Error in messageCreate event:", error);

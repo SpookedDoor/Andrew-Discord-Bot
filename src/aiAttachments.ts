@@ -2,7 +2,7 @@ import { AttachmentBuilder } from "discord.js";
 import path from "path";
 import db from "./db.js";
 
-export async function aiAttachment(responseText, probability = 0.25) {
+export async function aiAttachment(responseText: string, probability = 0.25) {
     const __dirname = import.meta.dirname;
     const lowerText = responseText.toLowerCase();
     const attachments = [];

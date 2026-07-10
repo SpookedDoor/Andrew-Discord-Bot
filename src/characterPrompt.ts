@@ -1,6 +1,6 @@
 import { getAge, getSampledMessages } from "./messageDatabase.js";
 
-export default async function getContent(prompt) {
+export default async function getContent(prompt: string) {
     const sampledMessages = await getSampledMessages({ prompt, samplePerCategory: 20 });
     const memoryDump = sampledMessages.join("\n");
 
