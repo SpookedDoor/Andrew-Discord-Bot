@@ -5,8 +5,8 @@ type UserRow = {
     id: string;
     username: string;
     display_name: string;
-    nicknames: string[];
-    traits: string[];
+    nicknames: string;
+    traits: string;
     is_creator: boolean;
     is_god: boolean;
 };
@@ -20,6 +20,15 @@ type User = {
     isGod: boolean;
 };
 
+function parseList(value: string | null): string[] {
+    return value
+        ? value
+              .split(",")
+              .map((x) => x.trim())
+              .filter(Boolean)
+        : [];
+}
+
 async function getUser(id: string): Promise<User | null> {
     const { rows } = await db.query<UserRow>(
         `SELECT id, username, display_name, nicknames, traits, is_creator, is_god FROM users WHERE id = $1`,
@@ -31,9 +40,9 @@ async function getUser(id: string): Promise<User | null> {
 
     return {
         id: row.id,
-        usernames: [row.username, ...row.nicknames].filter(Boolean),
+        usernames: [row.username, ...parseList(row.nicknames)].filter(Boolean),
         displayName: row.display_name,
-        traits: row.traits,
+        traits: parseList(row.traits),
         isCreator: row.is_creator,
         isGod: row.is_god,
     };
@@ -47,9 +56,9 @@ async function getUsers(): Promise<User[]> {
     return rows.map((row) => {
         return {
             id: row.id,
-            usernames: [row.username, ...row.nicknames].filter(Boolean),
+            usernames: [row.username, ...parseList(row.nicknames)].filter(Boolean),
             displayName: row.display_name,
-            traits: row.traits,
+            traits: parseList(row.traits),
             isCreator: row.is_creator,
             isGod: row.is_god,
         };
