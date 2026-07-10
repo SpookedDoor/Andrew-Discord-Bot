@@ -1,5 +1,10 @@
-import axios from "axios";
-import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import { search } from "booru";
+import {
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from "discord.js";
 
 const MIN_SCORE = 100;
 const BLACKLISTED_TAGS = [
@@ -24,6 +29,7 @@ const BLACKLISTED_TAGS = [
     "gore",
     "guro",
     "hairy_nipples",
+    "horsecock",
     "horse_penis",
     "hyper",
     "hyper_penis",
@@ -55,29 +61,27 @@ export default {
         .addStringOption((option) =>
             option
                 .setName("tags")
-                .setDescription("Tags to search for (space-separated)")
+                .setDescription("Tags to search for (comma-separated)")
                 .setRequired(true)
                 .setAutocomplete(true),
         ),
-    async autocomplete(interaction) {
+    async autocomplete(interaction: AutocompleteInteraction) {
         const focusedValue = interaction.options.getFocused();
         if (!focusedValue) return interaction.respond([]);
-        const parts = focusedValue.split(" ");
-        const lastTag = parts.pop();
-        const prefix = parts.join(" ");
+        const parts = focusedValue.split(",");
+        const lastTag = parts.pop()?.trim() as string;
+        const prefix = parts.join(", ");
 
         try {
-            const response = await axios.get(
+            const res: { name: string }[] = await fetch(
                 `https://danbooru.donmai.us/tags.json?search[name_matches]=${encodeURIComponent(lastTag)}*&search[order]=count`,
-            );
-            let suggestions = response.data;
-
-            suggestions = suggestions.filter((s) => !BLACKLISTED_TAGS.includes(s.name));
+            ).then((r) => r.json());
+            const tags = res.filter((t) => !BLACKLISTED_TAGS.includes(t.name));
 
             await interaction.respond(
-                suggestions.slice(0, 10).map((tag) => ({
-                    name: prefix ? `${prefix} ${tag.name}` : tag.name,
-                    value: prefix ? `${prefix} ${tag.name}` : tag.name,
+                tags.slice(0, 10).map((t) => ({
+                    name: prefix ? `${prefix}, ${t.name}` : t.name,
+                    value: prefix ? `${prefix}, ${t.name}` : t.name,
                 })),
             );
         } catch (err) {
@@ -85,43 +89,34 @@ export default {
             return interaction.respond([]);
         }
     },
-    async execute(interaction) {
-        const tags = interaction.options.getString("tags");
-        const url = `https://danbooru.donmai.us/posts.json?tags=${encodeURIComponent(tags + " order:score")}&limit=200`;
+    async execute(interaction: ChatInputCommandInteraction) {
+        const tags = interaction.options.getString("tags") as string;
 
         try {
-            const response = await axios.get(url);
-            let data = response.data;
+            const posts = await search("danbooru", tags.split(","), { limit: 100, random: true });
 
-            if (!data || data.length === 0)
+            if (posts.length === 0) {
                 return interaction.reply({
                     content: "❌ No images found for the given tags.",
                     flags: MessageFlags.Ephemeral,
                 });
+            }
 
-            data = data.filter((post) => {
-                if (!post || !post.tag_string) return false;
-
-                const tagsArray = post.tag_string.split(" ");
-                const hasBlacklistedTag = tagsArray.some((tag) => BLACKLISTED_TAGS.includes(tag));
-                const passesScore = parseInt(post.score, 10) >= MIN_SCORE;
-
+            const filtered = posts.filter((post) => {
+                if (!post || !post.tags) return false;
+                const hasBlacklistedTag = post.tags.some((tag) => BLACKLISTED_TAGS.includes(tag));
+                const passesScore = post.score >= MIN_SCORE;
                 return !hasBlacklistedTag && passesScore;
             });
 
-            if (data.length === 0)
+            if (filtered.length === 0) {
                 return interaction.reply({
                     content: "❌ No suitable images found after filtering.",
                     flags: MessageFlags.Ephemeral,
                 });
-
-            let posts = [];
-            for (let i = 0; i < 5 && data.length > 0; i++) {
-                const post = data[Math.floor(Math.random() * data.length)];
-                if (!posts.includes(post)) posts.push(post);
             }
 
-            const urls = posts.map((post) => post.file_url);
+            const urls = filtered.slice(0, 5).map((post) => post.fileUrl);
             return interaction.reply({ content: urls.join("\n") });
         } catch (err) {
             console.error("Danbooru fetch error:", err);
