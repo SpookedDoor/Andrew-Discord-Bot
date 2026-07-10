@@ -1,8 +1,8 @@
-import { Events, MessageFlags } from "discord.js";
+import { BaseInteraction, Events, MessageFlags } from "discord.js";
 
 export default {
     name: Events.InteractionCreate,
-    async execute(interaction) {
+    async execute(interaction: BaseInteraction) {
         if (!interaction.isChatInputCommand()) return;
         const command = interaction.client.commands.get(interaction.commandName);
 

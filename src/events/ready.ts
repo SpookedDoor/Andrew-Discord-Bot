@@ -1,12 +1,12 @@
-import { ActivityType, Events } from "discord.js";
+import { ActivityType, Client, Events } from "discord.js";
 import db from "../database/db.js";
 import { getMessages, getRandomMessage } from "../database/messageDatabase.js";
 
 export default {
     name: Events.ClientReady,
     once: true,
-    async execute(client) {
-        console.log(`Ready! Logged in as ${client.user.tag}`);
+    async execute(client: Client) {
+        console.log(`Ready! Logged in as ${client.user?.tag}`);
 
         const activities = [
             { name: "Watamote movie", type: ActivityType.Watching },
@@ -26,8 +26,8 @@ export default {
         let currentActivityIndex = 0;
 
         const updateActivity = () => {
-            const activity = activities[currentActivityIndex];
-            client.user.setActivity(activity.name, { type: activity.type });
+            const activity = activities[currentActivityIndex]!;
+            client.user?.setActivity(activity.name, { type: activity.type });
             currentActivityIndex = (currentActivityIndex + 1) % activities.length;
         };
 
@@ -36,11 +36,11 @@ export default {
 
         const updateAvatar = async () => {
             const andrew = await client.users.fetch("1014404029146726460");
-            const avatarURL = andrew.displayAvatarURL({ size: 1024, dynamic: true });
+            const avatarURL = andrew.displayAvatarURL({ size: 1024 });
             const response = await fetch(avatarURL);
             const arrayBuffer = await response.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
-            client.user.setAvatar(buffer);
+            client.user?.setAvatar(buffer);
         };
 
         try {
@@ -61,7 +61,7 @@ export default {
                     "SELECT channel_id FROM default_channels WHERE guild_id = $1",
                     [guild.id],
                 );
-                if (res.rowCount > 0) channel = guild.channels.cache.get(res.rows[0].channel_id);
+                if (res.rowCount! > 0) channel = guild.channels.cache.get(res.rows[0].channel_id);
                 if (!channel) channel = guild.channels.cache.find((ch) => ch.type === 0);
 
                 try {
@@ -84,7 +84,7 @@ export default {
                     const category = pickCategory();
                     if (category === "general") {
                         const msg = await getRandomMessage(category);
-                        if (msg.files.length > 0)
+                        if (msg.files && msg.files.length > 0)
                             console.log(
                                 `\nRandom message "${msg.content}" with attachment "${msg.files[0]}" from category "${category}" sent to guild: ${guild.name}`,
                             );
@@ -92,13 +92,24 @@ export default {
                             console.log(
                                 `\nRandom message "${msg.content}" from category "${category}" sent to guild: ${guild.name}`,
                             );
-                        await channel.send(msg);
+                        if (channel?.isSendable()) {
+                            await channel.send({
+                                ...(msg.content ? { content: msg.content } : {}),
+                                ...(msg.files?.length ? { files: msg.files } : {}),
+                            });
+                        }
                     } else if (category === "batch") {
                         const { rows } = await db.query(
                             "SELECT name FROM message_categories WHERE name LIKE 'batch%' ORDER BY RANDOM() LIMIT 1;",
                         );
                         const msgs = await getMessages(rows[0].name);
-                        for (const m of msgs) await channel.send(m);
+                        for (const m of msgs)
+                            if (channel?.isSendable()) {
+                                await channel.send({
+                                    ...(m.content ? { content: m.content } : {}),
+                                    ...(m.files?.length ? { files: m.files } : {}),
+                                });
+                            }
                         console.log(
                             `\nBatch of ${msgs.length} messages from category "${rows[0].name}" sent to guild: ${guild.name}`,
                         );
@@ -111,7 +122,7 @@ export default {
 							LIMIT 1;
 						`);
                         const msg = await getRandomMessage(rows[0].name);
-                        if (msg.files.length > 0)
+                        if (msg.files && msg.files.length > 0)
                             console.log(
                                 `\nRandom message "${msg.content}" with attachment "${msg.files[0]}" from category "${rows[0].name}" sent to guild: ${guild.name}`,
                             );
@@ -119,7 +130,12 @@ export default {
                             console.log(
                                 `\nRandom message "${msg.content}" from category "${rows[0].name}" sent to guild: ${guild.name}`,
                             );
-                        await channel.send(msg);
+                        if (channel?.isSendable()) {
+                            await channel.send({
+                                ...(msg.content ? { content: msg.content } : {}),
+                                ...(msg.files?.length ? { files: msg.files } : {}),
+                            });
+                        }
                     }
                 } catch (err) {
                     console.error(`Error sending message to guild: ${guild.name}`, err);
@@ -132,7 +148,6 @@ export default {
         const scheduleRandomMessage = () => {
             const randomMinutes = Math.floor(Math.random() * (720 - 360 + 1)) + 360;
             const randomDelay = randomMinutes * 60 * 1000;
-            const nextMessageTimestamp = Date.now() + randomDelay;
             console.log(`Next message will be sent in ${Math.round(randomDelay / 60000)} minutes.`);
             setTimeout(sendRandomMessage, randomDelay);
         };
