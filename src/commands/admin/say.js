@@ -1,5 +1,5 @@
 import { MessageFlags, PermissionsBitField, SlashCommandBuilder } from "discord.js";
-import { getAge } from "../../utils/messageDatabase.js";
+import { getAge } from "../../database/messageDatabase.js";
 
 export default {
     data: new SlashCommandBuilder()

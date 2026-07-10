@@ -1,26 +1,33 @@
-import { AttachmentBuilder, SlashCommandBuilder } from "discord.js";
+import {
+    Attachment,
+    AttachmentBuilder,
+    ChatInputCommandInteraction,
+    Client,
+    SlashCommandBuilder,
+    TextChannel,
+} from "discord.js";
 import path from "path";
-import { aiAttachment } from "../../aiAttachments.js";
 import { gptModel, gptimageModel, openai } from "../../ai/aiSettings.js";
 import getContent from "../../ai/characterPrompt.js";
-import { cleanReply } from "../../utils/cleanReply.js";
-import { addHistory, getFormattedHistory } from "../../dbHistoryUtils.js";
+import { addHistory, getFormattedHistory } from "../../database/dbHistoryUtils.js";
 import { aiGif } from "../../services/gifs.js";
 import { searchSauceNAO } from "../../services/saucenao.js";
+import { aiAttachment } from "../../utils/attachments.js";
+import { cleanReply } from "../../utils/cleanReply.js";
 import { createIdentityContext } from "../../utils/userIdentities.js";
 
 export async function describeImage(
     prompt = "Describe this image",
-    imageUrl,
-    model,
-    saucenaoResults,
+    imageUrl: string,
+    model: string,
+    saucenaoResults: string,
 ) {
     if (prompt == "Hey Andrew, describe this image and tell me what you think of this?")
         prompt = "Describe this image";
     let cleanPrompt;
     const referencedMatch = prompt.match(/(Referenced message from Andrew:[^\n]*)/i);
     if (referencedMatch) {
-        const referenced = referencedMatch[1];
+        const referenced = referencedMatch[1] as string;
         let rest = prompt.replace(referenced, "");
         rest = rest
             .replace(/andrew/gi, "")
@@ -64,13 +71,13 @@ export async function describeImage(
 }
 
 export async function generateImagePrompt(
-    serverId,
-    userId,
-    prompt,
-    finalPrompt,
-    imageUrl,
-    username,
-    client,
+    serverId: string | null,
+    userId: string,
+    prompt: string,
+    finalPrompt: string,
+    imageUrl: string,
+    username: string,
+    client: Client,
 ) {
     const results = await searchSauceNAO(imageUrl);
     let saucenaoResults = "";
@@ -132,8 +139,8 @@ export default {
         .addStringOption((option) =>
             option.setName("prompt").setDescription("Text prompt").setRequired(false),
         ),
-    async execute(interaction) {
-        const imageAttachment = interaction.options.getAttachment("image");
+    async execute(interaction: ChatInputCommandInteraction) {
+        const imageAttachment = interaction.options.getAttachment("image") as Attachment;
         const imageUrl = imageAttachment.url;
         const prompt =
             interaction.options.getString("prompt") ||
@@ -143,10 +150,15 @@ export default {
         await interaction.deferReply();
         try {
             console.log(
-                `Model used: ${model}, Location: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}, Prompt: ${prompt}\nImage URL: ${imageUrl}`,
+                `Model used: ${model}, Location: ${
+                    interaction.guild && interaction.channel instanceof TextChannel
+                        ? `${interaction.guild.name} - ${interaction.channel.name}`
+                        : `${interaction.user.username} - DM`
+                }, Prompt: ${prompt}\nImage URL: ${imageUrl}`,
             );
+            
             const reply = await generateImagePrompt(
-                interaction.guild?.id,
+                interaction.guild?.id as string | null,
                 interaction.user.id,
                 prompt,
                 prompt,
@@ -158,7 +170,7 @@ export default {
             const response = await fetch(imageUrl);
             const arrayBuffer = await response.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
-            let ext = path.extname(imageUrl.split("?")[0]).toLowerCase();
+            let ext = path.extname(imageUrl.split("?")[0] as string).toLowerCase();
             if (!ext || ![".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(ext)) ext = ".png";
             const originalImageAttachment = new AttachmentBuilder(buffer, { name: `image${ext}` });
 
@@ -168,7 +180,7 @@ export default {
 
             await interaction.editReply({ content: reply, files });
             if (gif)
-                interaction.guild
+                interaction.channel?.isSendable()
                     ? await interaction.channel.send(gif)
                     : await interaction.followUp(gif);
         } catch (err) {

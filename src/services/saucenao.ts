@@ -1,4 +1,4 @@
-type SauceNAOResults = {
+export type SauceNAOResults = {
     similarity: number;
     title: string;
     author: string;

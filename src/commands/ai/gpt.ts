@@ -88,13 +88,9 @@ export default {
                 : await interaction.editReply(reply);
 
             if (gif) {
-                if (interaction.guild) {
-                    if (interaction.channel?.isSendable()) {
-                        await interaction.channel.send(gif);
-                    }
-                } else {
-                    await interaction.followUp(gif);
-                }
+                interaction.channel?.isSendable()
+                    ? await interaction.channel.send(gif)
+                    : await interaction.followUp(gif);
             }
         } catch (err) {
             console.error(err);
