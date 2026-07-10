@@ -3,7 +3,6 @@ import path from "path";
 import db from "../database/db.js";
 
 export async function aiAttachment(responseText: string, probability = 0.25) {
-    const __dirname = import.meta.dirname;
     const lowerText = responseText.toLowerCase();
     const attachments = [];
 
@@ -15,8 +14,11 @@ export async function aiAttachment(responseText: string, probability = 0.25) {
                 [trigger.category],
             );
 
-            if (rows.length > 0)
-                attachments.push(new AttachmentBuilder(path.join(__dirname, rows[0].file_path)));
+            if (rows.length > 0) {
+                attachments.push(
+                    new AttachmentBuilder(path.join(process.cwd(), "media", rows[0].file_path)),
+                );
+            }
         }
     }
 
