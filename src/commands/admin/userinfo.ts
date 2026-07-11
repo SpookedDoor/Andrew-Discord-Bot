@@ -1,4 +1,9 @@
-import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    GuildMember,
+    MessageFlags,
+    SlashCommandBuilder,
+} from "discord.js";
 import { findUserIdentity } from "../../utils/userIdentities.js";
 
 export default {
@@ -17,7 +22,7 @@ export default {
                 .setDescription("Enter a user ID to get info about")
                 .setRequired(false),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
         if (!allowedIds.includes(interaction.user.id)) {
             return await interaction.reply({
@@ -26,11 +31,11 @@ export default {
             });
         }
 
-        let userId;
+        let userId: string;
         if (interaction.options.getMember("user"))
-            userId = interaction.options.getMember("user").id;
+            userId = (interaction.options.getMember("user") as GuildMember).id;
         else if (interaction.options.getString("userid"))
-            userId = interaction.options.getString("userid");
+            userId = interaction.options.getString("userid") as string;
         else userId = interaction.user.id;
 
         const identity = await findUserIdentity(userId, interaction.client);
@@ -39,11 +44,12 @@ export default {
         info += `ID: ${identity?.id || userId || "unknown"}\n`;
         info += `Display Name: ${identity?.displayName || "unknown"}\n`;
         info += `Usernames/Nicknames: ${identity?.usernames && identity.usernames.length ? identity.usernames.join(", ") : "unknown"}\n`;
-        if (identity?.traits && identity.traits.length)
-            info += `Traits: ${identity.traits.join(", ")}\n`;
-        if (identity?.isGod) info += `Tag: God\n`;
-        if (identity?.isCreator) info += `Tag: Creator\n`;
-        if (identity?.note) info += `Note: ${identity.note}\n`;
+        if ("traits" in identity) {
+            if (identity?.traits && identity.traits.length)
+                info += `Traits: ${identity.traits.join(", ")}\n`;
+            if (identity?.isGod) info += `Tag: God\n`;
+            if (identity?.isCreator) info += `Tag: Creator\n`;
+        }
 
         await interaction.reply({ content: info, flags: MessageFlags.Ephemeral });
     },

@@ -1,4 +1,12 @@
-import { MessageFlags, PermissionsBitField, SlashCommandBuilder } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    PermissionsBitField,
+    SlashCommandBuilder,
+    TextChannel,
+    type InteractionReplyOptions,
+    type MessageCreateOptions,
+} from "discord.js";
 import { getAge } from "../../database/messageDatabase.js";
 
 export default {
@@ -27,7 +35,7 @@ export default {
                     subcommand.setName("age").setDescription("Say my age"),
                 ),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
             if (interaction.options.getSubcommand(false) === "name") {
                 await interaction.reply(
@@ -60,7 +68,7 @@ export default {
             const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
             const permission =
                 allowedIds.includes(interaction.user.id) ||
-                interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) ||
+                interaction.memberPermissions?.has(PermissionsBitField.Flags.ManageGuild) ||
                 !interaction.guild;
 
             if (!permission) {
@@ -70,7 +78,8 @@ export default {
                 });
             }
 
-            let message = interaction.options.getString("text");
+            let message: string | MessageCreateOptions | null =
+                interaction.options.getString("text");
             const attachment = interaction.options.getAttachment("image");
             if (!message && !attachment) {
                 return await interaction.reply({
@@ -80,17 +89,22 @@ export default {
             }
 
             console.log(
-                `/say command used by: ${interaction.user.username}\nLocation: ${interaction.guild ? `${interaction.guild.name} - ${interaction.channel.name}` : `${interaction.user.username} - DM`}\nMessage: ${message}`,
+                `/say command used by: ${interaction.user.username}\nLocation: ${
+                    interaction.guild && interaction.channel instanceof TextChannel
+                        ? `${interaction.guild.name} - ${interaction.channel.name}`
+                        : `${interaction.user.username} - DM`
+                }\nMessage: ${message}`,
             );
 
             if (attachment) {
                 console.log(`Attachment: ${attachment.url}`);
-                message = { content: message, files: [attachment] };
+                message = { content: message as string, files: [attachment] };
             }
 
+            if (!message) throw new Error("No message");
             await interaction.reply({ content: `Message sent!`, flags: MessageFlags.Ephemeral });
-            if (interaction.guild) return await interaction.channel.send(message);
-            else return await interaction.followUp(message);
+            if (interaction.channel?.isSendable()) return await interaction.channel.send(message);
+            else return await interaction.followUp(message as InteractionReplyOptions);
         } catch (error) {
             console.error(error);
             await interaction.reply({

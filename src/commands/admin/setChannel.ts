@@ -1,4 +1,4 @@
-import { MessageFlags, PermissionsBitField, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, PermissionsBitField, SlashCommandBuilder } from "discord.js";
 import db from "../../database/db.js";
 
 export default {
@@ -11,8 +11,9 @@ export default {
                 .setDescription("The channel to send random messages to (leave empty to clear)")
                 .setRequired(false),
         ),
-    async execute(interaction) {
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
+    async execute(interaction: ChatInputCommandInteraction) {
+        if (!interaction.guild) throw new Error("Not a guild");
+        if (!interaction.memberPermissions?.has(PermissionsBitField.Flags.ManageGuild)) {
             await interaction.reply({
                 content: "You do not have permission to use this command.",
                 flags: MessageFlags.Ephemeral,
@@ -31,7 +32,7 @@ export default {
             });
         }
 
-        if (channel.type !== 0) {
+        if (channel && channel.type !== 0) {
             // 0 = GuildText
             return await interaction.reply({
                 content: "Please select a text channel.",

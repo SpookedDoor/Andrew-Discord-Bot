@@ -1,4 +1,9 @@
-import { MessageFlags, PermissionsBitField, SlashCommandBuilder } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    MessageFlags,
+    PermissionsBitField,
+    SlashCommandBuilder,
+} from "discord.js";
 import db from "../../database/db.js";
 
 export default {
@@ -13,11 +18,12 @@ export default {
                     option.setName("disabled").setDescription("Default: false").setRequired(true),
                 ),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
+        if (!interaction.guild) throw new Error("Not a guild");
         const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
         const permission =
             allowedIds.includes(interaction.user.id) ||
-            interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild);
+            interaction.memberPermissions?.has(PermissionsBitField.Flags.ManageGuild);
 
         if (!permission) {
             await interaction.reply({
