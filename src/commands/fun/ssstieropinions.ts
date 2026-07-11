@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    SlashCommandBuilder,
+    type InteractionReplyOptions,
+} from "discord.js";
 import { getRandomMessage } from "../../database/messageDatabase.js";
 
 export default {
@@ -15,7 +19,9 @@ export default {
                         .setDescription("You're at risk of hearing lil Androo's opinions!"),
                 ),
         ),
-    async execute(interaction) {
-        await interaction.reply(await getRandomMessage("sss_tier_opinions"));
+    async execute(interaction: ChatInputCommandInteraction) {
+        await interaction.reply(
+            (await getRandomMessage("sss_tier_opinions")) as InteractionReplyOptions,
+        );
     },
 };

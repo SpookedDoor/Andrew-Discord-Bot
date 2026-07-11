@@ -1,4 +1,9 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    SlashCommandBuilder,
+    type InteractionReplyOptions,
+} from "discord.js";
 import db from "../../database/db.js";
 import { getMessages, getRandomMessage } from "../../database/messageDatabase.js";
 
@@ -23,7 +28,7 @@ export default {
                         ),
                 ),
         ),
-    async autocomplete(interaction) {
+    async autocomplete(interaction: AutocompleteInteraction) {
         try {
             const focusedOption = interaction.options.getFocused(true);
             if (focusedOption.name === "category") {
@@ -40,16 +45,16 @@ export default {
             console.error("Error during autocomplete:", error);
         }
     },
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
-            const category = interaction.options.getString("category");
+            const category = interaction.options.getString("category") as string;
             if (category.includes("batch")) {
                 let combined = "";
                 const messages = await getMessages(category);
                 for (const msg of messages) combined += `${msg.content}\n`;
                 await interaction.reply(combined);
             } else {
-                const message = await getRandomMessage(category);
+                const message = (await getRandomMessage(category)) as InteractionReplyOptions;
                 await interaction.reply(message);
             }
         } catch (error) {

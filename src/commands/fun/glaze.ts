@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    SlashCommandBuilder,
+    type InteractionReplyOptions,
+} from "discord.js";
 import { getRandomMessage } from "../../database/messageDatabase.js";
 
 export default {
@@ -20,11 +24,11 @@ export default {
                     { name: "Andrew Tate", value: "tate" },
                 ),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
             const goat = interaction.options.getString("goat");
-            const message = await getRandomMessage(goat);
-            if (!message || (!message.content && message.files.length === 0)) {
+            const message = (await getRandomMessage(goat)) as InteractionReplyOptions;
+            if (!message || (!message.content && message.files?.length === 0)) {
                 return interaction.reply("No messages found for that goat.");
             }
             await interaction.reply(message);

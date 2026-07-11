@@ -1,4 +1,4 @@
-import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from "discord.js";
 import db from "../../database/db.js";
 
 export default {
@@ -11,12 +11,13 @@ export default {
         .addBooleanOption((option) =>
             option.setName("mention").setDescription("Mention the user or not").setRequired(false),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
             const greetings = ["hiii", "hello", "hi"];
             const greeting = greetings[Math.floor(Math.random() * greetings.length)];
             if (interaction.options.getUser("user")) {
                 const user = interaction.options.getUser("user");
+                if (!user) throw new Error("User not found");
                 const { rows } = await db.query(
                     "SELECT id, username, display_name, is_god FROM users WHERE id = $1",
                     [user.id],
@@ -31,9 +32,10 @@ export default {
                     : displayName;
                 return await interaction.reply(`${greeting} ${displayName} ${title}`);
             } else {
+                const user = interaction.user;
                 const { rows } = await db.query(
                     "SELECT id, username, display_name, is_god FROM users WHERE id = $1",
-                    [interaction.user.id],
+                    [user.id],
                 );
                 const god = rows.find((r) => r.is_god);
                 const title = god ? (Math.random() < 0.5 ? "god" : "God") : "friend";
