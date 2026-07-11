@@ -119,11 +119,13 @@ export default {
             const urls = filtered.slice(0, 5).map((post) => post.fileUrl);
             return interaction.reply({ content: urls.join("\n") });
         } catch (err) {
-            console.error("Danbooru fetch error:", err);
-            return interaction.reply({
-                content: "⚠️ Error fetching data from Danbooru.",
-                flags: MessageFlags.Ephemeral,
-            });
+            console.error(err);
+            if (err instanceof Error) {
+                return interaction.reply({
+                    content: err.message,
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
         }
     },
 };
