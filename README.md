@@ -17,6 +17,10 @@ It features over 1000 (and counting!) nonsensical messages that sent at random i
 
 And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed separately, and it is admittedly far more outdated than Andrew.)
 
+Shit's now rewritten in TypeScript! 
+
+![peak](https://static2.klipy.com/ii/35ccce3d852f7995dd2da910f2abd795/38/e7/fq7QUIOR.gif)
+
 ------------------------------------------------------------------------------
 # REQUIREMENTS FOR THE FEW THAT NEED IT
 
@@ -49,25 +53,25 @@ DATABASE_URL=postgresql://
 
 If you are planning to use online AI services instead of KoboldCPP, you would of course need to put your API key in there. A ``template.env`` is provided which shows you how it's set up and all you really gotta do is add in your own token and API keys. OBVIOUSLY, remove ``template`` from ``template.env``.
 
-Speaking of which... ``aiSettings.js`` makes it a lot easier to work with other AI services and switch models quickly!
+Speaking of which... ``aiSettings.ts`` makes it easier to switch AI services and models quickly! It can be found in ``src/ai/``.
 
 I recommend using local AIs as there are practically no costs or limits (other than your GPU of course) but if you decide to go with an online AI service, I would highly recommend [Nvidia API](https://build.nvidia.com/models) or [Google Gemini](https://aistudio.google.com) as rate limits for free users are pretty decent for now. I would lean more on using Nvidia right now, as it is less censored than Gemini and provides a wide range of models. However, either option is good. OpenAI however is by far the worst and most expensive option.
 
 Also, 🖕 Chutes for being no longer free.
 
-Currently, the bot is now using Gemini by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.js``.
+Currently, the bot is now using Gemini by default. Obviously, you may prefer to use a local AI (if you have the power to do so) and that is all detailed below. If you prefer a different service, you can figure everything out yourself just by looking at ``aiSettings.ts``.
 
 ## RUNNING WITH LOCAL AI
 Install a local AI backend such as [KoboldCPP](https://github.com/LostRuins/koboldcpp). Follow KoboldCPP's guide on getting everything set up. The most important part is obtaining an [AI model](https://huggingface.co/models?library=gguf&sort=trending). Make sure that you download a GGUF file and at least something that your PC can handle with ease (that means you can't just simply download Deepseek. If you want to use that, please use a service that provides it, like Chutes).
 
 For vision to work locally, download the correct [mmproj](https://huggingface.co/koboldcpp/mmproj/tree/main). For example, if you are using a model based on Llama3, download the one that says Llama3, then you would insert it into Loaded Files > Vision mmproj.
 
-Once that is installed and running, make sure to set your ``baseURL`` in ``aiSettings.js``. It should look like:  
+Once that is installed and running, make sure to set your ``baseURL`` in ``aiSettings.ts``. It should look like:  
 ```js
 	baseURL: "http://localhost:5001/v1",
 	apiKey: "0"
 ```
-And make sure all model variables in ``aiSettings.js`` are set to ``"koboldcpp"``.
+And make sure all model variables in ``aiSettings.ts`` are set to ``"koboldcpp"``.
 
 Simple!
 
@@ -78,11 +82,13 @@ With ``lastfm_links``, this table isn't actually referenced anywhere in Andrew b
 
 ------------------------------------------------------------------------------
 ## THE REST
-Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot. 
+Well, there you have it! The rest is pretty self-explanatory. You can look through the code and edit it and whatnot.
+
+Running it is dead simple, just run ``npm run build``, then ``npm run start``.
 
 You can go ahead and adjust the code to your liking, or just use the bot as-is after having done the necessities.
 
-Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me; SpookedDoor as well as Dragonary, as he is the #1 contributor, and without him, most of the project wouldn't even BE here to begin with.
+Though I'll note; if you were to hypothetically use any aspect of this for other projects, I'd recommend you credit both me, SpookedDoor, as well as Dragonary, as he is the #1 contributor, and without him, most of the project wouldn't even BE here to begin with.
 
 For even more help, refer to the [wiki page](https://github.com/SpookedDoor/Andrew-Discord-Bot/wiki).
 
