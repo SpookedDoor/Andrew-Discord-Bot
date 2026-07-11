@@ -1,6 +1,11 @@
-import { ActivityType, MessageFlags, SlashCommandBuilder } from "discord.js";
+import {
+    ActivityType,
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from "discord.js";
 
-const activityTypeNames = {
+const activityTypeNames: Record<number, string> = {
     [ActivityType.Playing]: "Playing ",
     [ActivityType.Streaming]: "Streaming ",
     [ActivityType.Listening]: "Listening to ",
@@ -20,22 +25,22 @@ export default {
                 .addStringOption((option) =>
                     option.setName("status").setDescription("Status").setRequired(true),
                 )
-                .addStringOption((option) =>
+                .addIntegerOption((option) =>
                     option
                         .setName("type")
                         .setDescription("Type")
                         .addChoices(
-                            { name: "Playing", value: ActivityType.Playing.toString() },
-                            { name: "Streaming", value: ActivityType.Streaming.toString() },
-                            { name: "Listening", value: ActivityType.Listening.toString() },
-                            { name: "Watching", value: ActivityType.Watching.toString() },
-                            { name: "Custom", value: ActivityType.Custom.toString() },
-                            { name: "Competing", value: ActivityType.Competing.toString() },
+                            { name: "Playing", value: ActivityType.Playing },
+                            { name: "Streaming", value: ActivityType.Streaming },
+                            { name: "Listening", value: ActivityType.Listening },
+                            { name: "Watching", value: ActivityType.Watching },
+                            { name: "Custom", value: ActivityType.Custom },
+                            { name: "Competing", value: ActivityType.Competing },
                         )
                         .setRequired(true),
                 ),
         ),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         const allowedIDs = [process.env.OWNER_ID, process.env.OWNER2_ID];
         if (allowedIDs.includes(interaction.user.id)) {
         } else {
@@ -46,8 +51,8 @@ export default {
             return;
         }
 
-        const status = interaction.options.getString("status");
-        const type = parseInt(interaction.options.getString("type"));
+        const status = interaction.options.getString("status") as string;
+        const type = interaction.options.getInteger("type") as number;
         const typeName = activityTypeNames[type];
 
         interaction.client.user.setPresence({ activities: [{ name: status, type: type }] });

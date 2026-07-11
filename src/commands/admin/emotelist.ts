@@ -1,22 +1,26 @@
 import {
     ActionRowBuilder,
     ButtonBuilder,
+    ChatInputCommandInteraction,
     EmbedBuilder,
+    MessageComponentInteraction,
     MessageFlags,
     PermissionsBitField,
     SlashCommandBuilder,
+    type InteractionReplyOptions,
+    type MessageCreateOptions,
 } from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
         .setName("emotelist")
         .setDescription("ADMIN: Show all bot emotes"),
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
             const allowedIds = [process.env.OWNER_ID, process.env.OWNER2_ID];
             if (
                 allowedIds.includes(interaction.user.id) ||
-                interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild) ||
+                interaction.memberPermissions?.has(PermissionsBitField.Flags.ManageGuild) ||
                 !interaction.guild
             ) {
                 const emojiList = new EmbedBuilder()
@@ -38,7 +42,7 @@ export default {
                             "<:wholesome:1403161256189493350> : <\\:wholesome:1403161256189493350>\n ",
                     );
 
-                const row1 = new ActionRowBuilder().addComponents(
+                const row1 = new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setCustomId("tomoko_cup")
                         .setLabel("Tomoko Cup")
@@ -61,7 +65,7 @@ export default {
                         .setEmoji("1358517922938617883"),
                 );
 
-                const row2 = new ActionRowBuilder().addComponents(
+                const row2 = new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setCustomId("emoji_52")
                         .setLabel("Emoji 52")
@@ -84,7 +88,7 @@ export default {
                         .setEmoji("1358518895627210762"),
                 );
 
-                const row3 = new ActionRowBuilder().addComponents(
+                const row3 = new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setCustomId("umarucry")
                         .setLabel("Umaru Cry")
@@ -101,7 +105,7 @@ export default {
                         .setStyle(1)
                         .setEmoji("1358518924303667272"),
                 );
-                const row4 = new ActionRowBuilder().addComponents(
+                const row4 = new ActionRowBuilder<ButtonBuilder>().addComponents(
                     new ButtonBuilder()
                         .setCustomId("pekostare")
                         .setLabel("Peko Stare")
@@ -114,7 +118,7 @@ export default {
                         .setEmoji("1403161256189493350"),
                 );
 
-                const replyOptions = {
+                const replyOptions: InteractionReplyOptions = {
                     content:
                         "Choose an emote for ol' great Androo to send. Or you could do it the traditional way and manually type in the emote. <:iminnocent:1357618844889256045>",
                     embeds: [emojiList],
@@ -122,20 +126,21 @@ export default {
                     flags: MessageFlags.Ephemeral,
                 };
 
-                if (interaction.channel) {
+                if (interaction.inGuild()) {
                     await interaction.reply(replyOptions);
                 } else {
-                    await interaction.user.send(replyOptions);
+                    await interaction.user.send(replyOptions as MessageCreateOptions);
                     await interaction.reply({
                         content: "Check your DMs for the emoji list!",
                         flags: MessageFlags.Ephemeral,
                     });
                 }
 
-                const filter = (i) => i.customId && i.user.id === interaction.user.id;
-                const collector = (
-                    interaction.channel || interaction.user.dmChannel
-                ).createMessageComponentCollector({ filter, time: 30000 });
+                const filter = (i: MessageComponentInteraction) =>
+                    i.isButton() && i.user.id === interaction.user.id;
+                const channel = interaction.channel ?? (await interaction.user.createDM());
+                if (!channel) throw new Error("Not a text channel");
+                const collector = channel.createMessageComponentCollector({ filter, time: 30000 });
 
                 collector.on("collect", async (i) => {
                     try {
@@ -184,7 +189,8 @@ export default {
                                 emoji = "Unknown emoji";
                         }
                         await i.deferUpdate();
-                        await (interaction.channel || interaction.user).send(emoji);
+                        if (interaction.channel?.isSendable()) interaction.channel.send(emoji);
+                        else await interaction.user.send(emoji);
                     } catch (error) {
                         console.error(error);
                     }

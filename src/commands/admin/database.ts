@@ -1,4 +1,9 @@
-import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import {
+    AutocompleteInteraction,
+    ChatInputCommandInteraction,
+    MessageFlags,
+    SlashCommandBuilder,
+} from "discord.js";
 import db from "../../database/db.js";
 
 export default {
@@ -48,7 +53,7 @@ export default {
                         .setAutocomplete(true),
                 ),
         ),
-    async autocomplete(interaction) {
+    async autocomplete(interaction: AutocompleteInteraction) {
         try {
             const focusedOption = interaction.options.getFocused(true);
             if (focusedOption.name === "category") {
@@ -112,7 +117,7 @@ export default {
             console.error("Error with autocomplete:", error);
         }
     },
-    async execute(interaction) {
+    async execute(interaction: ChatInputCommandInteraction) {
         try {
             const allowedIDs = [process.env.OWNER_ID, process.env.OWNER2_ID];
             if (!allowedIDs.includes(interaction.user.id)) {
