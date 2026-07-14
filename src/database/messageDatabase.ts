@@ -7,12 +7,12 @@ type MessageRow = {
     content: string;
     file_path: string;
     created_at: Date;
-}
+};
 
 type Message = {
     content: string | null;
     files?: string[];
-}
+};
 
 type MessageMap = Record<string, string[]>;
 type CategoryMap = Record<string, string[]>;
@@ -285,19 +285,23 @@ function pickRelevant(messages: string[], prompt: string, limit: number): string
 export async function getSampledMessages({
     prompt,
     samplePerCategory = 20,
+    excludedCategories = [],
 }: {
     prompt: string;
     samplePerCategory: number;
+    excludedCategories: string[];
 }) {
     const grouped: CategoryMap = {};
     const result: string[] = [];
 
-    const { rows } = await db.query<MessageRow>(`
-        SELECT mc.name AS category, m.content
+    const { rows } = await db.query<MessageRow>(
+        `SELECT mc.name AS category, m.content
         FROM messages m
         JOIN message_categories mc ON m.category_id = mc.id
         WHERE m.content IS NOT NULL
-    `);
+        AND mc.name != ALL($1)`,
+        [excludedCategories],
+    );
 
     for (const { category, content } of rows) {
         const key = normaliseCategory(category);
