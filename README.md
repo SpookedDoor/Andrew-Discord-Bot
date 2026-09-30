@@ -13,9 +13,7 @@ This bot was made as an inside-joke, and it can be pretty offensive, so there's 
 
 (Of course, we don't condone anything he says. This is purely satire, and it does not reflect our personal views.)
 
-It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, and hell, it's even got a LLM! 
-
-And for even more entertainment; [he's even got a enemy that beefs with Andrew!](https://github.com/TheDragonary/Anti-Andrew-Discord-Bot) (It ain't included with Andrew Bot though, obviously. It has to be installed separately, and it is admittedly far more outdated than Andrew.)
+It features over 1000 (and counting!) nonsensical messages that sent at random intervals, as well as peak slash commands, vision capablities, and hell, it's even got a LLM!
 
 Shit's now rewritten in TypeScript! 
 
