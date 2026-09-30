@@ -46,8 +46,6 @@ MISTRAL_API_KEY=YOURKEYHERE
 NVIDIA_API_KEY=YOURKEYHERE
 KLIPY_API_KEY=YOURKEYHERE
 SAUCENAO_API_KEY=YOURKEYHERE
-LASTFM_API_KEY=YOURKEYHERE
-LASTFM_AUTH_SERVER=https://
 DATABASE_URL=postgresql://
 ```
 
@@ -77,8 +75,6 @@ Simple!
 
 ## CONNECTING TO A DATABASE
 We use PostgreSQL for Andrew's database. You can find the schema in ``migrations/001_migration.sql``. You can host the database yourself or use a service like [Neon](https://neon.com) which is completely free for small projects and it's what we use.
-
-With ``lastfm_links``, this table isn't actually referenced anywhere in Andrew bot's code. Instead, you should refer to Dragonary's [Lastfm-Auth-Server-Discord](https://github.com/TheDragonary/Lastfm-Auth-Server-Discord). This is for linking Last.fm accounts with Discord users, and that repo will show you how it's done, as long as you read the README of course. Once you get the auth server all set up, all you have to do is stick the URL into Andrew bot's ``.env`` file and that's it.
 
 ------------------------------------------------------------------------------
 ## THE REST

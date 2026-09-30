@@ -1,9 +1,3 @@
--- Links table: Maps Discord user IDs to Last.fm usernames
-CREATE TABLE IF NOT EXISTS lastfm_links (
-    discord_user_id VARCHAR(32) PRIMARY KEY,
-    lastfm_username VARCHAR(64) NOT NULL
-);
-
 -- Disabled guilds table: Prevents the bot sending random messages in these servers
 CREATE TABLE IF NOT EXISTS disabled_guilds (
     id TEXT PRIMARY KEY,

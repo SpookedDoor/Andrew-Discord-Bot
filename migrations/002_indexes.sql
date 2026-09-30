@@ -1,5 +1,4 @@
 -- Indexes
-CREATE INDEX IF NOT EXISTS idx_lastfm_links_username ON lastfm_links(lastfm_username);
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 CREATE INDEX IF NOT EXISTS idx_users_display_name ON users(display_name);
 CREATE INDEX IF NOT EXISTS idx_messages_category_id ON messages(category_id);
