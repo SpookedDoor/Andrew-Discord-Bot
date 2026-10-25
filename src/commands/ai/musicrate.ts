@@ -88,8 +88,8 @@ async function rateSong(trackInfo: string, extraInfo: string | null) {
 
     const finalPrompt = [
         prompt,
-        `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount. 
-        You can comment on popularity though. Give a detailed review. Give a score out of 10.`,
+        `If the song isn't made by Kanye, don't mention Kanye and don't complain if it isn't Kanye. Don't mention playcount or listeners. 
+        Don't comment on popularity. Give a detailed review. Give a score out of 10.`,
         extraInfo,
     ]
         .filter(Boolean)
@@ -144,8 +144,7 @@ export default {
         const activity = presence.activities.find(
             (a) =>
                 a.type === ActivityType.Listening ||
-                (a.type === ActivityType.Custom &&
-                    /listening|music|song/i.test(a.state || a.name)),
+                (a.type === ActivityType.Custom && /listening|music|song/i.test(a.state || a.name)),
         );
 
         if (!activity) {
@@ -164,17 +163,18 @@ export default {
         try {
             await interaction.deferReply();
             const aiRating = await rateSong(trackInfo, extraInfo);
+
             console.log(
-                `Model used: ${gptModel}, Location: ${interaction.guild && interaction.channel instanceof TextChannel
-                    ? `${interaction.guild.name} - ${interaction.channel.name}`
-                    : `${interaction.user.username} - DM`
+                `Model used: ${gptModel}, Location: ${
+                    interaction.guild && interaction.channel instanceof TextChannel
+                        ? `${interaction.guild.name} - ${interaction.channel.name}`
+                        : `${interaction.user.username} - DM`
                 }, Response: ${aiRating}`,
             );
-            await interaction.editReply(
-                `Now playing: **${trackInfo}**\nAI rating: ${aiRating}`,
-            );
-        } catch (error) {
-            console.error(error);
+            
+            await interaction.editReply(`Now playing: **${trackInfo}**\nAI rating: ${aiRating}`);
+        } catch (err) {
+            console.error(err);
             await interaction.editReply("Failed to generate AI response");
         }
     },

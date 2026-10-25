@@ -156,7 +156,7 @@ export default {
                         : `${interaction.user.username} - DM`
                 }, Prompt: ${prompt}\nImage URL: ${imageUrl}`,
             );
-            
+
             const reply = await generateImagePrompt(
                 interaction.guild?.id as string | null,
                 interaction.user.id,
