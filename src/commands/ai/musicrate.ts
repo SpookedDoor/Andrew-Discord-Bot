@@ -160,8 +160,8 @@ export default {
             activity.details as string,
         );
 
+        await interaction.deferReply();
         try {
-            await interaction.deferReply();
             const aiRating = await rateSong(trackInfo, extraInfo);
 
             console.log(
